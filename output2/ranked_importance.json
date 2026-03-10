@@ -1,0 +1,2273 @@
+{
+  "methodology": "Weighted multi-dimensional biological importance scoring",
+  "weights": {
+    "whale_sustained": 0.2,
+    "bio_richness": 0.2,
+    "acoustic_diversity": 0.2,
+    "humpback_coverage": 0.15,
+    "cross_model_agreement": 0.15,
+    "humpback_peak": 0.05,
+    "yamnet_top_quality": 0.05
+  },
+  "tier_thresholds": {
+    "CRITICAL": 65,
+    "HIGH": 45,
+    "MODERATE": 25,
+    "LOW": 10,
+    "MINIMAL": 0
+  },
+  "total_ranked": 100,
+  "tier_distribution": {
+    "CRITICAL": 3,
+    "HIGH": 35,
+    "MODERATE": 40,
+    "LOW": 19,
+    "MINIMAL": 3
+  },
+  "rankings": [
+    {
+      "rank": 1,
+      "filename": "190806_3905.wav",
+      "score": 67.61,
+      "tier": "CRITICAL",
+      "components": {
+        "whale_sustained": 0.6929,
+        "bio_richness": 0.7295,
+        "acoustic_diversity": 0.7143,
+        "humpback_coverage": 0.2107,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.9435,
+        "yamnet_top_quality": 0.7002
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 7
+    },
+    {
+      "rank": 2,
+      "filename": "190806_3826.wav",
+      "score": 67.1,
+      "tier": "CRITICAL",
+      "components": {
+        "whale_sustained": 0.6872,
+        "bio_richness": 0.3842,
+        "acoustic_diversity": 1.0,
+        "humpback_coverage": 0.505,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.9203,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 9
+    },
+    {
+      "rank": 3,
+      "filename": "190806_3811.wav",
+      "score": 65.37,
+      "tier": "CRITICAL",
+      "components": {
+        "whale_sustained": 0.6522,
+        "bio_richness": 0.3513,
+        "acoustic_diversity": 0.8571,
+        "humpback_coverage": 0.6522,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.9746,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 8
+    },
+    {
+      "rank": 4,
+      "filename": "190807_3970.wav",
+      "score": 62.89,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.2931,
+        "bio_richness": 0.8957,
+        "acoustic_diversity": 0.7143,
+        "humpback_coverage": 0.2475,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.8302,
+        "yamnet_top_quality": 0.6924
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Call",
+      "annotations_count": 7
+    },
+    {
+      "rank": 5,
+      "filename": "190807_3963.wav",
+      "score": 60.41,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.2334,
+        "bio_richness": 0.994,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.2308,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.7361,
+        "yamnet_top_quality": 0.7593
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 6,
+      "filename": "190806_3840.wav",
+      "score": 60.16,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.6099,
+        "bio_richness": 0.2503,
+        "acoustic_diversity": 0.8571,
+        "humpback_coverage": 0.4983,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.9667,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 8
+    },
+    {
+      "rank": 7,
+      "filename": "190806_3790.wav",
+      "score": 59.34,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.0902,
+        "bio_richness": 0.4184,
+        "acoustic_diversity": 1.0,
+        "humpback_coverage": 0.7124,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.997,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Bp",
+      "annotations_count": 9
+    },
+    {
+      "rank": 8,
+      "filename": "190807_4172.wav",
+      "score": 58.76,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.4946,
+        "bio_richness": 0.6779,
+        "acoustic_diversity": 0.7143,
+        "humpback_coverage": 0.0836,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.6959,
+        "yamnet_top_quality": 0.5592
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 7
+    },
+    {
+      "rank": 9,
+      "filename": "190808_4237.wav",
+      "score": 58.59,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.2038,
+        "bio_richness": 0.8728,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.1873,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.8644,
+        "yamnet_top_quality": 1.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Call",
+      "annotations_count": 6
+    },
+    {
+      "rank": 10,
+      "filename": "201008_5856.wav",
+      "score": 57.56,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.8112,
+        "bio_richness": 0.2011,
+        "acoustic_diversity": 0.7143,
+        "humpback_coverage": 0.2375,
+        "cross_model_agreement": 1.0,
+        "humpback_peak": 0.8935,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback",
+        "marine_environment"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 8
+    },
+    {
+      "rank": 11,
+      "filename": "190807_4150.wav",
+      "score": 56.74,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.1769,
+        "bio_richness": 0.3523,
+        "acoustic_diversity": 0.8571,
+        "humpback_coverage": 0.709,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.976,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Bp",
+      "annotations_count": 8
+    },
+    {
+      "rank": 12,
+      "filename": "190806_3898.wav",
+      "score": 56.48,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.6244,
+        "bio_richness": 0.6863,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.0301,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.443,
+        "yamnet_top_quality": 0.5343
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Echolocation",
+      "annotations_count": 6
+    },
+    {
+      "rank": 13,
+      "filename": "190808_4251.wav",
+      "score": 55.48,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.2879,
+        "bio_richness": 0.777,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.0903,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.5795,
+        "yamnet_top_quality": 1.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 14,
+      "filename": "190808_4265.wav",
+      "score": 54.24,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.2471,
+        "bio_richness": 0.6974,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.214,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.8051,
+        "yamnet_top_quality": 0.6381
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 15,
+      "filename": "190807_3984.wav",
+      "score": 53.27,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.157,
+        "bio_richness": 0.8737,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.1773,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.7619,
+        "yamnet_top_quality": 0.8235
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 5
+    },
+    {
+      "rank": 16,
+      "filename": "190807_4071.wav",
+      "score": 52.08,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.5298,
+        "bio_richness": 0.387,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.388,
+        "cross_model_agreement": 1.0,
+        "humpback_peak": 0.8701,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback",
+        "marine_environment"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 17,
+      "filename": "190807_4157.wav",
+      "score": 51.73,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.607,
+        "bio_richness": 0.2082,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.3946,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.9155,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 18,
+      "filename": "190806_3797.wav",
+      "score": 51.17,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.2816,
+        "bio_richness": 0.4032,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.5151,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.9649,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 19,
+      "filename": "190808_4229.wav",
+      "score": 51.13,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.1399,
+        "bio_richness": 0.668,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.1773,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.6168,
+        "yamnet_top_quality": 0.8604
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 20,
+      "filename": "190806_3919.wav",
+      "score": 50.46,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.1164,
+        "bio_richness": 0.7313,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.1405,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.5977,
+        "yamnet_top_quality": 0.696
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 21,
+      "filename": "190807_4201.wav",
+      "score": 49.82,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.0901,
+        "bio_richness": 0.6477,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.2375,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.7338,
+        "yamnet_top_quality": 0.5811
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Gunshot",
+      "annotations_count": 6
+    },
+    {
+      "rank": 22,
+      "filename": "190806_3912.wav",
+      "score": 49.23,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.1602,
+        "bio_richness": 0.5894,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.1706,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.747,
+        "yamnet_top_quality": 0.6027
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 23,
+      "filename": "190807_3955.wav",
+      "score": 49.07,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.1244,
+        "bio_richness": 0.6511,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.2274,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.7668,
+        "yamnet_top_quality": 0.8493
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 5
+    },
+    {
+      "rank": 24,
+      "filename": "190807_4121.wav",
+      "score": 48.06,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.6659,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.7143,
+        "humpback_coverage": 0.3311,
+        "cross_model_agreement": 0.7,
+        "humpback_peak": 0.9974,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "whale_species",
+        "humpback",
+        "marine_environment"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 7
+    },
+    {
+      "rank": 25,
+      "filename": "190806_3876.wav",
+      "score": 48.05,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.2123,
+        "bio_richness": 0.5461,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.0936,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.7773,
+        "yamnet_top_quality": 0.5328
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 26,
+      "filename": "190807_3977.wav",
+      "score": 47.71,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.1991,
+        "bio_richness": 0.4549,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.1973,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.7895,
+        "yamnet_top_quality": 0.5592
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 27,
+      "filename": "190808_4258.wav",
+      "score": 47.47,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.1231,
+        "bio_richness": 0.5683,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.107,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.6085,
+        "yamnet_top_quality": 0.813
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 28,
+      "filename": "190806_3818.wav",
+      "score": 46.83,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.0664,
+        "bio_richness": 0.3186,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.6355,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.9331,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 29,
+      "filename": "190807_4208.wav",
+      "score": 46.77,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.1496,
+        "bio_richness": 0.5494,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.1237,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.6294,
+        "yamnet_top_quality": 0.5721
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 30,
+      "filename": "190807_4179.wav",
+      "score": 46.25,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.2269,
+        "bio_richness": 0.4249,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.1773,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.6852,
+        "yamnet_top_quality": 0.4401
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 31,
+      "filename": "190806_3927.wav",
+      "score": 46.1,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.0112,
+        "bio_richness": 1.0,
+        "acoustic_diversity": 0.2857,
+        "humpback_coverage": 0.1906,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.8106,
+        "yamnet_top_quality": 1.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 4
+    },
+    {
+      "rank": 32,
+      "filename": "190808_4244.wav",
+      "score": 46.08,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.0711,
+        "bio_richness": 0.6962,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.1906,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.7349,
+        "yamnet_top_quality": 0.9048
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 33,
+      "filename": "190807_4078.wav",
+      "score": 45.9,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.0405,
+        "bio_richness": 0.4542,
+        "acoustic_diversity": 0.7143,
+        "humpback_coverage": 0.5719,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.9776,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Call",
+      "annotations_count": 7
+    },
+    {
+      "rank": 34,
+      "filename": "190808_4323.wav",
+      "score": 45.86,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.2408,
+        "bio_richness": 0.2647,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.2943,
+        "cross_model_agreement": 1.0,
+        "humpback_peak": 0.9808,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback",
+        "marine_environment"
+      ],
+      "top_species": "Call",
+      "annotations_count": 7
+    },
+    {
+      "rank": 35,
+      "filename": "190807_4092.wav",
+      "score": 45.41,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.0424,
+        "bio_richness": 0.2621,
+        "acoustic_diversity": 0.8571,
+        "humpback_coverage": 0.612,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.9504,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Bp",
+      "annotations_count": 8
+    },
+    {
+      "rank": 36,
+      "filename": "190808_4374.wav",
+      "score": 45.26,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.1269,
+        "bio_richness": 0.2485,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.5217,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.9999,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Echolocation",
+      "annotations_count": 6
+    },
+    {
+      "rank": 37,
+      "filename": "190807_4222.wav",
+      "score": 45.16,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.0335,
+        "bio_richness": 0.8983,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.1438,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.6506,
+        "yamnet_top_quality": 0.8592
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 5
+    },
+    {
+      "rank": 38,
+      "filename": "190807_4100.wav",
+      "score": 45.05,
+      "tier": "HIGH",
+      "components": {
+        "whale_sustained": 0.9252,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.1706,
+        "cross_model_agreement": 0.6,
+        "humpback_peak": 0.712,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 5
+    },
+    {
+      "rank": 39,
+      "filename": "190806_3833.wav",
+      "score": 44.96,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.1866,
+        "bio_richness": 0.3063,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.5418,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.9807,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 5
+    },
+    {
+      "rank": 40,
+      "filename": "201008_5863.wav",
+      "score": 44.87,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.382,
+        "bio_richness": 0.0971,
+        "acoustic_diversity": 0.7143,
+        "humpback_coverage": 0.1672,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.998,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 7
+    },
+    {
+      "rank": 41,
+      "filename": "190807_3941.wav",
+      "score": 44.45,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.0268,
+        "bio_richness": 0.8125,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.1037,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.8583,
+        "yamnet_top_quality": 1.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 5
+    },
+    {
+      "rank": 42,
+      "filename": "190807_4049.wav",
+      "score": 44.13,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.1489,
+        "bio_richness": 0.168,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.5251,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.9966,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 43,
+      "filename": "190807_4186.wav",
+      "score": 43.75,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.0938,
+        "bio_richness": 0.7373,
+        "acoustic_diversity": 0.2857,
+        "humpback_coverage": 0.0635,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.8588,
+        "yamnet_top_quality": 0.5331
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 4
+    },
+    {
+      "rank": 44,
+      "filename": "190807_4164.wav",
+      "score": 43.2,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.2481,
+        "bio_richness": 0.3231,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.1873,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.9899,
+        "yamnet_top_quality": 0.3879
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 5
+    },
+    {
+      "rank": 45,
+      "filename": "190806_3883.wav",
+      "score": 42.89,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.4011,
+        "bio_richness": 0.3469,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.0736,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.4651,
+        "yamnet_top_quality": 0.4854
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 5
+    },
+    {
+      "rank": 46,
+      "filename": "190806_3782.wav",
+      "score": 42.41,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.2766,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.8571,
+        "humpback_coverage": 0.398,
+        "cross_model_agreement": 0.6,
+        "humpback_peak": 0.9522,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 7
+    },
+    {
+      "rank": 47,
+      "filename": "190806_3804.wav",
+      "score": 42.19,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.1119,
+        "bio_richness": 0.5283,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.0803,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.6505,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Call",
+      "annotations_count": 6
+    },
+    {
+      "rank": 48,
+      "filename": "190807_4027.wav",
+      "score": 42.01,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.099,
+        "bio_richness": 0.5532,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.087,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.6097,
+        "yamnet_top_quality": 0.5088
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 5
+    },
+    {
+      "rank": 49,
+      "filename": "201010_5906.wav",
+      "score": 41.66,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.0799,
+        "bio_richness": 0.1797,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.3579,
+        "cross_model_agreement": 1.0,
+        "humpback_peak": 0.9349,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback",
+        "marine_environment"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 7
+    },
+    {
+      "rank": 50,
+      "filename": "201008_5849.wav",
+      "score": 40.69,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.1804,
+        "bio_richness": 0.223,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.2776,
+        "cross_model_agreement": 1.0,
+        "humpback_peak": 0.9781,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback",
+        "marine_environment"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 51,
+      "filename": "190807_4107.wav",
+      "score": 40.42,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.5497,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.7143,
+        "humpback_coverage": 0.1204,
+        "cross_model_agreement": 0.6,
+        "humpback_peak": 0.8675,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 52,
+      "filename": "190807_4193.wav",
+      "score": 39.49,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.0589,
+        "bio_richness": 0.6708,
+        "acoustic_diversity": 0.2857,
+        "humpback_coverage": 0.2642,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.7721,
+        "yamnet_top_quality": 0.6207
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 4
+    },
+    {
+      "rank": 53,
+      "filename": "190808_4280.wav",
+      "score": 39.42,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.0594,
+        "bio_richness": 0.3952,
+        "acoustic_diversity": 0.7143,
+        "humpback_coverage": 0.1839,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.5401,
+        "yamnet_top_quality": 0.4674
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Call",
+      "annotations_count": 7
+    },
+    {
+      "rank": 54,
+      "filename": "190807_4006.wav",
+      "score": 38.81,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.2906,
+        "bio_richness": 0.1875,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.1037,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.5526,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 55,
+      "filename": "190807_4114.wav",
+      "score": 38.33,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.6383,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.1438,
+        "cross_model_agreement": 0.6,
+        "humpback_peak": 0.5959,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 5
+    },
+    {
+      "rank": 56,
+      "filename": "190808_4352.wav",
+      "score": 37.64,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.6138,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.7143,
+        "humpback_coverage": 0.0134,
+        "cross_model_agreement": 0.6,
+        "humpback_peak": 0.3757,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 57,
+      "filename": "190807_4215.wav",
+      "score": 37.5,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.0341,
+        "bio_richness": 0.5891,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.1037,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.6432,
+        "yamnet_top_quality": 0.6891
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 5
+    },
+    {
+      "rank": 58,
+      "filename": "190806_3934.wav",
+      "score": 37.43,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.0,
+        "bio_richness": 0.875,
+        "acoustic_diversity": 0.0,
+        "humpback_coverage": 0.1605,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.8548,
+        "yamnet_top_quality": 1.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 2
+    },
+    {
+      "rank": 59,
+      "filename": "190808_4287.wav",
+      "score": 37.27,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.0817,
+        "bio_richness": 0.3856,
+        "acoustic_diversity": 0.7143,
+        "humpback_coverage": 0.1271,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.6969,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 7
+    },
+    {
+      "rank": 60,
+      "filename": "190807_3991.wav",
+      "score": 36.48,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.0663,
+        "bio_richness": 0.4214,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.1839,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.9873,
+        "yamnet_top_quality": 0.4425
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 5
+    },
+    {
+      "rank": 61,
+      "filename": "190808_4301.wav",
+      "score": 36.35,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.1913,
+        "bio_richness": 0.2037,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.1773,
+        "cross_model_agreement": 0.9,
+        "humpback_peak": 0.7437,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 5
+    },
+    {
+      "rank": 62,
+      "filename": "201010_5935.wav",
+      "score": 36.17,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.5096,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.1906,
+        "cross_model_agreement": 0.7,
+        "humpback_peak": 0.81,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "whale_species",
+        "humpback",
+        "marine_environment"
+      ],
+      "top_species": "Bm",
+      "annotations_count": 5
+    },
+    {
+      "rank": 63,
+      "filename": "190808_4273.wav",
+      "score": 35.5,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.0799,
+        "bio_richness": 0.3259,
+        "acoustic_diversity": 0.7143,
+        "humpback_coverage": 0.1204,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.6083,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Call",
+      "annotations_count": 7
+    },
+    {
+      "rank": 64,
+      "filename": "201010_5928.wav",
+      "score": 35.48,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.3525,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.2843,
+        "cross_model_agreement": 0.6,
+        "humpback_peak": 0.7466,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Mn",
+      "annotations_count": 5
+    },
+    {
+      "rank": 65,
+      "filename": "190808_4294.wav",
+      "score": 35.06,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.473,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.1405,
+        "cross_model_agreement": 0.6,
+        "humpback_peak": 0.6134,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 5
+    },
+    {
+      "rank": 66,
+      "filename": "190807_4136.wav",
+      "score": 32.93,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.0221,
+        "bio_richness": 0.131,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.5452,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.9745,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Bp",
+      "annotations_count": 5
+    },
+    {
+      "rank": 67,
+      "filename": "201010_5921.wav",
+      "score": 32.63,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.1126,
+        "bio_richness": 0.0915,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.0803,
+        "cross_model_agreement": 1.0,
+        "humpback_peak": 0.7536,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback",
+        "marine_environment"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 68,
+      "filename": "190807_3948.wav",
+      "score": 31.96,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.0,
+        "bio_richness": 0.6456,
+        "acoustic_diversity": 0.0,
+        "humpback_coverage": 0.204,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.5476,
+        "yamnet_top_quality": 1.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 2
+    },
+    {
+      "rank": 69,
+      "filename": "190808_4309.wav",
+      "score": 31.31,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.0315,
+        "bio_richness": 0.1878,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.194,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.8674,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 6
+    },
+    {
+      "rank": 70,
+      "filename": "190807_4035.wav",
+      "score": 29.92,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.0831,
+        "bio_richness": 0.0878,
+        "acoustic_diversity": 0.2857,
+        "humpback_coverage": 0.097,
+        "cross_model_agreement": 1.0,
+        "humpback_peak": 0.8656,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "whale_species",
+        "humpback",
+        "marine_environment"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 5
+    },
+    {
+      "rank": 71,
+      "filename": "190807_4056.wav",
+      "score": 29.05,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.086,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.3244,
+        "cross_model_agreement": 0.6,
+        "humpback_peak": 0.9789,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 4
+    },
+    {
+      "rank": 72,
+      "filename": "190807_4013.wav",
+      "score": 28.48,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.1577,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.5714,
+        "humpback_coverage": 0.1204,
+        "cross_model_agreement": 0.6,
+        "humpback_peak": 0.6193,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 5
+    },
+    {
+      "rank": 73,
+      "filename": "190807_4128.wav",
+      "score": 28.39,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.0063,
+        "bio_richness": 0.1473,
+        "acoustic_diversity": 0.1429,
+        "humpback_coverage": 0.6221,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.9751,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Mn",
+      "annotations_count": 3
+    },
+    {
+      "rank": 74,
+      "filename": "190806_3761.wav",
+      "score": 28.24,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.0953,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.2943,
+        "cross_model_agreement": 0.6,
+        "humpback_peak": 0.8699,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Echolocation",
+      "annotations_count": 4
+    },
+    {
+      "rank": 75,
+      "filename": "190807_4143.wav",
+      "score": 26.77,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.0489,
+        "bio_richness": 0.1388,
+        "acoustic_diversity": 0.1429,
+        "humpback_coverage": 0.5084,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.8575,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Bp",
+      "annotations_count": 3
+    },
+    {
+      "rank": 76,
+      "filename": "190807_4042.wav",
+      "score": 26.18,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.1056,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.1472,
+        "cross_model_agreement": 0.7,
+        "humpback_peak": 0.5577,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "whale_species",
+        "humpback",
+        "marine_environment"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 5
+    },
+    {
+      "rank": 77,
+      "filename": "201010_5942.wav",
+      "score": 25.99,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.1757,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.0502,
+        "cross_model_agreement": 0.7,
+        "humpback_peak": 0.5301,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "whale_species",
+        "humpback",
+        "marine_environment"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 5
+    },
+    {
+      "rank": 78,
+      "filename": "190807_3999.wav",
+      "score": 25.34,
+      "tier": "MODERATE",
+      "components": {
+        "whale_sustained": 0.0431,
+        "bio_richness": 0.1055,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.1739,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.5882,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 5
+    },
+    {
+      "rank": 79,
+      "filename": "190806_3775.wav",
+      "score": 23.67,
+      "tier": "LOW",
+      "components": {
+        "whale_sustained": 0.0,
+        "bio_richness": 0.3377,
+        "acoustic_diversity": 0.0,
+        "humpback_coverage": 0.3043,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.8208,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Call",
+      "annotations_count": 2
+    },
+    {
+      "rank": 80,
+      "filename": "190806_3869.wav",
+      "score": 23.33,
+      "tier": "LOW",
+      "components": {
+        "whale_sustained": 0.0242,
+        "bio_richness": 0.1982,
+        "acoustic_diversity": 0.2857,
+        "humpback_coverage": 0.1104,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.6514,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 4
+    },
+    {
+      "rank": 81,
+      "filename": "190808_4366.wav",
+      "score": 22.34,
+      "tier": "LOW",
+      "components": {
+        "whale_sustained": 0.0131,
+        "bio_richness": 0.0916,
+        "acoustic_diversity": 0.2857,
+        "humpback_coverage": 0.1505,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.8046,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 4
+    },
+    {
+      "rank": 82,
+      "filename": "190808_4345.wav",
+      "score": 21.47,
+      "tier": "LOW",
+      "components": {
+        "whale_sustained": 0.1082,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.2857,
+        "humpback_coverage": 0.0569,
+        "cross_model_agreement": 0.6,
+        "humpback_peak": 0.747,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Echolocation",
+      "annotations_count": 3
+    },
+    {
+      "rank": 83,
+      "filename": "190806_3890.wav",
+      "score": 21.32,
+      "tier": "LOW",
+      "components": {
+        "whale_sustained": 0.0303,
+        "bio_richness": 0.0892,
+        "acoustic_diversity": 0.2857,
+        "humpback_coverage": 0.0803,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.7528,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 4
+    },
+    {
+      "rank": 84,
+      "filename": "201010_5913.wav",
+      "score": 21.18,
+      "tier": "LOW",
+      "components": {
+        "whale_sustained": 0.0119,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.2742,
+        "cross_model_agreement": 0.25,
+        "humpback_peak": 0.901,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "humpback"
+      ],
+      "top_species": "Mn",
+      "annotations_count": 4
+    },
+    {
+      "rank": 85,
+      "filename": "190806_3768.wav",
+      "score": 20.61,
+      "tier": "LOW",
+      "components": {
+        "whale_sustained": 0.0881,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.1639,
+        "cross_model_agreement": 0.25,
+        "humpback_peak": 0.8129,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 4
+    },
+    {
+      "rank": 86,
+      "filename": "190806_3862.wav",
+      "score": 18.72,
+      "tier": "LOW",
+      "components": {
+        "whale_sustained": 0.0068,
+        "bio_richness": 0.0898,
+        "acoustic_diversity": 0.1429,
+        "humpback_coverage": 0.1739,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.6147,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 3
+    },
+    {
+      "rank": 87,
+      "filename": "190808_4359.wav",
+      "score": 17.85,
+      "tier": "LOW",
+      "components": {
+        "whale_sustained": 0.0476,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.2857,
+        "humpback_coverage": 0.194,
+        "cross_model_agreement": 0.25,
+        "humpback_peak": 0.9045,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 3
+    },
+    {
+      "rank": 88,
+      "filename": "190808_4330.wav",
+      "score": 17.75,
+      "tier": "LOW",
+      "components": {
+        "whale_sustained": 0.0869,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.2857,
+        "humpback_coverage": 0.0067,
+        "cross_model_agreement": 0.6,
+        "humpback_peak": 0.2402,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "whale_species",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 3
+    },
+    {
+      "rank": 89,
+      "filename": "201010_5885.wav",
+      "score": 17.12,
+      "tier": "LOW",
+      "components": {
+        "whale_sustained": 0.0313,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.2857,
+        "humpback_coverage": 0.1237,
+        "cross_model_agreement": 0.35,
+        "humpback_peak": 0.7353,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "humpback",
+        "marine_environment"
+      ],
+      "top_species": "Echolocation",
+      "annotations_count": 4
+    },
+    {
+      "rank": 90,
+      "filename": "190806_3854.wav",
+      "score": 16.92,
+      "tier": "LOW",
+      "components": {
+        "whale_sustained": 0.0172,
+        "bio_richness": 0.0929,
+        "acoustic_diversity": 0.1429,
+        "humpback_coverage": 0.0669,
+        "cross_model_agreement": 0.55,
+        "humpback_peak": 0.5223,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "biological_audio",
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 3
+    },
+    {
+      "rank": 91,
+      "filename": "201010_5899.wav",
+      "score": 14.63,
+      "tier": "LOW",
+      "components": {
+        "whale_sustained": 0.0278,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.2857,
+        "humpback_coverage": 0.0134,
+        "cross_model_agreement": 0.35,
+        "humpback_peak": 0.5824,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "humpback",
+        "marine_environment"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 4
+    },
+    {
+      "rank": 92,
+      "filename": "190808_4338.wav",
+      "score": 14.58,
+      "tier": "LOW",
+      "components": {
+        "whale_sustained": 0.0494,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.4286,
+        "humpback_coverage": 0.01,
+        "cross_model_agreement": 0.25,
+        "humpback_peak": 0.2234,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "humpback"
+      ],
+      "top_species": "Echolocation",
+      "annotations_count": 4
+    },
+    {
+      "rank": 93,
+      "filename": "190807_4064.wav",
+      "score": 13.41,
+      "tier": "LOW",
+      "components": {
+        "whale_sustained": 0.0318,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.2857,
+        "humpback_coverage": 0.0468,
+        "cross_model_agreement": 0.25,
+        "humpback_peak": 0.5219,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 3
+    },
+    {
+      "rank": 94,
+      "filename": "190808_4316.wav",
+      "score": 13.24,
+      "tier": "LOW",
+      "components": {
+        "whale_sustained": 0.007,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.1429,
+        "humpback_coverage": 0.0502,
+        "cross_model_agreement": 0.35,
+        "humpback_peak": 0.8471,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "humpback",
+        "marine_environment"
+      ],
+      "top_species": "Mn",
+      "annotations_count": 3
+    },
+    {
+      "rank": 95,
+      "filename": "201007_5832.wav",
+      "score": 13.11,
+      "tier": "LOW",
+      "components": {
+        "whale_sustained": 0.0,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.0,
+        "humpback_coverage": 0.3333,
+        "cross_model_agreement": 0.25,
+        "humpback_peak": 0.8725,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 12.17,
+      "cascade_flags": [
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 1
+    },
+    {
+      "rank": 96,
+      "filename": "190807_4020.wav",
+      "score": 12.78,
+      "tier": "LOW",
+      "components": {
+        "whale_sustained": 0.0101,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.1429,
+        "humpback_coverage": 0.1973,
+        "cross_model_agreement": 0.25,
+        "humpback_peak": 0.6022,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "humpback"
+      ],
+      "top_species": "Echolocation",
+      "annotations_count": 2
+    },
+    {
+      "rank": 97,
+      "filename": "190807_4085.wav",
+      "score": 10.27,
+      "tier": "LOW",
+      "components": {
+        "whale_sustained": 0.0125,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.1429,
+        "humpback_coverage": 0.0569,
+        "cross_model_agreement": 0.25,
+        "humpback_peak": 0.5123,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 2
+    },
+    {
+      "rank": 98,
+      "filename": "190806_3847.wav",
+      "score": 9.01,
+      "tier": "MINIMAL",
+      "components": {
+        "whale_sustained": 0.0,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.0,
+        "humpback_coverage": 0.0301,
+        "cross_model_agreement": 0.25,
+        "humpback_peak": 0.9617,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "humpback"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 1
+    },
+    {
+      "rank": 99,
+      "filename": "190806_3754.wav",
+      "score": 7.84,
+      "tier": "MINIMAL",
+      "components": {
+        "whale_sustained": 0.0895,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.2857,
+        "humpback_coverage": 0.0,
+        "cross_model_agreement": 0.0,
+        "humpback_peak": 0.0672,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 15.91,
+      "cascade_flags": [],
+      "top_species": "Mn",
+      "annotations_count": 2
+    },
+    {
+      "rank": 100,
+      "filename": "201010_5892.wav",
+      "score": 7.33,
+      "tier": "MINIMAL",
+      "components": {
+        "whale_sustained": 0.0,
+        "bio_richness": 0.0,
+        "acoustic_diversity": 0.0,
+        "humpback_coverage": 0.01,
+        "cross_model_agreement": 0.35,
+        "humpback_peak": 0.386,
+        "yamnet_top_quality": 0.0
+      },
+      "duration_s": 299.9,
+      "cascade_flags": [
+        "humpback",
+        "marine_environment"
+      ],
+      "top_species": "Oo",
+      "annotations_count": 2
+    }
+  ]
+}

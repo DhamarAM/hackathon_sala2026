@@ -1,0 +1,59 @@
+{
+  "filename": "190806_3847.wav",
+  "duration_s": 299.9,
+  "sample_rate": 48000,
+  "bit_depth": 24,
+  "rms": 0.0492846,
+  "peak": 0.628079,
+  "status": "analyzed",
+  "has_meaningful_audio": true,
+  "has_biological_interest": true,
+  "upper_event_ratio": 1.0,
+  "upper_temporal_std": 7.35,
+  "tonal_ratio": 0.3038,
+  "band_analysis": {
+    "infrasonic_whales": {
+      "freq_range_hz": [
+        10,
+        100
+      ],
+      "mean_energy_db": -28.69,
+      "temporal_std": 8.74,
+      "transient_events": 0
+    },
+    "low_freq_fish": {
+      "freq_range_hz": [
+        50,
+        500
+      ],
+      "mean_energy_db": -29.3,
+      "temporal_std": 8.78,
+      "transient_events": 0
+    },
+    "mid_freq_dolphins": {
+      "freq_range_hz": [
+        500,
+        5000
+      ],
+      "mean_energy_db": -38.93,
+      "temporal_std": 7.57,
+      "transient_events": 0
+    },
+    "high_freq_clicks": {
+      "freq_range_hz": [
+        5000,
+        24000
+      ],
+      "mean_energy_db": -54.62,
+      "temporal_std": 7.29,
+      "transient_events": 44
+    }
+  },
+  "annotations": [
+    "Low-frequency energy (10-100Hz) with temporal variation \u2014 possible baleen whale vocalizations or vessel noise",
+    "Mid-frequency activity (500-5000Hz) with high variation \u2014 possible dolphin whistles or marine mammal calls",
+    "High-frequency transients (5000-24000Hz, 44 events) \u2014 possible echolocation clicks or snapping shrimp",
+    "Tonal signals detected (tonal ratio: 0.304) \u2014 possible marine mammal whistles or fish calls"
+  ],
+  "spectrogram": "190806_3847_spectrogram.png"
+}
