@@ -52,15 +52,22 @@ def iter_chunk_rms(
     with wave.open(str(path), "rb") as wf:
         n_channels = wf.getnchannels()
         sample_width = wf.getsampwidth()
-        if sample_width != 2:
+        if sample_width not in (2, 3):
             raise ValueError(
-                f"Only 16-bit PCM WAV is supported, got {sample_width * 8}-bit: {path}"
+                f"Only 16-bit or 24-bit PCM WAV is supported, got {sample_width * 8}-bit: {path}"
             )
         while True:
             raw = wf.readframes(chunk_frames)
             if not raw:
                 break
-            samples = np.frombuffer(raw, dtype=np.int16).astype(np.float32)
+            if sample_width == 2:
+                samples = np.frombuffer(raw, dtype=np.int16).astype(np.float32)
+            else:
+                # 24-bit little-endian: [b0, b1, b2] → int32 con extensión de signo
+                raw_bytes = np.frombuffer(raw, dtype=np.uint8).reshape(-1, 3)
+                sign_byte = np.where(raw_bytes[:, 2] >= 128, np.uint8(0xFF), np.uint8(0x00)).reshape(-1, 1)
+                int32_bytes = np.concatenate([raw_bytes, sign_byte], axis=1)
+                samples = int32_bytes.view(np.int32).astype(np.float32)
             if n_channels > 1:
                 samples = samples.reshape(-1, n_channels).mean(axis=1)
             yield float(np.sqrt(np.mean(samples ** 2)))
