@@ -1,0 +1,58 @@
+{
+  "filename": "190807_3984.wav",
+  "duration_s": 299.9,
+  "sample_rate": 48000,
+  "bit_depth": 24,
+  "rms": 0.00496931,
+  "peak": 0.396006,
+  "status": "analyzed",
+  "has_meaningful_audio": true,
+  "has_biological_interest": true,
+  "upper_event_ratio": 0.9998,
+  "upper_temporal_std": 1.73,
+  "tonal_ratio": 0.0269,
+  "band_analysis": {
+    "infrasonic_whales": {
+      "freq_range_hz": [
+        10,
+        100
+      ],
+      "mean_energy_db": -30.21,
+      "temporal_std": 3.45,
+      "transient_events": 212
+    },
+    "low_freq_fish": {
+      "freq_range_hz": [
+        50,
+        500
+      ],
+      "mean_energy_db": -39.35,
+      "temporal_std": 2.72,
+      "transient_events": 272
+    },
+    "mid_freq_dolphins": {
+      "freq_range_hz": [
+        500,
+        5000
+      ],
+      "mean_energy_db": -51.79,
+      "temporal_std": 2.39,
+      "transient_events": 376
+    },
+    "high_freq_clicks": {
+      "freq_range_hz": [
+        5000,
+        24000
+      ],
+      "mean_energy_db": -53.04,
+      "temporal_std": 1.77,
+      "transient_events": 443
+    }
+  },
+  "annotations": [
+    "Low-frequency energy (10-100Hz) with temporal variation \u2014 possible baleen whale vocalizations or vessel noise",
+    "Pulsed low-frequency events (50-500Hz, 272 events) \u2014 possible fish chorus or drumming",
+    "High-frequency transients (5000-24000Hz, 443 events) \u2014 possible echolocation clicks or snapping shrimp"
+  ],
+  "spectrogram": "190807_3984_spectrogram.png"
+}
