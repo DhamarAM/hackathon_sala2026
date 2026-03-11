@@ -3,7 +3,8 @@
 **SALA 2026 Hackathon** — Marine Acoustic Monitoring, Galapagos Marine Reserve
 
 > **Full project context (AI or human):** [`docs/PROJECT_OVERVIEW.md`](docs/PROJECT_OVERVIEW.md)
-> **Frontend bugs/TODO:** [`docs/FRONTEND_AUDIT.md`](docs/FRONTEND_AUDIT.md)
+> **Frontend next steps:** [`docs/FRONTEND_NEXT_STEPS.md`](docs/FRONTEND_NEXT_STEPS.md)
+> **Hackathon proposal:** [`docs/HACKATHON_PROPOSAL.md`](docs/HACKATHON_PROPOSAL.md)
 > **Scientific notes:** [`docs/PAPER_NOTES.md`](docs/PAPER_NOTES.md)
 
 ---
@@ -21,7 +22,7 @@ A web dashboard that visualizes the output of a 6-stage AI pipeline applied to u
 cd frontend
 npm install
 npm run dev
-# http://localhost:3000
+# http://localhost:5173
 ```
 
 Vite middleware serves data from `outputs/` via `/api/pipeline/*`. No backend server needed.
@@ -42,17 +43,32 @@ bash scripts/runpod_run.sh --source /workspace/data/marine-acoustic
 ```
 dragon-ocean-analyzer/
 ├── README.md
-├── LICENSE
-├── requirements.txt
+├── requirements.txt          ← Python dependencies
 ├── .gitignore
 │
-├── backend/          ← Python ML pipeline (stages 0-6)
-├── frontend/         ← React 18 + Vite 6 + Chart.js
-├── scripts/          ← Data download, deployment utilities
-├── docs/             ← Project documentation and audits
+├── backend/                  ← Python ML pipeline
+│   ├── pipeline/             ← stage1_clip … stage5_rank
+│   ├── utils/                ← helper scripts
+│   ├── config.py
+│   └── run.py                ← pipeline entry point
 │
-├── hackathon_data/   ← Audio dataset (gitignored, download separately)
-└── outputs/  ← Generated artifacts (gitignored)
+├── frontend/                 ← React 18 + Vite 6 + Chart.js
+│   └── src/
+│       ├── pages/            ← LandingPage, SingleObservation, MultipleObservations
+│       └── components/       ← Charts, AnalysisPanel, SpectrogramViewer, …
+│
+├── scripts/                  ← data download, RunPod deployment
+│
+├── docs/                     ← all documentation
+│   ├── PROJECT_OVERVIEW.md
+│   ├── HACKATHON_PROPOSAL.md
+│   ├── FRONTEND_NEXT_STEPS.md
+│   ├── CASCADE_PIPELINE.md
+│   ├── RANKING_METHODOLOGY.md
+│   └── PAPER_NOTES.md
+│
+├── hackathon_data/           ← audio dataset (gitignored, download separately)
+└── outputs/                  ← generated artifacts (gitignored)
 ```
 
 ## Team Workflow
