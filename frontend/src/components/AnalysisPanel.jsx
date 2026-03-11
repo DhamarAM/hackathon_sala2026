@@ -3,54 +3,59 @@ import { ScoringRadarChart, YamnetBarChart, TimeSeriesChart, BandEnergyChart } f
 import { formatScore, formatDuration } from '../utils'
 import { SPECIES_MAP, VOCALIZATION_CODES } from '../config'
 
-export default function AnalysisPanel({ ranking, cascade, basic }) {
+export default function AnalysisPanel({ ranking, cascade, basic, section = 'all' }) {
   if (!ranking) return null
 
   const detections = cascade?.stage2_multispecies?.detections || []
   const speciesDetections = detections.filter(d => !VOCALIZATION_CODES.includes(d.class_code))
   const vocalizationDetections = detections.filter(d => VOCALIZATION_CODES.includes(d.class_code))
 
+  const showSummary = section === 'all' || section === 'summary'
+  const showDetail  = section === 'all' || section === 'detail'
+
   return (
     <div className="stack">
       {/* Summary Header */}
-      <div className="card">
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
-          <div>
-            <div style={{ fontSize: 11, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 4 }}>
-              Biological Importance Score
-            </div>
-            <div style={{ fontSize: 36, fontWeight: 800, fontFamily: 'var(--font-mono)', color: 'var(--text-primary)' }}>
-              {formatScore(ranking.score)}
-            </div>
-          </div>
-          <TierBadge tier={ranking.tier} />
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>Duration</div>
-            <div style={{ fontFamily: 'var(--font-mono)' }}>{formatDuration(ranking.duration_s)}</div>
-          </div>
-          {ranking.top_species && (
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>Top Species</div>
-              <div style={{ color: 'var(--teal)', fontWeight: 600 }}>
-                {ranking.top_species}
+      {showSummary && (
+        <div className="card">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+            <div>
+              <div style={{ fontSize: 11, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 4 }}>
+                Biological Importance Score
               </div>
+              <div style={{ fontSize: 36, fontWeight: 800, fontFamily: 'var(--font-mono)', color: 'var(--text-primary)' }}>
+                {formatScore(ranking.score)}
+              </div>
+            </div>
+            <TierBadge tier={ranking.tier} />
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>Duration</div>
+              <div style={{ fontFamily: 'var(--font-mono)' }}>{formatDuration(ranking.duration_s)}</div>
+            </div>
+            {ranking.top_species && (
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>Top Species</div>
+                <div style={{ color: 'var(--teal)', fontWeight: 600 }}>
+                  {ranking.top_species}
+                </div>
+              </div>
+            )}
+          </div>
+          {ranking.cascade_flags && (
+            <div className="flag-list" style={{ marginTop: 12 }}>
+              {ranking.cascade_flags.map(f => <span key={f} className="flag-tag">{f.replace(/_/g, ' ')}</span>)}
             </div>
           )}
         </div>
-        {ranking.cascade_flags && (
-          <div className="flag-list" style={{ marginTop: 12 }}>
-            {ranking.cascade_flags.map(f => <span key={f} className="flag-tag">{f.replace(/_/g, ' ')}</span>)}
-          </div>
-        )}
-      </div>
+      )}
 
       {/* Radar Chart */}
-      {ranking.components && (
+      {showSummary && ranking.components && (
         <ScoringRadarChart components={ranking.components} />
       )}
 
       {/* Cascade Classifiers */}
-      {cascade && (
+      {showDetail && cascade && (
         <div className="classifier-grid">
           {/* Stage 1: YAMNet */}
           <div className="classifier-card">
@@ -72,7 +77,7 @@ export default function AnalysisPanel({ ranking, cascade, basic }) {
             )}
           </div>
 
-          {/* Stage 2: Multispecies — All Detections */}
+          {/* Stage 2: Multispecies */}
           <div className="classifier-card">
             <div className="classifier-card-header">
               <span className="classifier-name">Stage 2: Multispecies</span>
@@ -134,37 +139,39 @@ export default function AnalysisPanel({ ranking, cascade, basic }) {
       )}
 
       {/* YAMNet bar chart */}
-      {cascade?.stage1_yamnet?.top_classes && (
+      {showDetail && cascade?.stage1_yamnet?.top_classes && (
         <YamnetBarChart topClasses={cascade.stage1_yamnet.top_classes} />
       )}
 
       {/* Time series */}
-      <div className="grid-2">
-        {cascade?.stage2_multispecies?.top_time_series && (
-          <TimeSeriesChart
-            title={`Multispecies: ${cascade.stage2_multispecies.top_species || 'Top Species'}`}
-            dataSeries={cascade.stage2_multispecies.top_time_series}
-            threshold={0.1}
-            color="rgb(45,212,191)"
-          />
-        )}
-        {cascade?.stage3_humpback?.time_series && (
-          <TimeSeriesChart
-            title="Humpback Detection"
-            dataSeries={cascade.stage3_humpback.time_series}
-            threshold={0.3}
-            color="rgb(56,189,248)"
-          />
-        )}
-      </div>
+      {showDetail && (
+        <div className="grid-2">
+          {cascade?.stage2_multispecies?.top_time_series && (
+            <TimeSeriesChart
+              title={`Multispecies: ${cascade.stage2_multispecies.top_species || 'Top Species'}`}
+              dataSeries={cascade.stage2_multispecies.top_time_series}
+              threshold={0.1}
+              color="rgb(45,212,191)"
+            />
+          )}
+          {cascade?.stage3_humpback?.time_series && (
+            <TimeSeriesChart
+              title="Humpback Detection"
+              dataSeries={cascade.stage3_humpback.time_series}
+              threshold={0.3}
+              color="rgb(56,189,248)"
+            />
+          )}
+        </div>
+      )}
 
       {/* Band Energy */}
-      {basic?.band_analysis && (
+      {showDetail && basic?.band_analysis && (
         <BandEnergyChart bandAnalysis={basic.band_analysis} />
       )}
 
       {/* Annotations */}
-      {cascade?.annotations?.length > 0 && (
+      {showDetail && cascade?.annotations?.length > 0 && (
         <div className="card">
           <div className="card-title">Annotations</div>
           <ul className="annotation-list">
@@ -176,9 +183,11 @@ export default function AnalysisPanel({ ranking, cascade, basic }) {
       )}
 
       {/* Methodology note */}
-      <div style={{ fontSize: 11, color: 'var(--text-tertiary)', textAlign: 'center', padding: '8px 0', fontStyle: 'italic' }}>
-        Automated analysis via pretrained models (YAMNet, Google Whale). Scores reflect acoustic pattern confidence, not confirmed presence.
-      </div>
+      {showDetail && (
+        <div style={{ fontSize: 11, color: 'var(--text-tertiary)', textAlign: 'center', padding: '8px 0', fontStyle: 'italic' }}>
+          Automated analysis via pretrained models (YAMNet, Google Whale). Scores reflect acoustic pattern confidence, not confirmed presence.
+        </div>
+      )}
     </div>
   )
 }

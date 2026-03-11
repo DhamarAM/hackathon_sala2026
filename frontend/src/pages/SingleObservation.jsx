@@ -84,6 +84,8 @@ export default function SingleObservation() {
         {loading ? (
           <div className="loading"><div className="spinner" /> Loading analysis data...</div>
         ) : (
+        <div className="stack">
+          {/* Top: spectrogram (left) + summary & radar (right) */}
           <div className="grid-2" style={{ gridTemplateColumns: '1.5fr 1fr', alignItems: 'start' }}>
             <div className="stack">
               <SpectrogramViewer
@@ -95,9 +97,13 @@ export default function SingleObservation() {
               />
             </div>
             <div className="stack">
-              <AnalysisPanel ranking={ranking} cascade={cascade} basic={basic} />
+              <AnalysisPanel section="summary" ranking={ranking} cascade={cascade} basic={basic} />
             </div>
           </div>
+
+          {/* Bottom: classifiers, charts and annotations — full width */}
+          <AnalysisPanel section="detail" ranking={ranking} cascade={cascade} basic={basic} />
+        </div>
         )}
       </div>
     )

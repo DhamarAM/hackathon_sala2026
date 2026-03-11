@@ -5,10 +5,9 @@
   "rms": 0.00145542,
   "status": "analyzed",
   "cascade_flags": [
-    "whale_species",
-    "humpback"
+    "whale_species"
   ],
-  "cascade_summary": "whale_species; humpback",
+  "cascade_summary": "whale_species",
   "stage1_yamnet": {
     "top_classes": [
       {
@@ -131,7 +130,7 @@
     "mean_score": 0.006718,
     "fraction_above_threshold": 0.0067,
     "num_windows": 299,
-    "humpback_detected": true,
+    "humpback_detected": false,
     "time_series": [
       0.0018819341203197837,
       0.0008836977067403495,

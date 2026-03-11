@@ -12,8 +12,8 @@ export default function LandingPage() {
       .then(([ranked, cascade]) => setStats({
         total: ranked.total_ranked,
         tiers: ranked.tier_distribution,
-        yamnetBio: cascade?.bio_signals || 0,
-        whaleSpecies: cascade?.whale_detected || 0,
+        yamnetBio: cascade?.yamnet_bio_signals || 0,
+        whaleSpecies: cascade?.whale_species_detected || 0,
         humpback: cascade?.humpback_detected || 0,
       }))
       .catch(() => setStats(null))
@@ -75,7 +75,7 @@ export default function LandingPage() {
         )}
         {stats && (
           <div style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 12, position: 'relative' }}>
-            *Humpback model may over-detect due to frequency overlap with boat noise (100&ndash;1000 Hz). Threshold = 0.1.
+            *Humpback model may over-detect due to frequency overlap with boat noise (100&ndash;1000 Hz). Threshold = 0.3.
           </div>
         )}
       </div>

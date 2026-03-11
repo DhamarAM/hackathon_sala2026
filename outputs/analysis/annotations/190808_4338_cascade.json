@@ -4,10 +4,8 @@
   "sample_rate": 48000,
   "rms": 0.00158324,
   "status": "analyzed",
-  "cascade_flags": [
-    "humpback"
-  ],
-  "cascade_summary": "humpback",
+  "cascade_flags": [],
+  "cascade_summary": "",
   "stage1_yamnet": {
     "top_classes": [
       {
@@ -140,7 +138,7 @@
     "mean_score": 0.009216,
     "fraction_above_threshold": 0.01,
     "num_windows": 299,
-    "humpback_detected": true,
+    "humpback_detected": false,
     "time_series": [
       0.09054363518953323,
       0.06135473772883415,
