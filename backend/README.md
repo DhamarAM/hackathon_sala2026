@@ -21,6 +21,12 @@ pip install -r requirements.txt   # from repo root
 Run from the **repo root** (not from inside `backend/`):
 
 ```bash
+python -m backend.run --source hackathon_data/marine-acoustic/5783
+```
+
+Other examples:
+
+```bash
 # Full pipeline — default source and output
 python -m backend.run
 
@@ -61,39 +67,15 @@ python -m backend.run --no-cluster
 
 ## Pipeline Stages
 
-```
-Source WAVs
-    │
-    ▼
-Stage 0 — AudioClipper
-    Silence detection (RMS threshold), active-segment extraction,
-    padding, merging. Produces short WAV clips.
-    │
-    ▼
-Stage 1 — YAMNet
-    521-class AudioSet classifier (16 kHz). Flags biological/marine/noise signals.
-    │
-Stage 2 — Multispecies Whale
-    12-class cetacean detector: 7 species + 5 vocalization types (24 kHz, 5s windows).
-    │
-Stage 3 — Humpback Whale
-    Binary per-window detector (10 kHz, 1s windows).
-    │
-    ▼
-Stage 5 — Soundscape Characterization
-    NDSI (Normalized Difference Soundscape Index), band power, spectral
-    and temporal entropy. Penalizes anthropogenic noise. CPU-only.
-    │
-    ▼
-Stage 6 — Embedding Clustering   [optional, GPU recommended]
-    BirdNET embeddings (1024-dim) → UMAP (2D) → HDBSCAN clusters.
-    Fallback: MFCC+Chroma (148-dim) on CPU.
-    │
-    ▼
-Stage 4 — Biological Importance Ranking
-    9-dimensional weighted score (0–100), 5 tiers.
-    Writes ranked.json and ranked.csv.
-```
+| Stage | Script | What it does |
+|-------|--------|--------------|
+| Stage 0 | `backend/pipeline/stage1_clip.py` | AudioClipper — silence detection (RMS), active-segment extraction, padding and merging. Produces short WAV clips. |
+| Stages 1–3 | `backend/pipeline/stage2_cascade.py` | Cascade — YAMNet (521 classes, 16 kHz) + Multispecies Whale (12 classes, 24 kHz, 5s windows) + Humpback (binary, 10 kHz, 1s windows). |
+| Stage 5 | `backend/pipeline/stage3_soundscape.py` | Soundscape — NDSI, band power, spectral and temporal entropy. CPU-only, no GPU needed. |
+| Stage 6 | `backend/pipeline/stage4_cluster.py` | Clustering — BirdNET embeddings (1024-dim, GPU optional) → UMAP (2D) → HDBSCAN. Fallback: MFCC+Chroma (148-dim) on CPU. |
+| Stage 4 | `backend/pipeline/stage5_rank.py` | Ranking — 9-dimensional weighted score (0–100), 5 tiers. Writes `ranked.json` and `ranked.csv`. |
+
+> **Note on numbering:** Stage 4 (Ranking) runs last because it depends on Stages 5 and 6 as inputs. The script filenames (`stage1_` through `stage5_`) reflect execution order, not the conceptual stage numbers.
 
 ---
 

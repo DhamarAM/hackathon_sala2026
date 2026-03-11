@@ -1,112 +1,115 @@
 # PROJECT OVERVIEW — Dragon Ocean Analyzer
 
-> **Este es el documento maestro.** Cualquier AI (Claude, etc.) que trabaje en este
-> proyecto debe leer este archivo primero. Contiene todo el contexto necesario.
+> **This is the master document.** Any AI (Claude, etc.) working on this
+> project should read this file first. It contains all the necessary context.
 
 ---
 
-## Qué es este proyecto
+## What this project is
 
-**Dragon Ocean Analyzer** es un dashboard web para el hackathon SALA 2026 que visualiza resultados de un pipeline de clasificación de audio subacuático. Presentación de 3 minutos.
+**Dragon Ocean Analyzer** is a web dashboard for the SALA 2026 hackathon that visualizes results from an underwater audio classification pipeline. 3-minute presentation.
 
-**Problema:** La Bahía de San Cristóbal (Galápagos) tiene hidrófonos SoundTrap ST300 que grabaron ~926 archivos WAV (~97 horas). Los biólogos marinos necesitan saber cuáles revisar primero.
+**Problem:** San Cristóbal Bay (Galápagos) has SoundTrap ST300 hydrophones that recorded ~926 WAV files (~97 hours). Marine biologists need to know which ones to review first.
 
-**Nuestra solución:** Un pipeline de 6 stages (segmentación + 3 modelos AI + soundscape + clustering) + un ranking de importancia biológica + un frontend interactivo que muestra todo.
+**Our solution:** A 6-stage pipeline (segmentation + 3 AI models + soundscape + clustering) + a biological importance ranking + an interactive frontend that shows everything.
 
 ---
 
 ## Pipeline (stages 0-6)
 
 ```
-WAV → Stage 0: AudioClipper    (silence filter + segmentación)
-    → Stage 1: YAMNet          (521 clases AudioSet, bio vs ruido)
-    → Stage 2: Multispecies    (12 clases: 7 especies + 5 vocalizaciones)
-    → Stage 3: Humpback Whale  (binario por ventana de 1s)
-    → Stage 4: Ranking v2      (7 dimensiones ponderadas, score 0-100, 5 tiers)
-    → Stage 5: Soundscape      (NDSI — penaliza dominancia de barcos)
-    → Stage 6: Clustering      (UMAP + HDBSCAN, bonus por cluster biológico)
+WAV → Stage 0: AudioClipper    (silence filter + segmentation)
+    → Stage 1: YAMNet          (521 AudioSet classes, bio vs noise)
+    → Stage 2: Multispecies    (12 classes: 7 species + 5 vocalizations)
+    → Stage 3: Humpback Whale  (binary per 1s window)
+    → Stage 5: Soundscape      (NDSI — penalizes boat dominance)
+    → Stage 6: Clustering      (UMAP + HDBSCAN, bonus for biological cluster)
+    → Stage 4: Ranking         (9 weighted dimensions, score 0-100, 5 tiers)
 ```
 
-**IMPORTANTE:** Los 3 modelos (stages 1-3) se ejecutan SIEMPRE (no hay gating). No es un cascade real — es un pipeline paralelo. Ver BACKEND_AUDIT.md §4.1.
+**IMPORTANT:** The 3 models (stages 1-3) always run (no gating). It is not a true cascade — it is a parallel pipeline. See BACKEND_AUDIT.md §4.1.
 
-### Modelos
+### Models
 
-| Stage | Modelo | Input SR | Output |
+| Stage | Model | Input SR | Output |
 |-------|--------|----------|--------|
-| 1 | YAMNet (TFHub google/yamnet/1) | 16 kHz | 521 clases, embeddings |
-| 2 | Multispecies Whale (Kaggle google/multispecies-whale/TF2/default/2) | 24 kHz | 12 clases por ventana 5s |
-| 3 | Humpback Whale (TFHub google/humpback_whale/1) | 10 kHz | score binario por ventana 1s |
+| 1 | YAMNet (TFHub google/yamnet/1) | 16 kHz | 521 classes, embeddings |
+| 2 | Multispecies Whale (Kaggle google/multispecies-whale/TF2/default/2) | 24 kHz | 12 classes per 5s window |
+| 3 | Humpback Whale (TFHub google/humpback_whale/1) | 10 kHz | binary score per 1s window |
 
-### Ranking v2 (9 dimensiones)
+### Ranking v2 (9 dimensions)
 
-| Dimensión (key) | Peso | Mide |
+| Dimension (key) | Weight | Measures |
 |-----------------|------|------|
 | `whale_sustained` | 18% | Composite max + mean multispecies |
-| `bio_richness` | 15% | Conteo + scores bio de YAMNet |
-| `acoustic_diversity` | 15% | Especies + tipos de vocalización |
-| `humpback_coverage` | 12% | Fracción de ventanas con humpback |
-| `cross_model` | 12% | Convergencia entre modelos |
-| `ndsi_score` | 10% | NDSI marino (Stage 5, penaliza barcos) |
-| `cluster_signal` | 8% | Bonus por cluster biológico (Stage 6) |
-| `humpback_peak` | 5% | Score máximo humpback |
-| `yamnet_quality` | 5% | Si top-1 YAMNet es biológico |
+| `bio_richness` | 15% | Count + YAMNet bio scores |
+| `acoustic_diversity` | 15% | Species + vocalization types |
+| `humpback_coverage` | 12% | Fraction of windows with humpback |
+| `cross_model` | 12% | Convergence across models |
+| `ndsi_score` | 10% | Marine NDSI (Stage 5, penalizes boats) |
+| `cluster_signal` | 8% | Bonus for biological cluster (Stage 6) |
+| `humpback_peak` | 5% | Maximum humpback score |
+| `yamnet_quality` | 5% | Whether YAMNet top-1 is biological |
 
 **Tiers:** CRITICAL (≥65), HIGH (≥45), MODERATE (≥25), LOW (≥10), MINIMAL (<10)
 
 ---
 
-## Dataset analizado
+## Dataset analyzed
 
-- **100 grabaciones** del deployment Pilot (48 kHz, ~5 min c/u)
-- **Filenames:** `YYMMDD_SEQUENCE.wav` (ej: `190806_3754.wav` = 6 ago 2019)
-- **1 solo WAV** en el repo (`190806_3754.wav`, 15.9s). Los otros 99 se procesaron externamente.
+- **100 recordings** from the Pilot deployment (48 kHz, ~5 min each)
+- **Filenames:** `YYMMDD_SEQUENCE.wav` (e.g.: `190806_3754.wav` = Aug 6, 2019)
+- **1 single WAV** in the repo (`190806_3754.wav`, 15.9s). The other 99 were processed externally.
 
-### Resultados actuales
+### Current results
 
-| Métrica | Valor |
-|---------|-------|
-| CRITICAL | 3 archivos |
+| Metric | Value |
+|--------|-------|
+| CRITICAL | 3 files |
 | HIGH | 35 |
 | MODERATE | 40 |
 | LOW | 19 |
 | MINIMAL | 3 |
 | YAMNet bio signals | 70/100 |
 | any_whale_detected | 61/100 |
-| humpback_detected | **99/100** (sospechoso — ver notas) |
+| humpback_detected | **99/100** (suspicious — see notes) |
 
-### Advertencias científicas
+### Scientific warnings
 
-1. **El contenido biológico NO está verificado** por expertos de dominio. Los modelos detectan patrones, no confirman presencia.
-2. **Humpback FP reducidos:** threshold subido de 0.1 → 0.3. Cifra exacta depende del dataset activo.
-3. `'singing'`/`'speech'`/`'music'` removidos de `YAMNET_BIO_KEYWORDS` — ya no inflan bio_richness.
-4. **Los dB son relativos**, no calibrados a µPa.
+1. **Biological content has NOT been verified** by domain experts. Models detect patterns, they do not confirm presence.
+2. **Humpback FP reduced:** threshold raised from 0.1 → 0.3. Exact figure depends on the active dataset.
+3. `'singing'`/`'speech'`/`'music'` removed from `YAMNET_BIO_KEYWORDS` — no longer inflate bio_richness.
+4. **The dB values are relative**, not calibrated to µPa.
 
 ---
 
-## Estructura del repo
+## Repo structure
 
 ```
 dragon-ocean-analyzer/
 ├── README.md               ← Intro + quickstart
 ├── LICENSE
-├── requirements.txt        ← Deps Python (librosa, tensorflow, etc.)
+├── requirements.txt        ← Python deps (librosa, tensorflow, etc.)
 ├── .gitignore
 │
 ├── backend/                ← Python ML pipeline
-│   ├── config.py           ← Todas las constantes del pipeline
-│   ├── run.py              ← Entry point: ejecuta stages 0-6
-│   ├── stage0_clip.py      ← Silence filter + segmentación de WAVs
-│   ├── stage1_3_cascade.py ← YAMNet + Multispecies + Humpback
-│   ├── stage4_rank.py      ← Ranking 9-dimensional (score 0-100)
-│   ├── stage5_soundscape.py← NDSI (scikit-maad)
-│   └── stage6_cluster.py   ← UMAP + HDBSCAN embeddings
+│   ├── config.py           ← All pipeline constants
+│   ├── run.py              ← Entry point: python -m backend.run --source ...
+│   ├── download_audio.py   ← Downloads WAVs from R2 (called by frontend)
+│   ├── pipeline/
+│   │   ├── stage1_clip.py       ← Silence filter + WAV segmentation
+│   │   ├── stage2_cascade.py    ← YAMNet + Multispecies + Humpback
+│   │   ├── stage3_soundscape.py ← NDSI (scikit-maad)
+│   │   ├── stage4_cluster.py    ← UMAP + HDBSCAN embeddings
+│   │   └── stage5_rank.py       ← 9-dimensional ranking (score 0-100)
+│   └── utils/              ← Helpers: r2_download, spectrograms, tester…
 │
 ├── frontend/               ← React 18 + Vite 6
 │   ├── src/
 │   │   ├── main.jsx, App.jsx      ← Entry + router
 │   │   ├── config.js              ← Tiers, species map, scoring dimensions
 │   │   ├── utils.js               ← Data loaders, CSV export
-│   │   ├── styles.css             ← Tema dark+light (CSS custom properties)
+│   │   ├── styles.css             ← Dark+light theme (CSS custom properties)
 │   │   ├── context/ThemeContext.jsx
 │   │   ├── pages/
 │   │   │   ├── LandingPage.jsx
@@ -121,24 +124,24 @@ dragon-ocean-analyzer/
 │   │       ├── AnalysisPanel.jsx      ← Score, radar, 3 classifiers, charts
 │   │       ├── DetailModal.jsx
 │   │       └── TierBadge.jsx
-│   ├── vite.config.js             ← Middleware sirve outputs/
+│   ├── vite.config.js             ← Middleware serves outputs/
 │   └── package.json               ← React 18, Vite 6, Chart.js
 │
-├── scripts/                ← Utilidades y despliegue
-│   ├── r2_download.py      ← Descarga datos desde Cloudflare R2
-│   ├── manifest.json       ← Manifiesto del dataset hackathon
+├── scripts/                ← Utilities and deployment
+│   ├── r2_download.py      ← Downloads data from Cloudflare R2
+│   ├── manifest.json       ← Hackathon dataset manifest
 │   ├── r2_manifest_template.json
-│   ├── runpod_run.sh       ← Lanzador para RunPod GPU
-│   └── data_download.ipynb ← Notebook interactivo de descarga
+│   ├── runpod_run.sh       ← Launcher for RunPod GPU
+│   └── data_download.ipynb ← Interactive download notebook
 │
-├── docs/                   ← Documentación del proyecto
-│   ├── PROJECT_OVERVIEW.md ← ESTE ARCHIVO (leer primero)
+├── docs/                   ← Project documentation
+│   ├── PROJECT_OVERVIEW.md ← THIS FILE (read first)
 │   ├── FRONTEND_AUDIT.md
 │   ├── PAPER_NOTES.md
 │   └── guidelines.md
 │
-└── outputs/        ← Generado por run.py (gitignored)
-    ├── clips/              ← WAVs segmentados (Stage 0)
+└── outputs/        ← Generated by run.py (gitignored)
+    ├── clips/              ← Segmented WAVs (Stage 0)
     ├── analysis/           ← results.json + spectrograms/ + annotations/
     ├── ranking/            ← ranked.json + ranked.csv
     ├── soundscape/         ← Stage 5 output
@@ -147,9 +150,9 @@ dragon-ocean-analyzer/
 
 ---
 
-## Schemas de datos (referencia rápida)
+## Data schemas (quick reference)
 
-### cascade_results.json → por archivo
+### cascade_results.json → per file
 
 ```
 stage1_yamnet:
@@ -164,7 +167,7 @@ stage2_multispecies:
   top_max_score: float
   any_whale_detected: bool (threshold ≥ MULTISPECIES_DETECTION_THR = 0.10)
   num_windows: int
-  top_time_series: [float]  ← incluido en JSON desde Bug 1.1 fix
+  top_time_series: [float]  ← included in JSON since Bug 1.1 fix
 
 stage3_humpback:
   max_score: float
@@ -172,10 +175,10 @@ stage3_humpback:
   fraction_above_threshold: float
   humpback_detected: bool (threshold ≥ HUMPBACK_THRESHOLD = 0.30)
   num_windows: int
-  time_series: [float]  ← incluido en JSON desde Bug 1.1 fix
+  time_series: [float]  ← included in JSON since Bug 1.1 fix
 ```
 
-### ranked.json → por archivo (outputs/ranking/)
+### ranked.json → per file (outputs/ranking/)
 
 ```
 total_ranked: int
@@ -186,24 +189,24 @@ rankings: [{
                humpback_coverage, cross_model, ndsi_score,
                cluster_signal, humpback_peak, yamnet_quality}
   cascade_flags: [string]
-  top_species: string  ← nombre completo, no código
+  top_species: string  ← full name, not code
   annotations: [string]
 }]
 ```
 
-### Clases del modelo Multispecies (12 total)
+### Multispecies model classes (12 total)
 
-**Especies (7):** Oo (Orca), Mn (Humpback), Eg (Right whale), Bp (Fin), Bm (Blue), Ba (Minke), Be (Beaked)
-**Vocalizaciones (5):** Call, Echolocation, Gunshot, Upcall, Whistle
+**Species (7):** Oo (Orca), Mn (Humpback), Eg (Right whale), Bp (Fin), Bm (Blue), Ba (Minke), Be (Beaked)
+**Vocalizations (5):** Call, Echolocation, Gunshot, Upcall, Whistle
 
-Solo se detectan en nuestros datos: Bm, Bp, Eg, Mn, Oo + Call, Echolocation, Gunshot, Upcall, Whistle. Ba y Be nunca aparecen.
+Only detected in our data: Bm, Bp, Eg, Mn, Oo + Call, Echolocation, Gunshot, Upcall, Whistle. Ba and Be never appear.
 
 ---
 
 ## API Routes (Vite middleware)
 
-| Ruta | Sirve desde | Contenido |
-|------|------------|-----------|
+| Route | Serves from | Content |
+|------|------------|---------|
 | `/api/pipeline/analysis/*` | `outputs/analysis/` | results.json, spectrograms/, annotations/ |
 | `/api/pipeline/ranking/*` | `outputs/ranking/` | ranked.json, ranked.csv |
 | `/api/pipeline/soundscape/*` | `outputs/soundscape/` | soundscape.json |
@@ -212,71 +215,71 @@ Solo se detectan en nuestros datos: Bm, Bp, Eg, Mn, Oo + Call, Echolocation, Gun
 
 ---
 
-## Bugs conocidos (resumen — ver audits para detalle)
+## Known bugs (summary — see audits for detail)
 
 ### Frontend
-- ✅ **time_series no existía en JSON** → corregido, ahora incluido
-- ✅ **API routes desconectadas** → corregido, ahora `/api/pipeline/*`
-- ✅ **cross_model_agreement** → corregido a `cross_model`
-- ✅ **threshold visual 0.5** → corregido a 0.3 en TimeSeriesChart
-- **SPECIES_MAP incompleto** → falta Call, Echolocation, Gunshot, Upcall, Whistle (ver `docs/FRONTEND_AUDIT.md` §1.2)
-- **Falta disclaimer** de contenido biológico no verificado
+- ✅ **time_series did not exist in JSON** → fixed, now included
+- ✅ **API routes disconnected** → fixed, now `/api/pipeline/*`
+- ✅ **cross_model_agreement** → fixed to `cross_model`
+- ✅ **visual threshold 0.5** → fixed to 0.3 in TimeSeriesChart
+- **SPECIES_MAP incomplete** → missing Call, Echolocation, Gunshot, Upcall, Whistle (see `docs/FRONTEND_AUDIT.md` §1.2)
+- **Missing disclaimer** of unverified biological content
 
 ### Backend
-- ✅ **time_series se borraba** del JSON consolidado — corregido
-- ✅ **'singing'/'speech'/'music' como bio** — removidos de YAMNET_BIO_KEYWORDS
-- ✅ **HUMPBACK_THRESHOLD = 0.1** (99% FP) → subido a 0.3
-- ✅ **0.1 hardcodeado** en stage1_3_cascade.py → extraído como MULTISPECIES_DETECTION_THR en config.py
-- ✅ **No hay requirements.txt** — ya existe
-- **Cascade sin gates** → los 3 modelos se ejecutan siempre (decisión pendiente — ver análisis: YAMNet no detecta cetáceos en este dataset, un gate basado en YAMNet bloquearía el pipeline)
+- ✅ **time_series was deleted** from consolidated JSON — fixed
+- ✅ **'singing'/'speech'/'music' as bio** — removed from YAMNET_BIO_KEYWORDS
+- ✅ **HUMPBACK_THRESHOLD = 0.1** (99% FP) → raised to 0.3
+- ✅ **0.1 hardcoded** in stage2_cascade.py → extracted as MULTISPECIES_DETECTION_THR in config.py
+- ✅ **No requirements.txt** — now exists
+- **Cascade without gates** → all 3 models always run (pending decision — see analysis: YAMNet does not detect cetaceans in this dataset, a YAMNet-based gate would block the pipeline)
 
 ---
 
-## Convenciones de código
+## Code conventions
 
 ### Frontend
-- CSS: todo en `styles.css` con custom properties. Mantener `[data-theme="dark"]` Y `[data-theme="light"]`
-- Data: usar funciones de `utils.js` (loadRankedData, loadCascadeResults, etc.)
-- Charts: componentes en `Charts.jsx` usando react-chartjs-2
-- Config: species map, tiers, dimensiones en `config.js`
-- Componentes: un archivo por componente en `components/`
+- CSS: everything in `styles.css` with custom properties. Maintain `[data-theme="dark"]` AND `[data-theme="light"]`
+- Data: use functions from `utils.js` (loadRankedData, loadCascadeResults, etc.)
+- Charts: components in `Charts.jsx` using react-chartjs-2
+- Config: species map, tiers, dimensions in `config.js`
+- Components: one file per component in `components/`
 
 ### Backend
-- Pipeline execution: `python -m backend.run --source <data_dir>` (orquesta stages 0-6)
+- Pipeline execution: `python -m backend.run --source <data_dir>` (orchestrates stages 0-6)
 - Output dir: `outputs/` (clips/, analysis/, ranking/, soundscape/, clusters/)
 
 ---
 
-## Contexto hackathon
+## Hackathon context
 
-- **Evento:** SALA 2026 AI Hackathon
-- **Demo:** 3 minutos, 5 slides máx
+- **Event:** SALA 2026 AI Hackathon
+- **Demo:** 3 minutes, 5 slides max
 - **Judging:** Originality (30%), Technical Execution (30%), Impact & Relevance (25%), Presentation (15%)
 - **Key pitch points:**
-  - Herramienta para biólogos marinos que prioriza qué grabaciones revisar
-  - 7 dimensiones de scoring, no solo un threshold simple
-  - 100 archivos analizados, 3 CRITICAL identificados
-  - Galápagos: 23 especies de cetáceos, 14 residentes/visitantes
-  - Contenido no verificado = honestidad científica (valor para jueces)
-- **Future vision:** similarity search (Agile Modeling), PCEN, más unidades, active learning
+  - Tool for marine biologists that prioritizes which recordings to review
+  - 9 scoring dimensions, not just a simple threshold
+  - 100 files analyzed, 3 CRITICAL identified
+  - Galápagos: 23 cetacean species, 14 residents/visitors
+  - Unverified content = scientific honesty (valuable for judges)
+- **Future vision:** similarity search (Agile Modeling), PCEN, more units, active learning
 
 ---
 
-## Prompt base para Claude
+## Base prompt for Claude
 
 ```
-Trabajo en "Dragon Ocean Analyzer" — dashboard React + pipeline Python para
-bioacústica marina, hackathon SALA 2026 (Galápagos Marine Reserve).
+I work on "Dragon Ocean Analyzer" — React dashboard + Python pipeline for
+marine bioacoustics, SALA 2026 hackathon (Galápagos Marine Reserve).
 
-LEE PRIMERO: docs/PROJECT_OVERVIEW.md (contexto completo del proyecto)
-LUEGO LEE: docs/FRONTEND_AUDIT.md según tu tarea
+READ FIRST: docs/PROJECT_OVERVIEW.md (full project context)
+THEN READ: docs/FRONTEND_AUDIT.md based on your task
 
 Repo:
   backend/          — Python pipeline stages 0-6
   frontend/src/     — React 18 + Vite 6 + Chart.js
-  scripts/          — utilidades de descarga y despliegue
-  docs/             — documentación
-  outputs/  — artefactos generados (gitignored)
+  scripts/          — download and deployment utilities
+  docs/             — documentation
+  outputs/  — generated artifacts (gitignored)
 
-Mi tarea es: [DESCRIBE]
+My task is: [DESCRIBE]
 ```

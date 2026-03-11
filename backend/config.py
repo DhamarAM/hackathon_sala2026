@@ -1,10 +1,10 @@
 """
-backend/config.py — Configuración centralizada del backend.
+backend/config.py — Centralized backend configuration.
 """
 
 from pathlib import Path
 
-# ─── Rutas por defecto ────────────────────────────────────────────────────────
+# ─── Default paths ────────────────────────────────────────────────────────────
 
 ROOT_DIR    = Path(__file__).resolve().parent.parent
 OUTPUT_DIR  = ROOT_DIR / "outputs"
@@ -21,16 +21,16 @@ RANKING_DIR      = OUTPUT_DIR / "ranking"
 # ─── Stage 0: AudioClipper ────────────────────────────────────────────────────
 
 SILENCE_THRESHOLD  = 50.0       # RMS int16 units (~-56 dBFS)
-CHUNK_FRAMES       = 144_000    # 1s a 144kHz; se adapta al sr real
-PADDING_S          = 1.0        # Padding alrededor de cada segmento activo
-MERGE_GAP_S        = 2.0        # Silencio ≤ N s → fusionar segmentos
-MIN_SEGMENT_S      = 2.0        # Descartar clips más cortos que esto
-MULTISPECIES_MIN_S = 5.0        # Mínimo requerido por el modelo multispecies (120k samples @ 24kHz)
+CHUNK_FRAMES       = 144_000    # 1s at 144kHz; adapts to actual sr
+PADDING_S          = 1.0        # Padding around each active segment
+MERGE_GAP_S        = 2.0        # Silence ≤ N s → merge segments
+MIN_SEGMENT_S      = 2.0        # Discard clips shorter than this
+MULTISPECIES_MIN_S = 5.0        # Minimum required by the multispecies model (120k samples @ 24kHz)
 
 # ─── Stage 1: YAMNet ─────────────────────────────────────────────────────────
 
 YAMNET_TOP_K        = 5
-YAMNET_BIO_THRESHOLD = 0.05     # Score mínimo para flagear clase biológica
+YAMNET_BIO_THRESHOLD = 0.05     # Minimum score to flag a biological class
 
 YAMNET_BIO_KEYWORDS = {
     'animal', 'whale', 'bird', 'insect', 'frog', 'cricket',
@@ -45,8 +45,8 @@ YAMNET_NOISE_KEYWORDS = {
 
 # ─── Stage 2: Multispecies Whale ─────────────────────────────────────────────
 
-MULTISPECIES_THRESHOLD     = 0.01   # Score mínimo para listar especie en detections[]
-MULTISPECIES_DETECTION_THR = 0.10   # Score mínimo para detección confirmada (activa flag whale_species)
+MULTISPECIES_THRESHOLD     = 0.01   # Minimum score to list species in detections[]
+MULTISPECIES_DETECTION_THR = 0.10   # Minimum score for confirmed detection (activates whale_species flag)
 
 WHALE_SPECIES = {
     'Oo':          'Orcinus orca (Orca)',
@@ -65,7 +65,7 @@ WHALE_SPECIES = {
 
 # ─── Stage 3: Humpback Whale ─────────────────────────────────────────────────
 
-HUMPBACK_THRESHOLD = 0.3        # Score mínimo por ventana de 1s (0.1 generaba ~99% detecciones)
+HUMPBACK_THRESHOLD = 0.3        # Minimum score per 1s window (0.1 produced ~99% detections)
 
 # ─── Stage 4: Ranking ─────────────────────────────────────────────────────────
 
@@ -77,8 +77,8 @@ RANK_WEIGHTS = {
     'cross_model':        0.12,
     'humpback_peak':      0.05,
     'yamnet_quality':     0.05,
-    'ndsi_score':         0.10,  # Stage 5: penaliza dominancia de barcos
-    'cluster_signal':     0.08,  # Stage 6: bonus por cluster biológico
+    'ndsi_score':         0.10,  # Stage 5: penalizes boat noise dominance
+    'cluster_signal':     0.08,  # Stage 6: bonus for biological cluster
 }
 
 RANK_TIERS = {
