@@ -26,6 +26,7 @@ __pycache__/
 
 # Generated pipeline artifacts
 output/
+outputs/
 
 # Large audio dataset (download separately)
 hackathon_data/
