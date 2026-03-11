@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import SpectrogramViewer from '../components/SpectrogramViewer'
 import AnalysisPanel from '../components/AnalysisPanel'
-import { loadRankedData, loadCascadeResults, loadAnalysisResults, loadFileAnnotation, getFileId } from '../utils'
+import { IconUpload } from '../components/Icons'
+import { loadRankedData, loadCascadeResults, loadFileAnnotation, getFileId } from '../utils'
 
 export default function SingleObservation() {
   const [mode, setMode] = useState('select') // 'select' | 'upload' | 'viewing'
@@ -90,6 +91,7 @@ export default function SingleObservation() {
                 duration={ranking?.duration_s || cascade?.duration_s || basic?.duration_s}
                 audioSrc={uploadedAudio}
                 cascade={cascade}
+                sampleRate={cascade?.sample_rate || basic?.sample_rate || 48000}
               />
             </div>
             <div className="stack">
@@ -124,7 +126,7 @@ export default function SingleObservation() {
           }
         }}
       >
-        <div className="upload-icon">{'\uD83C\uDF0A'}</div>
+        <div className="upload-icon"><IconUpload size={40} /></div>
         <div className="upload-text">Drop an audio file here or click to upload</div>
         <div className="upload-hint">Supports WAV files from SoundTrap hydrophones</div>
         <input ref={fileInputRef} type="file" accept=".wav,audio/*" hidden onChange={handleUpload} />

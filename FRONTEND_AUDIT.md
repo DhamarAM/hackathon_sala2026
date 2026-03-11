@@ -248,7 +248,7 @@ The judges evaluate:
 frontend/src/
 ├── main.jsx              # Entry point
 ├── App.jsx               # Router + layout shell
-├── config.js             # API paths, tier config, species map, scoring dimensions
+├── config.js             # API paths, tier config, species map, scoring dimensions, band config
 ├── utils.js              # Data loaders (loadRankedData, loadCascadeResults, etc.), CSV export
 ├── styles.css            # All styles (dark+light themes, CSS custom properties)
 ├── context/
@@ -258,13 +258,14 @@ frontend/src/
 │   ├── SingleObservation.jsx
 │   └── MultipleObservations.jsx
 └── components/
+    ├── Icons.jsx               # Inline SVG icons (no emoji, no external deps)
     ├── Navbar.jsx
     ├── Sidebar.jsx
     ├── PipelineDiagram.jsx
-    ├── SpectrogramViewer.jsx   # Zoom, pan, audio player, event timeline
-    ├── Charts.jsx              # Doughnut, Bar, Line, Radar (react-chartjs-2)
+    ├── SpectrogramViewer.jsx   # Zoom, pan, audio player, event timeline, keyboard shortcuts
+    ├── Charts.jsx              # Doughnut, Bar, Line, Radar, SpeciesDetection (react-chartjs-2)
     ├── ReportTable.jsx         # Sort, filter, search, CSV export
-    ├── AnalysisPanel.jsx       # Score, radar, 3 classifier cards, charts
+    ├── AnalysisPanel.jsx       # Score, radar, 3 classifier cards, all detections, charts
     ├── DetailModal.jsx
     └── TierBadge.jsx
 ```

@@ -4,7 +4,7 @@ import {
   ArcElement, RadialLinearScale, Filler, Tooltip, Legend,
 } from 'chart.js'
 import { Bar, Doughnut, Line, Radar } from 'react-chartjs-2'
-import { TIER_CONFIG, SCORING_DIMENSIONS } from '../config'
+import { TIER_CONFIG, SCORING_DIMENSIONS, SPECIES_MAP, VOCALIZATION_CODES } from '../config'
 
 ChartJS.register(
   CategoryScale, LinearScale, BarElement, PointElement, LineElement,
@@ -179,7 +179,10 @@ export function YamnetBarChart({ topClasses }) {
 // Time Series Line Chart (multispecies or humpback)
 export function TimeSeriesChart({ title, dataSeries, threshold, color = '#38bdf8' }) {
   if (!dataSeries?.length) return null
-  const labels = dataSeries.map((_, i) => `W${i + 1}`)
+  const many = dataSeries.length > 30
+  const labels = many
+    ? dataSeries.map((_, i) => (i % Math.ceil(dataSeries.length / 15) === 0) ? `${i + 1}` : '')
+    : dataSeries.map((_, i) => `W${i + 1}`)
   const datasets = [{
     label: title,
     data: dataSeries,
@@ -187,13 +190,13 @@ export function TimeSeriesChart({ title, dataSeries, threshold, color = '#38bdf8
     backgroundColor: color.replace(')', ',0.1)').replace('rgb', 'rgba'),
     fill: true,
     tension: 0.3,
-    pointRadius: 3,
-    pointHoverRadius: 5,
-    borderWidth: 2,
+    pointRadius: many ? 0 : 3,
+    pointHoverRadius: many ? 3 : 5,
+    borderWidth: many ? 1.5 : 2,
   }]
   if (threshold !== undefined) {
     datasets.push({
-      label: 'Threshold',
+      label: `Threshold (${threshold})`,
       data: dataSeries.map(() => threshold),
       borderColor: '#ef4444',
       borderWidth: 1,
@@ -231,7 +234,7 @@ export function BandEnergyChart({ bandAnalysis }) {
   const data = {
     labels: bands.map(([key]) => key.replace(/_/g, ' ')),
     datasets: [{
-      label: 'Mean Energy (dB)',
+      label: 'Mean Energy (relative dB)',
       data: bands.map(([, v]) => v.mean_energy_db),
       backgroundColor: colors,
       borderWidth: 0,
@@ -254,6 +257,77 @@ export function BandEnergyChart({ bandAnalysis }) {
     <div className="chart-container">
       <h3>Band Energy Analysis</h3>
       <div style={{ height: 200 }}><Bar data={data} options={options} /></div>
+      <div style={{ fontSize: 10, color: '#64748b', marginTop: 6, textAlign: 'center' }}>
+        Relative dB (not calibrated to &micro;Pa). Analysis bands optimized for 48 kHz sample rate.
+      </div>
+    </div>
+  )
+}
+
+// Species Detection Summary — how many files contain each class code
+export function SpeciesDetectionChart({ cascadeData }) {
+  if (!cascadeData?.files) return null
+  const counts = {}
+  Object.values(cascadeData.files).forEach(file => {
+    const dets = file.stage2_multispecies?.detections || []
+    dets.forEach(d => {
+      counts[d.class_code] = (counts[d.class_code] || 0) + 1
+    })
+  })
+  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1])
+  if (sorted.length === 0) return null
+
+  const isVocalization = (code) => VOCALIZATION_CODES.includes(code)
+  const data = {
+    labels: sorted.map(([code]) => code),
+    datasets: [{
+      label: 'Files with detection',
+      data: sorted.map(([, count]) => count),
+      backgroundColor: sorted.map(([code]) =>
+        isVocalization(code) ? 'rgba(56,189,248,0.7)' : 'rgba(45,212,191,0.7)'
+      ),
+      borderWidth: 0,
+      borderRadius: 4,
+    }],
+  }
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: 'y',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#0f1a2e',
+        borderColor: 'rgba(56,189,248,0.2)',
+        borderWidth: 1,
+        titleFont: chartFont,
+        bodyFont: chartFont,
+        callbacks: {
+          title: (items) => {
+            const code = items[0]?.label
+            return SPECIES_MAP[code] || code
+          },
+          label: (item) => `${item.raw} / ${cascadeData.total_files} files`,
+        },
+      },
+    },
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { color: tickColor, font: chartFont }, title: { display: true, text: 'Number of files', color: tickColor, font: chartFont } },
+      y: { grid: { display: false }, ticks: { color: '#f1f5f9', font: { ...chartFont, weight: 'bold' } } },
+    },
+  }
+  return (
+    <div className="chart-container">
+      <h3>Species & Vocalization Detections</h3>
+      <div style={{ height: Math.max(180, sorted.length * 28) }}><Bar data={data} options={options} /></div>
+      <div style={{ display: 'flex', gap: 16, justifyContent: 'center', marginTop: 8 }}>
+        <span style={{ fontSize: 10, color: tickColor, display: 'flex', alignItems: 'center', gap: 4 }}>
+          <span style={{ width: 10, height: 10, borderRadius: 2, background: 'rgba(45,212,191,0.7)', display: 'inline-block' }} /> Species
+        </span>
+        <span style={{ fontSize: 10, color: tickColor, display: 'flex', alignItems: 'center', gap: 4 }}>
+          <span style={{ width: 10, height: 10, borderRadius: 2, background: 'rgba(56,189,248,0.7)', display: 'inline-block' }} /> Vocalization
+        </span>
+      </div>
     </div>
   )
 }

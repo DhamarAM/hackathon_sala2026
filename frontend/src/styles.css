@@ -1170,6 +1170,69 @@ html, body, #root {
   margin-bottom: 16px;
 }
 
+/* ---------- Scientific Context Banner ---------- */
+.disclaimer-banner {
+  background: var(--accent-bg);
+  border-bottom: 1px solid var(--surface-border);
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-align: center;
+  padding: 8px 24px;
+  letter-spacing: 0.2px;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* ---------- Detection List (AnalysisPanel) ---------- */
+.detection-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+.detection-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: var(--accent-bg);
+  border-radius: var(--radius);
+  font-size: 12px;
+}
+.detection-item-code {
+  font-weight: 600;
+  color: var(--teal);
+  font-family: var(--font-mono);
+}
+.detection-item-name {
+  color: var(--text-secondary);
+  flex: 1;
+  margin-left: 8px;
+}
+.detection-item-scores {
+  font-family: var(--font-mono);
+  color: var(--text-tertiary);
+  font-size: 11px;
+}
+
+/* ---------- Species Chart (MultipleObservations) ---------- */
+.species-chart-legend {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.species-chart-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid var(--surface-border);
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
   .grid-2, .grid-3, .grid-4, .landing-stats, .features-grid { grid-template-columns: 1fr; }

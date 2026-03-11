@@ -1,7 +1,8 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { API } from '../config'
+import { IconVolumeHigh, IconVolumeMute } from './Icons'
 
-export default function SpectrogramViewer({ fileId, duration, audioSrc, cascade }) {
+export default function SpectrogramViewer({ fileId, duration, audioSrc, cascade, sampleRate = 48000 }) {
   const [spectroType, setSpectroType] = useState('cascade')
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
@@ -33,6 +34,41 @@ export default function SpectrogramViewer({ fileId, duration, audioSrc, cascade 
 
   // Reset zoom on spectrogram type change
   useEffect(() => { setZoom(1); setPanX(0) }, [spectroType])
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return
+      switch (e.key) {
+        case ' ':
+          e.preventDefault()
+          togglePlay()
+          break
+        case 'ArrowLeft':
+          e.preventDefault()
+          if (audioRef.current && audioDuration > 0) {
+            audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 5)
+            setCurrentTime(audioRef.current.currentTime)
+          }
+          break
+        case 'ArrowRight':
+          e.preventDefault()
+          if (audioRef.current && audioDuration > 0) {
+            audioRef.current.currentTime = Math.min(audioDuration, audioRef.current.currentTime + 5)
+            setCurrentTime(audioRef.current.currentTime)
+          }
+          break
+        case '+': case '=':
+          setZoom(z => Math.min(5, z + 0.5))
+          break
+        case '-':
+          setZoom(z => { const next = Math.max(1, z - 0.5); if (next === 1) setPanX(0); return next })
+          break
+      }
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [audioDuration, audioError, isPlaying])
 
   const updateTime = useCallback(() => {
     if (audioRef.current) {
@@ -113,9 +149,11 @@ export default function SpectrogramViewer({ fileId, duration, audioSrc, cascade 
     const xRatio = (xInViewport + (-panX)) / imgDisplayWidth
     const time = xRatio * audioDuration
     const yRatio = (e.clientY - rect.top) / rect.height
+    const nyquist = sampleRate / 2
+    const freqHz = Math.round((1 - yRatio) * nyquist)
     setHoverInfo({
       time: `${Math.floor(time / 60)}:${Math.floor(time % 60).toString().padStart(2, '0')}`,
-      freq: `${Math.round((1 - yRatio) * 24000)} Hz`,
+      freq: freqHz >= 1000 ? `${(freqHz / 1000).toFixed(1)} kHz` : `${freqHz} Hz`,
     })
   }
 
@@ -256,7 +294,7 @@ export default function SpectrogramViewer({ fileId, duration, audioSrc, cascade 
           {formatTime(currentTime)} / {formatTime(audioDuration)}
         </div>
         <div className="volume-control">
-          <span style={{ fontSize: 14, color: 'var(--text-tertiary)' }}>{volume > 0 ? '\uD83D\uDD0A' : '\uD83D\uDD07'}</span>
+          <span style={{ color: 'var(--text-tertiary)' }}>{volume > 0 ? <IconVolumeHigh size={16} /> : <IconVolumeMute size={16} />}</span>
           <input
             type="range"
             className="volume-slider"

@@ -1,29 +1,31 @@
+import { IconWave, IconSpectrum, IconSearch, IconWhale, IconRanking } from './Icons'
+
 export default function PipelineDiagram() {
   const stages = [
     {
-      icon: '\uD83C\uDF0A',
-      title: 'SoundTrap Collection',
-      desc: 'Hydrophone recordings from the Galapagos Marine Reserve',
+      icon: <IconWave size={24} />,
+      title: 'SoundTrap ST300',
+      desc: 'Hydrophone capture from the Galapagos Marine Reserve (48 kHz)',
     },
     {
-      icon: '\uD83D\uDCC8',
-      title: 'Signal Processing',
-      desc: 'Spectral analysis, band filtering, RMS & peak detection',
+      icon: <IconSpectrum size={24} />,
+      title: 'Audio Analysis',
+      desc: 'Band decomposition, transient detection, spectrogram generation',
     },
     {
-      icon: '\uD83E\uDDE0',
-      title: 'AI Cascade Classifier',
-      desc: 'YAMNet \u2192 Multispecies Whale \u2192 Humpback Detector',
+      icon: <IconSearch size={24} />,
+      title: 'YAMNet (Stage 1)',
+      desc: '521-class general audio, bio signal gating',
     },
     {
-      icon: '\uD83D\uDDF3\uFE0F',
-      title: 'Ensemble Voting',
-      desc: 'Cross-model agreement and confidence scoring',
+      icon: <IconWhale size={24} />,
+      title: 'Whale Classifiers',
+      desc: 'Multispecies (12 classes) + Humpback (binary per 1s window)',
     },
     {
-      icon: '\uD83D\uDCCA',
-      title: 'Ranking & Report',
-      desc: '7-dimension biological importance scoring with 5-tier classification',
+      icon: <IconRanking size={24} />,
+      title: 'Bio Importance Ranking',
+      desc: '7-dimension weighted scoring, 5 priority tiers',
     },
   ]
 
