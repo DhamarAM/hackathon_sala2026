@@ -1,0 +1,21 @@
+# ─── Core audio ───────────────────────────────────────────────────────────────
+librosa>=0.10,<0.12
+soundfile>=0.12
+numpy>=1.24,<2.0
+scipy>=1.11
+
+# ─── Deep learning (TF + TF-Hub for Stages 1-3) ──────────────────────────────
+tensorflow[and-cuda]>=2.17
+tensorflow-hub>=0.16
+setuptools<81              # required by tensorflow-hub import
+
+# ─── Soundscape indices (Stage 5 — CPU only) ─────────────────────────────────
+scikit-maad>=0.3
+
+# ─── Embeddings + clustering (Stage 6 — GPU optional) ────────────────────────
+opensoundscape>=0.10       # BirdNET/Perch embeddings
+umap-learn>=0.5
+hdbscan>=0.8.33
+
+# ─── Visualisation ────────────────────────────────────────────────────────────
+matplotlib>=3.7
