@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import ReportTable from '../components/ReportTable'
 import DetailModal from '../components/DetailModal'
-import { TierDistributionChart, ScoreHistogramChart } from '../components/Charts'
+import { TierDistributionChart, ScoreHistogramChart, SpeciesDetectionChart } from '../components/Charts'
 import { loadRankedData, loadCascadeResults } from '../utils'
 
 export default function MultipleObservations() {
@@ -34,13 +34,13 @@ export default function MultipleObservations() {
     { label: 'Total Files', value: cascadeData.total_files },
     { label: 'YAMNet Bio Signals', value: cascadeData.bio_signals },
     { label: 'Whale Species', value: cascadeData.whale_detected },
-    { label: 'Humpback Detected', value: cascadeData.humpback_detected },
+    { label: 'Humpback-Consistent*', value: cascadeData.humpback_detected },
   ] : []
 
   return (
     <div className="stack">
       <div className="section-header">
-        <h1>Multiple Observations</h1>
+        <h1>Batch Report</h1>
         <div className="section-actions">
           <span style={{ fontSize: 12, color: 'var(--text-tertiary)', alignSelf: 'center' }}>
             {rankedData?.total_ranked || 0} recordings analyzed
@@ -57,12 +57,18 @@ export default function MultipleObservations() {
           </div>
         ))}
       </div>
+      <div style={{ fontSize: 11, color: 'var(--text-tertiary)', textAlign: 'center', marginTop: -8, fontStyle: 'italic' }}>
+        *Humpback model may over-detect due to frequency overlap with boat noise (100&ndash;1000 Hz). Scores indicate acoustic pattern confidence.
+      </div>
 
       {/* Charts */}
       <div className="grid-2">
         <TierDistributionChart distribution={rankedData?.tier_distribution} />
         <ScoreHistogramChart rankings={rankedData?.rankings} />
       </div>
+
+      {/* Species Detection Summary */}
+      <SpeciesDetectionChart cascadeData={cascadeData} />
 
       {/* Report Table */}
       <ReportTable

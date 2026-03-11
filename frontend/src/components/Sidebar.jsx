@@ -1,12 +1,13 @@
 import { Link, useLocation } from 'react-router-dom'
+import { IconHome, IconWaveform, IconList } from './Icons'
 
 export default function Sidebar({ isOpen, onClose }) {
   const location = useLocation()
 
   const links = [
-    { to: '/', icon: '\u2302', label: 'Home' },
-    { to: '/single', icon: '\u266A', label: 'Single Observation' },
-    { to: '/multiple', icon: '\u2630', label: 'Multiple Observations' },
+    { to: '/', icon: <IconHome size={16} />, label: 'Home' },
+    { to: '/single', icon: <IconWaveform size={16} />, label: 'Single Analysis' },
+    { to: '/multiple', icon: <IconList size={16} />, label: 'Batch Report' },
   ]
 
   return (

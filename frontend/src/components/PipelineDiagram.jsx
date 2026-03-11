@@ -1,27 +1,29 @@
+import { IconWave, IconSpectrum, IconSearch, IconWhale, IconRanking } from './Icons'
+
 export default function PipelineDiagram() {
   const stages = [
     {
-      icon: '\uD83C\uDF0A',
-      title: 'SoundTrap Collection',
-      desc: 'Hydrophone recordings from the Galapagos Marine Reserve',
+      icon: <IconWave size={24} />,
+      title: 'SoundTrap ST300',
+      desc: 'Hydrophone capture from the Galapagos Marine Reserve (48 kHz)',
     },
     {
-      icon: '\u2702\uFE0F',
+      icon: <IconSpectrum size={24} />,
       title: 'Audio Segmentation',
       desc: 'Silence removal and active-segment extraction (Stage 0)',
     },
     {
-      icon: '\uD83E\uDDE0',
+      icon: <IconSearch size={24} />,
       title: 'AI Cascade Classifier',
-      desc: 'YAMNet \u2192 Multispecies Whale \u2192 Humpback Detector (Stages 1\u20133)',
+      desc: 'YAMNet → Multispecies Whale → Humpback Detector (Stages 1–3)',
     },
     {
-      icon: '\uD83C\uDF3F',
+      icon: <IconWhale size={24} />,
       title: 'Soundscape & Clustering',
-      desc: 'NDSI acoustic indices + UMAP/HDBSCAN embedding clusters (Stages 5\u20136)',
+      desc: 'NDSI acoustic indices + UMAP/HDBSCAN embedding clusters (Stages 5–6)',
     },
     {
-      icon: '\uD83D\uDCCA',
+      icon: <IconRanking size={24} />,
       title: 'Ranking & Report',
       desc: '9-dimension biological importance scoring with 5-tier classification (Stage 4)',
     },

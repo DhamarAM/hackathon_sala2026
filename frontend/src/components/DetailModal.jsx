@@ -41,7 +41,7 @@ export default function DetailModal({ ranking, onClose }) {
           <div className="loading"><div className="spinner" /> Loading annotation data...</div>
         ) : (
           <div className="stack">
-            <SpectrogramViewer fileId={fileId} duration={ranking.duration_s} cascade={cascade} />
+            <SpectrogramViewer fileId={fileId} duration={ranking.duration_s} cascade={cascade} sampleRate={cascade?.sample_rate || basic?.sample_rate || 48000} />
             <AnalysisPanel ranking={ranking} cascade={cascade} basic={basic} />
           </div>
         )}

@@ -1,0 +1,10 @@
+# Dragon Ocean Analyzer — Backend Dependencies
+numpy>=1.24
+librosa>=0.10
+matplotlib>=3.7
+scipy>=1.10
+soundfile>=0.12
+tensorflow>=2.12
+tensorflow_hub>=0.13
+boto3>=1.28
+Pillow>=9.5
