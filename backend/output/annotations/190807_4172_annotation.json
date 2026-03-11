@@ -1,0 +1,58 @@
+{
+  "filename": "190807_4172.wav",
+  "duration_s": 299.9,
+  "sample_rate": 48000,
+  "bit_depth": 24,
+  "rms": 0.00469434,
+  "peak": 0.239175,
+  "status": "analyzed",
+  "has_meaningful_audio": true,
+  "has_biological_interest": true,
+  "upper_event_ratio": 1.0,
+  "upper_temporal_std": 2.48,
+  "tonal_ratio": 0.0818,
+  "band_analysis": {
+    "infrasonic_whales": {
+      "freq_range_hz": [
+        10,
+        100
+      ],
+      "mean_energy_db": -23.18,
+      "temporal_std": 2.88,
+      "transient_events": 34
+    },
+    "low_freq_fish": {
+      "freq_range_hz": [
+        50,
+        500
+      ],
+      "mean_energy_db": -31.3,
+      "temporal_std": 2.52,
+      "transient_events": 146
+    },
+    "mid_freq_dolphins": {
+      "freq_range_hz": [
+        500,
+        5000
+      ],
+      "mean_energy_db": -42.96,
+      "temporal_std": 3.72,
+      "transient_events": 91
+    },
+    "high_freq_clicks": {
+      "freq_range_hz": [
+        5000,
+        24000
+      ],
+      "mean_energy_db": -45.99,
+      "temporal_std": 1.76,
+      "transient_events": 382
+    }
+  },
+  "annotations": [
+    "Pulsed low-frequency events (50-500Hz, 146 events) \u2014 possible fish chorus or drumming",
+    "High-frequency transients (5000-24000Hz, 382 events) \u2014 possible echolocation clicks or snapping shrimp",
+    "Tonal signals detected (tonal ratio: 0.082) \u2014 possible marine mammal whistles or fish calls"
+  ],
+  "spectrogram": "190807_4172_spectrogram.png"
+}

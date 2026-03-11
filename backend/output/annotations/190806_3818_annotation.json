@@ -1,0 +1,57 @@
+{
+  "filename": "190806_3818.wav",
+  "duration_s": 299.9,
+  "sample_rate": 48000,
+  "bit_depth": 24,
+  "rms": 0.00867753,
+  "peak": 0.5113,
+  "status": "analyzed",
+  "has_meaningful_audio": true,
+  "has_biological_interest": true,
+  "upper_event_ratio": 0.2438,
+  "upper_temporal_std": 1.24,
+  "tonal_ratio": 0.082,
+  "band_analysis": {
+    "infrasonic_whales": {
+      "freq_range_hz": [
+        10,
+        100
+      ],
+      "mean_energy_db": -40.64,
+      "temporal_std": 5.64,
+      "transient_events": 191
+    },
+    "low_freq_fish": {
+      "freq_range_hz": [
+        50,
+        500
+      ],
+      "mean_energy_db": -50.63,
+      "temporal_std": 5.19,
+      "transient_events": 303
+    },
+    "mid_freq_dolphins": {
+      "freq_range_hz": [
+        500,
+        5000
+      ],
+      "mean_energy_db": -62.86,
+      "temporal_std": 2.35,
+      "transient_events": 376
+    },
+    "high_freq_clicks": {
+      "freq_range_hz": [
+        5000,
+        24000
+      ],
+      "mean_energy_db": -66.69,
+      "temporal_std": 0.3,
+      "transient_events": 0
+    }
+  },
+  "annotations": [
+    "Low-frequency energy (10-100Hz) with temporal variation \u2014 possible baleen whale vocalizations or vessel noise",
+    "Tonal signals detected (tonal ratio: 0.082) \u2014 possible marine mammal whistles or fish calls"
+  ],
+  "spectrogram": "190806_3818_spectrogram.png"
+}
