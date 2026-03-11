@@ -12,6 +12,7 @@ export default function SpectrogramViewer({ fileId, duration, audioSrc, cascade,
   const [panX, setPanX] = useState(0)
   const [hoverInfo, setHoverInfo] = useState(null)
   const [audioError, setAudioError] = useState(false)
+  const [downloadStatus, setDownloadStatus] = useState(null) // null | 'checking' | 'downloading' | 'ready' | 'error'
   const audioRef = useRef(null)
   const viewportRef = useRef(null)
   const imgRef = useRef(null)
@@ -21,6 +22,10 @@ export default function SpectrogramViewer({ fileId, duration, audioSrc, cascade,
   const spectroSrc = spectroType === 'cascade'
     ? API.cascadeSpectrogram(`${fileId}_cascade.png`)
     : API.spectrogram(`${fileId}_spectrogram.png`)
+
+  const cleanSpectroSrc = spectroType === 'cascade'
+    ? API.cleanSpectrogram(`${fileId}_cascade_clean.png`)
+    : API.cleanSpectrogram(`${fileId}_spectrogram_clean.png`)
 
   const actualAudioSrc = audioSrc || API.audio(`${fileId}.wav`)
 
@@ -34,6 +39,25 @@ export default function SpectrogramViewer({ fileId, duration, audioSrc, cascade,
 
   // Reset zoom on spectrogram type change
   useEffect(() => { setZoom(1); setPanX(0) }, [spectroType])
+
+  // Check audio availability when fileId changes
+  useEffect(() => {
+    if (!fileId || audioSrc) return // skip if user-uploaded audio
+    setAudioError(false)
+    setDownloadStatus('checking')
+    fetch(API.audioStatus(`${fileId}.wav`))
+      .then(r => r.json())
+      .then(data => {
+        if (data.exists) {
+          setDownloadStatus(null)
+        } else if (data.downloading) {
+          setDownloadStatus('downloading')
+        } else {
+          setDownloadStatus('unavailable')
+        }
+      })
+      .catch(() => setDownloadStatus(null))
+  }, [fileId, audioSrc])
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -157,6 +181,28 @@ export default function SpectrogramViewer({ fileId, duration, audioSrc, cascade,
     })
   }
 
+  const handleDownloadAudio = () => {
+    setDownloadStatus('downloading')
+    fetch(API.audioDownload(`${fileId}.wav`))
+      .then(r => r.json())
+      .then(data => {
+        if (data.status === 'ready') {
+          setDownloadStatus('ready')
+          setAudioError(false)
+          // Reload audio element by updating its src
+          if (audioRef.current) {
+            audioRef.current.load()
+          }
+        } else if (data.status === 'downloading') {
+          // Still downloading — poll again after a delay
+          setTimeout(handleDownloadAudio, 3000)
+        } else {
+          setDownloadStatus('error')
+        }
+      })
+      .catch(() => setDownloadStatus('error'))
+  }
+
   const progress = audioDuration > 0 ? (currentTime / audioDuration) * 100 : 0
 
   // Compute playhead position accounting for zoom and pan
@@ -216,6 +262,9 @@ export default function SpectrogramViewer({ fileId, duration, audioSrc, cascade,
     }
   }
 
+  const audioUnavailable = audioError || downloadStatus === 'unavailable'
+  const isDownloading = downloadStatus === 'downloading'
+
   return (
     <div className="stack">
       {/* Spectrogram Type Tabs */}
@@ -273,9 +322,14 @@ export default function SpectrogramViewer({ fileId, duration, audioSrc, cascade,
           if (audioRef.current) {
             setAudioDuration(audioRef.current.duration)
             setAudioError(false)
+            setDownloadStatus(null)
           }
         }}
-        onError={() => setAudioError(true)}
+        onError={() => {
+          if (!audioSrc && downloadStatus !== 'downloading') {
+            setAudioError(true)
+          }
+        }}
         onEnded={() => {
           setIsPlaying(false)
           if (animRef.current) cancelAnimationFrame(animRef.current)
@@ -284,8 +338,13 @@ export default function SpectrogramViewer({ fileId, duration, audioSrc, cascade,
 
       {/* Audio Controls */}
       <div className="audio-player">
-        <button className="play-btn" onClick={togglePlay} title={audioError ? 'Audio not available' : isPlaying ? 'Pause' : 'Play'}>
-          {audioError ? '!' : isPlaying ? '\u275A\u275A' : '\u25B6'}
+        <button
+          className="play-btn"
+          onClick={togglePlay}
+          disabled={audioUnavailable && !isDownloading}
+          title={audioUnavailable ? 'Audio not available' : isPlaying ? 'Pause' : 'Play'}
+        >
+          {audioUnavailable ? '!' : isDownloading ? '...' : isPlaying ? '\u275A\u275A' : '\u25B6'}
         </button>
         <div className="timeline" onClick={handleTimelineClick}>
           <div className="timeline-progress" style={{ width: `${progress}%` }} />
@@ -333,9 +392,26 @@ export default function SpectrogramViewer({ fileId, duration, audioSrc, cascade,
           }} />
         )}
       </div>
-      {audioError && (
-        <div style={{ fontSize: 12, color: 'var(--tier-moderate)', textAlign: 'center' }}>
-          Audio file not available for this recording. Only one sample file (190806_3754.wav) is in the dataset.
+
+      {/* Audio download status messages */}
+      {isDownloading && (
+        <div className="audio-status-bar">
+          <div className="spinner" style={{ width: 14, height: 14 }} />
+          Downloading audio from cloud storage...
+        </div>
+      )}
+      {audioUnavailable && !isDownloading && (
+        <div className="audio-status-bar">
+          <span>Audio file not available locally.</span>
+          <button className="btn btn-sm" onClick={handleDownloadAudio}>
+            Download from cloud
+          </button>
+        </div>
+      )}
+      {downloadStatus === 'error' && (
+        <div className="audio-status-bar" style={{ color: 'var(--tier-moderate)' }}>
+          Download failed. Check your internet connection and try again.
+          <button className="btn btn-sm" onClick={handleDownloadAudio}>Retry</button>
         </div>
       )}
     </div>

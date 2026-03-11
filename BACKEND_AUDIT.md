@@ -123,11 +123,13 @@ Papers recomiendan extraer `SamplingStartTimeUTC`, `Temperature`, `Gain`, sampli
 
 ## 5. TODO
 
+> **Updated 2026-03-10.** See also `BACKEND_CHANGES.md` for full reorganization details.
+
 ### Urgentes (afectan demo)
-- [ ] Dejar de borrar time_series (L544-549)
+- [ ] Dejar de borrar time_series (L544-549) — **workaround:** frontend reads individual annotation JSONs which DO have time_series
 - [ ] Quitar 'speech'/'music'/'singing' de YAMNET_BIO_KEYWORDS
-- [ ] Crear requirements.txt
-- [ ] .gitignore: .idea/, __pycache__/
+- [x] Crear requirements.txt — **DONE**
+- [x] .gitignore: .idea/, __pycache__/ — **DONE** (.idea/ removed, .gitignore created)
 
 ### Precisión
 - [ ] Implementar gates en el cascade
@@ -136,9 +138,10 @@ Papers recomiendan extraer `SamplingStartTimeUTC`, `Temperature`, `Gain`, sampli
 - [ ] Agregar confidence_level a detections
 
 ### Organización
-- [ ] Parametrizar INPUT_DIR
-- [ ] Crear run_pipeline.py
-- [ ] Eliminar r2_download.py duplicado
+- [ ] Parametrizar INPUT_DIR — scripts moved to `pipeline/`, pero las paths internas AÚN apuntan a `"Music_Soundtrap_Pilot"`. VER BACKEND_CHANGES.md §3
+- [x] Crear run_pipeline.py — **DONE**
+- [x] Eliminar r2_download.py duplicado — **DONE** (moved to `utils/`)
+- [x] Reorganizar estructura de carpetas — **DONE** (pipeline/, utils/, docs/). VER BACKEND_CHANGES.md
 
 ---
 
@@ -148,17 +151,25 @@ Papers recomiendan extraer `SamplingStartTimeUTC`, `Temperature`, `Gain`, sampli
 Trabajo en el backend de "Dragon Ocean Analyzer" — pipeline Python de bioacústica
 marina para el hackathon SALA 2026 (Galapagos Marine Reserve).
 
-ESTRUCTURA:
+ESTRUCTURA (REORGANIZADA — ver BACKEND_CHANGES.md):
   backend/
-  ├── analyze_marine_audio.py   ← Band analysis + spectrograms (output/)
-  ├── cascade_classifier.py     ← YAMNet + Multispecies + Humpback (output2/)
-  ├── rank_biological_importance.py ← Scoring 7-dimensional (output2/)
-  ├── data/raw_data/            ← WAV files
-  └── output/ + output2/        ← Results
+  ├── run_pipeline.py              ← Orquestador
+  ├── download_audio.py            ← Descarga WAV desde R2 bajo demanda
+  ├── generate_clean_spectrograms.py ← Cropped heatmaps para frontend
+  ├── pipeline/
+  │   ├── analyze_marine_audio.py   ← Band analysis + spectrograms (output/)
+  │   ├── cascade_classifier.py     ← YAMNet + Multispecies + Humpback (output2/)
+  │   └── rank_biological_importance.py ← Scoring 7-dimensional (output2/)
+  ├── utils/                        ← Helper scripts, R2 download
+  ├── docs/                         ← Technical docs, hackathon reference
+  ├── output/ + output2/            ← Results (usado por frontend)
+  └── requirements.txt
 
-BUGS CRÍTICOS (ver BACKEND_AUDIT.md):
+AUDIO: WAVs están FUERA del repo en SALA/data/audio/ (20+ GB)
+
+BUGS CRÍTICOS (ver arriba):
 1. time_series se genera pero se borra antes de guardar (L544-549)
-2. INPUT_DIR="Music_Soundtrap_Pilot" no existe en el repo
+2. INPUT_DIR="Music_Soundtrap_Pilot" no existe — PIPELINE SCRIPTS NO CORREN
 3. 'speech'/'music' cuentan como detección biológica
 4. El cascade NO filtra — los 3 modelos se ejecutan siempre
 5. HUMPBACK_THRESHOLD=0.1 genera 99/100 detecciones

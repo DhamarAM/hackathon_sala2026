@@ -5,9 +5,12 @@ export const API = {
   rankedCsv: '/api/output2/ranked_importance.csv',
   spectrogram: (filename) => `/api/output/spectrograms/${filename}`,
   cascadeSpectrogram: (filename) => `/api/output2/spectrograms/${filename}`,
+  cleanSpectrogram: (filename) => `/api/clean-spectrogram/${filename}`,
   annotation: (id) => `/api/output/annotations/${id}_annotation.json`,
   cascadeAnnotation: (id) => `/api/output2/annotations/${id}_cascade.json`,
   audio: (filename) => `/api/audio/${filename}`,
+  audioStatus: (filename) => `/api/audio/status/${filename}`,
+  audioDownload: (filename) => `/api/audio/download/${filename}`,
 }
 
 export const TIER_CONFIG = {
