@@ -1,0 +1,82 @@
+{
+  "5783.040122170635_seg001.wav": {
+    "ndsi_underwater": -0.9494,
+    "band_power_low": 0.3059,
+    "band_power_mid": 0.0061,
+    "band_power_high": 0.0033,
+    "temporal_entropy": 0.5094,
+    "spectral_entropy": 0.2005,
+    "dominant_band": "LOW",
+    "boat_score": 1.0
+  },
+  "5783.040122170635_seg002.wav": {
+    "ndsi_underwater": -0.9923,
+    "band_power_low": 0.7527,
+    "band_power_mid": 0.0029,
+    "band_power_high": 0.0,
+    "temporal_entropy": 0.4696,
+    "spectral_entropy": 0.3316,
+    "dominant_band": "LOW",
+    "boat_score": 1.0
+  },
+  "5783.040122170635_seg003.wav": {
+    "ndsi_underwater": -0.9862,
+    "band_power_low": 0.7275,
+    "band_power_mid": 0.005,
+    "band_power_high": 0.0,
+    "temporal_entropy": 0.628,
+    "spectral_entropy": 0.3862,
+    "dominant_band": "LOW",
+    "boat_score": 1.0
+  },
+  "5783.040122170635_seg004.wav": {
+    "ndsi_underwater": -0.9997,
+    "band_power_low": 0.936,
+    "band_power_mid": 0.0001,
+    "band_power_high": 0.0,
+    "temporal_entropy": NaN,
+    "spectral_entropy": 0.3287,
+    "dominant_band": "LOW",
+    "boat_score": 1.0
+  },
+  "5783.040122170635_seg005.wav": {
+    "ndsi_underwater": -0.9994,
+    "band_power_low": 0.9318,
+    "band_power_mid": 0.0003,
+    "band_power_high": 0.0,
+    "temporal_entropy": 0.1149,
+    "spectral_entropy": 0.4099,
+    "dominant_band": "LOW",
+    "boat_score": 1.0
+  },
+  "5783.040122170635_seg006.wav": {
+    "ndsi_underwater": -0.9942,
+    "band_power_low": 0.2227,
+    "band_power_mid": 0.0006,
+    "band_power_high": 0.0,
+    "temporal_entropy": 0.5602,
+    "spectral_entropy": 0.1529,
+    "dominant_band": "LOW",
+    "boat_score": 1.0
+  },
+  "5783.040122220635_seg001.wav": {
+    "ndsi_underwater": -0.9258,
+    "band_power_low": 0.2524,
+    "band_power_mid": 0.0074,
+    "band_power_high": 0.0041,
+    "temporal_entropy": NaN,
+    "spectral_entropy": 0.1696,
+    "dominant_band": "LOW",
+    "boat_score": 1.0
+  },
+  "5783.040123030635_seg001.wav": {
+    "ndsi_underwater": -0.9255,
+    "band_power_low": 0.2516,
+    "band_power_mid": 0.0074,
+    "band_power_high": 0.0042,
+    "temporal_entropy": NaN,
+    "spectral_entropy": 0.1697,
+    "dominant_band": "LOW",
+    "boat_score": 1.0
+  }
+}

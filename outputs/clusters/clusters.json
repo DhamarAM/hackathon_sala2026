@@ -1,0 +1,58 @@
+{
+  "5783.040122170635_seg001.wav": {
+    "cluster_id": 0,
+    "umap_x": 1.3569,
+    "umap_y": -1.8724,
+    "cluster_size": 4,
+    "cluster_dominant_band": "LOW"
+  },
+  "5783.040122170635_seg002.wav": {
+    "cluster_id": 1,
+    "umap_x": 0.9911,
+    "umap_y": 0.1021,
+    "cluster_size": 4,
+    "cluster_dominant_band": "LOW"
+  },
+  "5783.040122170635_seg003.wav": {
+    "cluster_id": 0,
+    "umap_x": 0.6177,
+    "umap_y": -1.5119,
+    "cluster_size": 4,
+    "cluster_dominant_band": "LOW"
+  },
+  "5783.040122170635_seg004.wav": {
+    "cluster_id": 1,
+    "umap_x": 1.7378,
+    "umap_y": 0.2158,
+    "cluster_size": 4,
+    "cluster_dominant_band": "LOW"
+  },
+  "5783.040122170635_seg005.wav": {
+    "cluster_id": 1,
+    "umap_x": 2.1801,
+    "umap_y": -0.4726,
+    "cluster_size": 4,
+    "cluster_dominant_band": "LOW"
+  },
+  "5783.040122170635_seg006.wav": {
+    "cluster_id": 0,
+    "umap_x": 0.3619,
+    "umap_y": -0.6105,
+    "cluster_size": 4,
+    "cluster_dominant_band": "LOW"
+  },
+  "5783.040122220635_seg001.wav": {
+    "cluster_id": 1,
+    "umap_x": 1.2917,
+    "umap_y": -0.7317,
+    "cluster_size": 4,
+    "cluster_dominant_band": "LOW"
+  },
+  "5783.040123030635_seg001.wav": {
+    "cluster_id": 0,
+    "umap_x": 2.0278,
+    "umap_y": -1.4128,
+    "cluster_size": 4,
+    "cluster_dominant_band": "LOW"
+  }
+}

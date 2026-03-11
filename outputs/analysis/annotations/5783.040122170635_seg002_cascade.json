@@ -1,0 +1,154 @@
+{
+  "filename": "5783.040122170635_seg002.wav",
+  "source_path": "/home/dhamarkin/Kin Analytics - Repos/hackathon-proposal/outputs/clips/5783.040122170635_seg002.wav",
+  "duration_s": 60.0,
+  "sample_rate": 144000,
+  "rms": 0.0150512,
+  "status": "analyzed",
+  "cascade_flags": [
+    "humpback"
+  ],
+  "cascade_summary": "humpback",
+  "stage1_yamnet": {
+    "top_classes": [
+      {
+        "class": "Silence",
+        "score": 0.6301
+      },
+      {
+        "class": "Stomach rumble",
+        "score": 0.0948
+      },
+      {
+        "class": "Inside, small room",
+        "score": 0.0528
+      },
+      {
+        "class": "Heart sounds, heartbeat",
+        "score": 0.0221
+      },
+      {
+        "class": "Animal",
+        "score": 0.0158
+      }
+    ],
+    "bio_detections": [],
+    "marine_detections": [],
+    "noise_detections": [
+      {
+        "class": "Silence",
+        "score": 0.6301
+      }
+    ],
+    "has_bio_signal": false,
+    "has_marine_signal": false,
+    "embedding_norm": 20.9385
+  },
+  "stage2_multispecies": {
+    "detections": [
+      {
+        "class_code": "Mn",
+        "species": "Megaptera novaeangliae (Humpback whale)",
+        "max_score": 0.020391,
+        "mean_score": 0.003376
+      },
+      {
+        "class_code": "Bm",
+        "species": "Balaenoptera musculus (Blue whale)",
+        "max_score": 0.014099,
+        "mean_score": 0.001774
+      }
+    ],
+    "num_windows": 12,
+    "top_species": "Mn",
+    "top_species_name": "Megaptera novaeangliae (Humpback whale)",
+    "top_max_score": 0.020391,
+    "top_time_series": [
+      0.0005067305755801499,
+      1.4774388546356931e-05,
+      3.831649155472405e-05,
+      0.020391259342432022,
+      1.8715873011387885e-05,
+      0.00023350979608949274,
+      0.0021158382296562195,
+      0.01718747615814209,
+      5.875087226000423e-16,
+      8.596118277637288e-06,
+      2.798476828047569e-08,
+      7.991773041948758e-12
+    ],
+    "any_whale_detected": false
+  },
+  "stage3_humpback": {
+    "max_score": 0.748866,
+    "mean_score": 0.073659,
+    "fraction_above_threshold": 0.0877,
+    "num_windows": 57,
+    "humpback_detected": true,
+    "time_series": [
+      0.028248310089111328,
+      0.07361169159412384,
+      0.01936975121498108,
+      0.015538855455815792,
+      0.7191665768623352,
+      0.6347156167030334,
+      0.7488659620285034,
+      0.34360969066619873,
+      0.055031031370162964,
+      0.005133134312927723,
+      0.043123215436935425,
+      0.18664394319057465,
+      0.08538437634706497,
+      0.13654805719852448,
+      0.03407624736428261,
+      0.006768237799406052,
+      0.007274916861206293,
+      0.06965798884630203,
+      0.0016439836472272873,
+      0.0066681853495538235,
+      0.009729215875267982,
+      0.04754042252898216,
+      0.04089924320578575,
+      0.18883933126926422,
+      0.004517565481364727,
+      0.007600720971822739,
+      0.07762805372476578,
+      0.30713996291160583,
+      0.03055395372211933,
+      0.00175421591848135,
+      0.006706603802740574,
+      0.015933770686388016,
+      0.005096023436635733,
+      0.0011086525628343225,
+      0.09557903558015823,
+      0.0032030632719397545,
+      0.0009293260518461466,
+      0.0007121982052922249,
+      0.0033795777708292007,
+      0.014518417418003082,
+      0.026051996275782585,
+      0.0017572783399373293,
+      0.0022744070738554,
+      0.005165410228073597,
+      0.028641855344176292,
+      0.002033174503594637,
+      0.008410217240452766,
+      0.0025455905124545097,
+      0.010611005127429962,
+      0.002377413446083665,
+      0.00013278378173708916,
+      0.0004099469806533307,
+      0.0010556147899478674,
+      0.004858959466218948,
+      0.0030582614708691835,
+      0.0006994444993324578,
+      0.014024579897522926
+    ]
+  },
+  "annotations": [
+    "Possible whale: Megaptera novaeangliae (Humpback whale) (score=0.0204)",
+    "Possible whale: Balaenoptera musculus (Blue whale) (score=0.0141)",
+    "Humpback detected (max=0.7489, 9% of windows)"
+  ],
+  "spectrogram": "5783.040122170635_seg002_cascade.png"
+}

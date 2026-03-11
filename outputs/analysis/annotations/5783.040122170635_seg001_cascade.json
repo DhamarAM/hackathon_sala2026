@@ -1,0 +1,81 @@
+{
+  "filename": "5783.040122170635_seg001.wav",
+  "source_path": "/home/dhamarkin/Kin Analytics - Repos/hackathon-proposal/outputs/clips/5783.040122170635_seg001.wav",
+  "duration_s": 12.0,
+  "sample_rate": 144000,
+  "rms": 0.0618207,
+  "status": "analyzed",
+  "cascade_flags": [
+    "humpback"
+  ],
+  "cascade_summary": "humpback",
+  "stage1_yamnet": {
+    "top_classes": [
+      {
+        "class": "Silence",
+        "score": 0.3162
+      },
+      {
+        "class": "Stomach rumble",
+        "score": 0.2518
+      },
+      {
+        "class": "Inside, small room",
+        "score": 0.0777
+      },
+      {
+        "class": "Knock",
+        "score": 0.0622
+      },
+      {
+        "class": "Heart sounds, heartbeat",
+        "score": 0.0565
+      }
+    ],
+    "bio_detections": [],
+    "marine_detections": [],
+    "noise_detections": [
+      {
+        "class": "Silence",
+        "score": 0.3162
+      }
+    ],
+    "has_bio_signal": false,
+    "has_marine_signal": false,
+    "embedding_norm": 9.7804
+  },
+  "stage2_multispecies": {
+    "detections": [],
+    "num_windows": 2,
+    "top_species": "Oo",
+    "top_species_name": "Orcinus orca (Orca)",
+    "top_max_score": 0.000313,
+    "top_time_series": [
+      1.5975399492162978e-06,
+      0.00031292950734496117
+    ],
+    "any_whale_detected": false
+  },
+  "stage3_humpback": {
+    "max_score": 0.489272,
+    "mean_score": 0.06983,
+    "fraction_above_threshold": 0.1111,
+    "num_windows": 9,
+    "humpback_detected": true,
+    "time_series": [
+      0.48927152156829834,
+      0.03547855466604233,
+      0.08714436739683151,
+      0.00033414826611988246,
+      0.002092676004394889,
+      0.0009790806798264384,
+      0.0008676716824993491,
+      0.0015956099377945065,
+      0.010705573484301567
+    ]
+  },
+  "annotations": [
+    "Humpback detected (max=0.4893, 11% of windows)"
+  ],
+  "spectrogram": "5783.040122170635_seg001_cascade.png"
+}
