@@ -3,7 +3,7 @@ import { API } from '../config'
 import { IconVolumeHigh, IconVolumeMute } from './Icons'
 
 export default function SpectrogramViewer({ fileId, duration, audioSrc, cascade, sampleRate = 48000 }) {
-  const [spectroType, setSpectroType] = useState('cascade')
+  const [spectroType, setSpectroType] = useState('spectrogram')
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [audioDuration, setAudioDuration] = useState(duration || 0)
@@ -12,20 +12,16 @@ export default function SpectrogramViewer({ fileId, duration, audioSrc, cascade,
   const [panX, setPanX] = useState(0)
   const [hoverInfo, setHoverInfo] = useState(null)
   const [audioError, setAudioError] = useState(false)
-  const [downloadStatus, setDownloadStatus] = useState(null) // null | 'checking' | 'downloading' | 'ready' | 'error'
+  const [downloadStatus, setDownloadStatus] = useState(null)
   const audioRef = useRef(null)
   const viewportRef = useRef(null)
   const imgRef = useRef(null)
   const animRef = useRef(null)
   const dragRef = useRef({ dragging: false, startX: 0, startPan: 0 })
 
-  const spectroSrc = spectroType === 'cascade'
-    ? API.cascadeSpectrogram(`${fileId}_cascade.png`)
-    : API.spectrogram(`${fileId}_spectrogram.png`)
-
-  const cleanSpectroSrc = spectroType === 'cascade'
-    ? API.cleanSpectrogram(`${fileId}_cascade_clean.png`)
-    : API.cleanSpectrogram(`${fileId}_spectrogram_clean.png`)
+  const spectroSrc = spectroType === 'spectrogram'
+    ? API.spectrogram(fileId)
+    : API.cascadeSpectrogram(`${fileId}_cascade.png`)
 
   const actualAudioSrc = audioSrc || API.audio(`${fileId}.wav`)
 
@@ -269,11 +265,11 @@ export default function SpectrogramViewer({ fileId, duration, audioSrc, cascade,
     <div className="stack">
       {/* Spectrogram Type Tabs */}
       <div className="tabs" style={{ maxWidth: 300 }}>
-        <button className={`tab ${spectroType === 'cascade' ? 'active' : ''}`} onClick={() => setSpectroType('cascade')}>
-          Cascade (4-panel)
+        <button className={`tab ${spectroType === 'spectrogram' ? 'active' : ''}`} onClick={() => setSpectroType('spectrogram')}>
+          Spectrogram
         </button>
-        <button className={`tab ${spectroType === 'basic' ? 'active' : ''}`} onClick={() => setSpectroType('basic')}>
-          Basic (2-panel)
+        <button className={`tab ${spectroType === 'cascade' ? 'active' : ''}`} onClick={() => setSpectroType('cascade')}>
+          Cascade (full analysis)
         </button>
       </div>
 

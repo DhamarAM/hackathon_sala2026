@@ -1,0 +1,97 @@
+{
+  "filename": "190806_3754.wav",
+  "duration_s": 15.91,
+  "sample_rate": 48000,
+  "rms": 0.01405134,
+  "status": "analyzed",
+  "cascade_flags": [],
+  "cascade_summary": "no_detections",
+  "stage1_yamnet": {
+    "top_classes": [
+      {
+        "class": "Silence",
+        "score": 0.3903
+      },
+      {
+        "class": "Inside, small room",
+        "score": 0.0781
+      },
+      {
+        "class": "Stomach rumble",
+        "score": 0.0466
+      },
+      {
+        "class": "Snake",
+        "score": 0.042
+      },
+      {
+        "class": "Noise",
+        "score": 0.0315
+      }
+    ],
+    "bio_detections": [],
+    "marine_detections": [],
+    "noise_detections": [
+      {
+        "class": "Silence",
+        "score": 0.3903
+      }
+    ],
+    "has_bio_signal": false,
+    "has_marine_signal": false,
+    "embedding_norm": 6.0498
+  },
+  "stage2_multispecies": {
+    "detections": [
+      {
+        "class_code": "Mn",
+        "species": "Megaptera novaeangliae (Humpback whale)",
+        "max_score": 0.038034,
+        "mean_score": 0.014153
+      },
+      {
+        "class_code": "Oo",
+        "species": "Orcinus orca (Killer whale / Orca)",
+        "max_score": 0.033451,
+        "mean_score": 0.01403
+      }
+    ],
+    "num_windows": 3,
+    "top_species": "Mn",
+    "top_species_name": "Megaptera novaeangliae (Humpback whale)",
+    "top_max_score": 0.038034,
+    "top_time_series": [
+      0.003575537819415331,
+      0.0008486029109917581,
+      0.03803408890962601
+    ],
+    "any_whale_detected": false
+  },
+  "stage3_humpback": {
+    "max_score": 0.06722,
+    "mean_score": 0.014855,
+    "fraction_above_threshold": 0.0,
+    "num_windows": 13,
+    "humpback_detected": false,
+    "time_series": [
+      0.028446834534406662,
+      0.002157540526241064,
+      0.010002522729337215,
+      0.004311621654778719,
+      0.0020924373529851437,
+      0.022351279854774475,
+      0.06722003221511841,
+      0.004884848836809397,
+      0.02482270635664463,
+      0.010513768531382084,
+      0.009600420482456684,
+      0.0012126333313062787,
+      0.005501332227140665
+    ]
+  },
+  "annotations": [
+    "Possible whale: Megaptera novaeangliae (Humpback whale) (weak signal, score=0.0380)",
+    "Possible whale: Orcinus orca (Killer whale / Orca) (weak signal, score=0.0335)"
+  ],
+  "spectrogram": "190806_3754_cascade.png"
+}

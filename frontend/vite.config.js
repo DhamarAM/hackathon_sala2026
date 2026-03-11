@@ -10,9 +10,25 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = path.resolve(__dirname, '..')
 const BACKEND_DIR = path.resolve(REPO_ROOT, 'backend')
 const OUTPUTS_DIR = path.resolve(REPO_ROOT, 'outputs')
-const AUDIO_DIR = path.resolve(BACKEND_DIR, 'data/raw_data')
-const CLEAN_SPEC_DIR = path.resolve(BACKEND_DIR, 'output', 'spectrograms_clean')
+const SALA_ROOT = path.resolve(REPO_ROOT, '..', '..')           // SALA/
+const AUDIO_DIR = path.resolve(SALA_ROOT, 'data', 'audio')      // SALA/data/audio/
 const DOWNLOAD_SCRIPT = path.resolve(BACKEND_DIR, 'download_audio.py')
+const GENERATE_SPEC_SCRIPT = path.resolve(BACKEND_DIR, 'utils', 'generate_spectrogram.py')
+
+// Audio subdirectories (WAVs are organized by hydrophone unit)
+const AUDIO_SUBDIRS = ['Music_Soundtrap_Pilot', '6478', '5783']
+
+function findAudioFile(filename) {
+  // Search all unit subdirectories for the WAV file
+  for (const sub of AUDIO_SUBDIRS) {
+    const p = path.join(AUDIO_DIR, sub, filename)
+    if (fs.existsSync(p)) return p
+  }
+  // Fallback: check AUDIO_DIR root
+  const root = path.join(AUDIO_DIR, filename)
+  if (fs.existsSync(root)) return root
+  return null
+}
 
 // Track in-progress downloads to avoid duplicate spawns
 const downloading = new Set()
@@ -30,24 +46,41 @@ function serveDataPlugin() {
         if (url.startsWith('/api/pipeline/')) {
           filePath = path.join(OUTPUTS_DIR, url.replace('/api/pipeline/', ''))
         } else if (url.startsWith('/api/audio/download/')) {
-          // On-demand download trigger — returns status JSON
           const filename = url.replace('/api/audio/download/', '')
           handleAudioDownload(filename, res)
           return
         } else if (url.startsWith('/api/audio/status/')) {
-          // Check if audio file exists locally
           const filename = url.replace('/api/audio/status/', '')
-          const audioPath = path.join(AUDIO_DIR, filename)
-          const exists = fs.existsSync(audioPath)
+          const found = findAudioFile(filename)
           const isDownloading = downloading.has(filename)
           res.setHeader('Content-Type', 'application/json')
           res.setHeader('Access-Control-Allow-Origin', '*')
-          res.end(JSON.stringify({ exists, downloading: isDownloading }))
+          res.end(JSON.stringify({ exists: !!found, downloading: isDownloading }))
           return
         } else if (url.startsWith('/api/audio/')) {
-          filePath = path.join(AUDIO_DIR, url.replace('/api/audio/', ''))
+          const filename = url.replace('/api/audio/', '')
+          filePath = findAudioFile(filename)
+          if (!filePath) {
+            res.statusCode = 404
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ error: 'not_found', path: url }))
+            return
+          }
         } else if (url.startsWith('/api/clean-spectrogram/')) {
-          filePath = path.join(CLEAN_SPEC_DIR, url.replace('/api/clean-spectrogram/', ''))
+          // On-the-fly clean spectrogram generation
+          const filename = url.replace('/api/clean-spectrogram/', '')
+          handleCleanSpectrogram(filename, res)
+          return
+        } else if (url.startsWith('/api/spectrogram/generate/')) {
+          // On-the-fly full spectrogram generation
+          const filename = url.replace('/api/spectrogram/generate/', '')
+          handleGenerateSpectrogram(filename, 'full', res)
+          return
+        } else if (url.startsWith('/api/spectrogram/bands/')) {
+          // On-the-fly band spectrogram generation
+          const filename = url.replace('/api/spectrogram/bands/', '')
+          handleGenerateSpectrogram(filename, 'bands', res)
+          return
         } else {
           return next()
         }
@@ -95,21 +128,17 @@ function handleAudioDownload(filename, res) {
   res.setHeader('Content-Type', 'application/json')
   res.setHeader('Access-Control-Allow-Origin', '*')
 
-  const audioPath = path.join(AUDIO_DIR, filename)
-
-  // Already downloaded
-  if (fs.existsSync(audioPath)) {
+  const found = findAudioFile(filename)
+  if (found) {
     res.end(JSON.stringify({ status: 'ready', filename }))
     return
   }
 
-  // Already being downloaded
   if (downloading.has(filename)) {
     res.end(JSON.stringify({ status: 'downloading', filename }))
     return
   }
 
-  // Start download
   downloading.add(filename)
   try {
     execSync(`python "${DOWNLOAD_SCRIPT}" "${filename}"`, {
@@ -126,13 +155,75 @@ function handleAudioDownload(filename, res) {
   }
 }
 
+function handleCleanSpectrogram(filename, res) {
+  // First check if a pre-generated version exists in outputs
+  const preGenerated = path.join(OUTPUTS_DIR, 'analysis', 'spectrograms', filename)
+  if (fs.existsSync(preGenerated)) {
+    res.setHeader('Content-Type', 'image/png')
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    const stat = fs.statSync(preGenerated)
+    res.setHeader('Content-Length', stat.size)
+    fs.createReadStream(preGenerated).pipe(res)
+    return
+  }
+
+  // Generate on-the-fly from WAV
+  const wavFilename = filename
+    .replace(/_cascade_clean\.png$/, '.wav')
+    .replace(/_spectrogram_clean\.png$/, '.wav')
+    .replace(/_clean\.png$/, '.wav')
+  const wavPath = findAudioFile(wavFilename)
+
+  if (!wavPath) {
+    res.statusCode = 404
+    res.setHeader('Content-Type', 'application/json')
+    res.end(JSON.stringify({ error: 'audio_not_found', filename: wavFilename }))
+    return
+  }
+
+  handleGenerateSpectrogram(wavPath, 'clean', res)
+}
+
+function handleGenerateSpectrogram(wavPathOrName, mode, res) {
+  // Accept either a resolved path or a filename to search for
+  const wavPath = fs.existsSync(wavPathOrName) ? wavPathOrName : findAudioFile(wavPathOrName)
+
+  if (!wavPath) {
+    res.statusCode = 404
+    res.setHeader('Content-Type', 'application/json')
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.end(JSON.stringify({ error: 'audio_not_found', filename: wavPathOrName }))
+    return
+  }
+
+  try {
+    const result = execSync(
+      `python "${GENERATE_SPEC_SCRIPT}" "${wavPath}" --mode ${mode}`,
+      { cwd: BACKEND_DIR, timeout: 60000, stdio: 'pipe', maxBuffer: 10 * 1024 * 1024 }
+    )
+    res.setHeader('Content-Type', 'image/png')
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Content-Length', result.length)
+    res.end(result)
+  } catch (e) {
+    res.statusCode = 500
+    res.setHeader('Content-Type', 'application/json')
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.end(JSON.stringify({
+      error: 'generation_failed',
+      filename: wavPath,
+      detail: e.stderr?.toString() || e.message,
+    }))
+  }
+}
+
 export default defineConfig({
   plugins: [react(), serveDataPlugin()],
   server: {
     port: 3000,
     open: true,
     fs: {
-      allow: [__dirname, BACKEND_DIR, OUTPUTS_DIR, AUDIO_DIR, CLEAN_SPEC_DIR]
+      allow: [__dirname, BACKEND_DIR, OUTPUTS_DIR, AUDIO_DIR]
     }
   }
 })

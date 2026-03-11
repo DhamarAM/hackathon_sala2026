@@ -1,0 +1,48 @@
+{
+  "filename": "201007_5832.wav",
+  "duration_s": 12.17,
+  "sample_rate": 48000,
+  "cascade_flags": [
+    "humpback"
+  ],
+  "yamnet_top_classes": [
+    {
+      "class": "Silence",
+      "score": 0.6797
+    },
+    {
+      "class": "Inside, small room",
+      "score": 0.0418
+    },
+    {
+      "class": "Outside, rural or natural",
+      "score": 0.0176
+    },
+    {
+      "class": "Snake",
+      "score": 0.0139
+    },
+    {
+      "class": "White noise",
+      "score": 0.0134
+    }
+  ],
+  "yamnet_bio": [],
+  "multispecies_top": "Orcinus orca (Killer whale / Orca)",
+  "multispecies_time_series": [
+    0.0030447139870375395,
+    5.644514203595463e-06
+  ],
+  "humpback_time_series": [
+    0.8724793791770935,
+    0.8358480334281921,
+    0.2927105128765106,
+    0.049297936260700226,
+    0.01992941088974476,
+    0.006015359424054623,
+    0.0075659011490643024,
+    0.01070030964910984,
+    0.03749997541308403
+  ],
+  "humpback_max": 0.872479
+}
