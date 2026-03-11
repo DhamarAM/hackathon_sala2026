@@ -32,8 +32,8 @@ export default function MultipleObservations() {
 
   const pipelineStats = cascadeData ? [
     { label: 'Total Files', value: cascadeData.total_files },
-    { label: 'YAMNet Bio Signals', value: cascadeData.yamnet_bio_signals },
-    { label: 'Whale Species', value: cascadeData.whale_species_detected },
+    { label: 'YAMNet Bio Signals', value: cascadeData.bio_signals },
+    { label: 'Whale Species', value: cascadeData.whale_detected },
     { label: 'Humpback Detected', value: cascadeData.humpback_detected },
   ] : []
 

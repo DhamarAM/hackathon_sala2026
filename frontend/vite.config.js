@@ -9,6 +9,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = path.resolve(__dirname, '..')
 const BACKEND_DIR = path.resolve(REPO_ROOT, 'backend')
 const AUDIO_DIR = path.resolve(BACKEND_DIR, 'data/raw_data')
+const OUTPUTS_DIR = path.resolve(REPO_ROOT, 'outputs')
 
 function serveDataPlugin() {
   return {
@@ -20,10 +21,8 @@ function serveDataPlugin() {
         let filePath = null
         let contentType = 'application/octet-stream'
 
-        if (url.startsWith('/api/output2/')) {
-          filePath = path.join(BACKEND_DIR, 'output2', url.replace('/api/output2/', ''))
-        } else if (url.startsWith('/api/output/')) {
-          filePath = path.join(BACKEND_DIR, 'output', url.replace('/api/output/', ''))
+        if (url.startsWith('/api/pipeline/')) {
+          filePath = path.join(OUTPUTS_DIR, url.replace('/api/pipeline/', ''))
         } else if (url.startsWith('/api/audio/')) {
           filePath = path.join(AUDIO_DIR, url.replace('/api/audio/', ''))
         } else {
@@ -74,7 +73,7 @@ export default defineConfig({
     port: 3000,
     open: true,
     fs: {
-      allow: [__dirname, BACKEND_DIR]
+      allow: [__dirname, BACKEND_DIR, OUTPUTS_DIR]
     }
   }
 })

@@ -6,24 +6,24 @@ export default function PipelineDiagram() {
       desc: 'Hydrophone recordings from the Galapagos Marine Reserve',
     },
     {
-      icon: '\uD83D\uDCC8',
-      title: 'Signal Processing',
-      desc: 'Spectral analysis, band filtering, RMS & peak detection',
+      icon: '\u2702\uFE0F',
+      title: 'Audio Segmentation',
+      desc: 'Silence removal and active-segment extraction (Stage 0)',
     },
     {
       icon: '\uD83E\uDDE0',
       title: 'AI Cascade Classifier',
-      desc: 'YAMNet \u2192 Multispecies Whale \u2192 Humpback Detector',
+      desc: 'YAMNet \u2192 Multispecies Whale \u2192 Humpback Detector (Stages 1\u20133)',
     },
     {
-      icon: '\uD83D\uDDF3\uFE0F',
-      title: 'Ensemble Voting',
-      desc: 'Cross-model agreement and confidence scoring',
+      icon: '\uD83C\uDF3F',
+      title: 'Soundscape & Clustering',
+      desc: 'NDSI acoustic indices + UMAP/HDBSCAN embedding clusters (Stages 5\u20136)',
     },
     {
       icon: '\uD83D\uDCCA',
       title: 'Ranking & Report',
-      desc: '7-dimension biological importance scoring with 5-tier classification',
+      desc: '9-dimension biological importance scoring with 5-tier classification (Stage 4)',
     },
   ]
 

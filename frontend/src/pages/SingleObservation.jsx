@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import SpectrogramViewer from '../components/SpectrogramViewer'
 import AnalysisPanel from '../components/AnalysisPanel'
-import { loadRankedData, loadCascadeResults, loadAnalysisResults, loadFileAnnotation, getFileId } from '../utils'
+import { loadRankedData, loadCascadeResults, loadFileAnnotation, getFileId } from '../utils'
 
 export default function SingleObservation() {
   const [mode, setMode] = useState('select') // 'select' | 'upload' | 'viewing'

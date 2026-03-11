@@ -2,19 +2,21 @@
 
 **SALA 2026 Hackathon** — Marine Acoustic Monitoring, Galapagos Marine Reserve
 
-> **For full project context (AI or human), read [`PROJECT_OVERVIEW.md`](PROJECT_OVERVIEW.md)**
-> For frontend bugs/TODO: [`FRONTEND_AUDIT.md`](FRONTEND_AUDIT.md)
-> For backend bugs/TODO: [`BACKEND_AUDIT.md`](BACKEND_AUDIT.md)
-> For scientific notes: [`PAPER_NOTES.md`](PAPER_NOTES.md)
+> **Full project context (AI or human):** [`docs/PROJECT_OVERVIEW.md`](docs/PROJECT_OVERVIEW.md)
+> **Frontend bugs/TODO:** [`docs/FRONTEND_AUDIT.md`](docs/FRONTEND_AUDIT.md)
+> **Scientific notes:** [`docs/PAPER_NOTES.md`](docs/PAPER_NOTES.md)
 
 ---
 
 ## What it does
 
-A web dashboard that visualizes the output of a 3-stage AI classifier pipeline (YAMNet → Multispecies Whale → Humpback Whale) applied to 100 underwater recordings. Ranks recordings by biological importance (7-dimension weighted score) so marine biologists know which audio to manually review first.
+A web dashboard that visualizes the output of a 6-stage AI pipeline applied to underwater hydrophone recordings. Ranks audio clips by biological importance (9-dimension weighted score, 5 tiers) so marine biologists know which recordings to manually review first.
+
+**Pipeline:** AudioClipper → YAMNet → Multispecies Whale → Humpback Whale → Soundscape Indices → Embedding Clusters → Biological Importance Ranking
 
 ## Quick Start
 
+### Frontend
 ```bash
 cd frontend
 npm install
@@ -22,28 +24,45 @@ npm run dev
 # http://localhost:3000
 ```
 
-Vite middleware serves data from `backend/output/`, `backend/output2/`, `backend/data/raw_data/`. No backend server needed.
+Vite middleware serves data from `outputs/` via `/api/pipeline/*`. No backend server needed.
+
+### Backend (re-run pipeline)
+```bash
+pip install -r requirements.txt
+python -m backend.run --source hackathon_data/marine-acoustic
+```
+
+For GPU environments (RunPod):
+```bash
+bash scripts/runpod_run.sh --source /workspace/data/marine-acoustic
+```
 
 ## Repo Structure
 
 ```
-hackathon_sala2026/
-├── PROJECT_OVERVIEW.md   ← Full context (read first)
-├── FRONTEND_AUDIT.md     ← Frontend bugs, TODO, Claude prompts
-├── BACKEND_AUDIT.md      ← Backend bugs, TODO, Claude prompts
-├── PAPER_NOTES.md        ← Scientific literature notes
-├── backend/              ← Python pipeline + data + outputs
-└── frontend/             ← React 18 + Vite 6 + Chart.js dashboard
+dragon-ocean-analyzer/
+├── README.md
+├── LICENSE
+├── requirements.txt
+├── .gitignore
+│
+├── backend/          ← Python ML pipeline (stages 0-6)
+├── frontend/         ← React 18 + Vite 6 + Chart.js
+├── scripts/          ← Data download, deployment utilities
+├── docs/             ← Project documentation and audits
+│
+├── hackathon_data/   ← Audio dataset (gitignored, download separately)
+└── outputs/  ← Generated artifacts (gitignored)
 ```
 
 ## Team Workflow
 
-| Role | Branch | Scope |
-|------|--------|-------|
-| Frontend A | `feature/pages` | Pages, layout, navigation |
-| Frontend B | `feature/viz` | Charts, SpectrogramViewer, visualizations |
-| Backend | `feature/pipeline` | Python scripts, data processing |
+| Role | Scope |
+|------|-------|
+| Backend | `backend/` — Python pipeline, config, stages |
+| Frontend | `frontend/src/` — React components, charts, pages |
+| DevOps | `scripts/` — data download, deployment |
 
 ## For AI Assistants
 
-Read `PROJECT_OVERVIEW.md` first — it contains all schemas, API routes, known bugs, conventions, and a prompt template.
+Read `docs/PROJECT_OVERVIEW.md` first — it contains all schemas, API routes, known bugs, conventions, and a prompt template.

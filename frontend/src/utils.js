@@ -14,17 +14,10 @@ export async function loadCascadeResults() {
   return fetchJSON(API.cascadeResults)
 }
 
-export async function loadAnalysisResults() {
-  return fetchJSON(API.analysisResults)
-}
-
 export async function loadFileAnnotation(filename) {
   const id = filename.replace('.wav', '')
-  const [basic, cascade] = await Promise.all([
-    fetchJSON(API.annotation(id)).catch(() => null),
-    fetchJSON(API.cascadeAnnotation(id)).catch(() => null),
-  ])
-  return { basic, cascade }
+  const cascade = await fetchJSON(API.cascadeAnnotation(id)).catch(() => null)
+  return { basic: null, cascade }
 }
 
 export function getFileId(filename) {

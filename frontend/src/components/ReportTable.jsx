@@ -1,7 +1,6 @@
 import { useState, useMemo } from 'react'
 import TierBadge from './TierBadge'
 import { formatScore, exportTableToCSV } from '../utils'
-import { SPECIES_MAP } from '../config'
 
 export default function ReportTable({ rankings, onRowClick }) {
   const [sortKey, setSortKey] = useState('rank')
@@ -21,7 +20,6 @@ export default function ReportTable({ rankings, onRowClick }) {
       const q = search.toLowerCase()
       data = data.filter(r =>
         r.filename.toLowerCase().includes(q) ||
-        (r.top_species && SPECIES_MAP[r.top_species]?.toLowerCase().includes(q)) ||
         (r.top_species && r.top_species.toLowerCase().includes(q))
       )
     }

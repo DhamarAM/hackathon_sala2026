@@ -1,13 +1,11 @@
 export const API = {
-  analysisResults: '/api/output/analysis_results.json',
-  cascadeResults: '/api/output2/cascade_results.json',
-  rankedImportance: '/api/output2/ranked_importance.json',
-  rankedCsv: '/api/output2/ranked_importance.csv',
-  spectrogram: (filename) => `/api/output/spectrograms/${filename}`,
-  cascadeSpectrogram: (filename) => `/api/output2/spectrograms/${filename}`,
-  annotation: (id) => `/api/output/annotations/${id}_annotation.json`,
-  cascadeAnnotation: (id) => `/api/output2/annotations/${id}_cascade.json`,
-  audio: (filename) => `/api/audio/${filename}`,
+  cascadeResults:  '/api/pipeline/analysis/results.json',
+  rankedImportance:'/api/pipeline/ranking/ranked.json',
+  rankedCsv:       '/api/pipeline/ranking/ranked.csv',
+  spectrogram:        (filename) => `/api/pipeline/analysis/spectrograms/${filename}`,
+  cascadeSpectrogram: (filename) => `/api/pipeline/analysis/spectrograms/${filename}`,
+  cascadeAnnotation:  (id)       => `/api/pipeline/analysis/annotations/${id}_cascade.json`,
+  audio:              (filename) => `/api/audio/${filename}`,
 }
 
 export const TIER_CONFIG = {
@@ -33,7 +31,7 @@ export const SCORING_DIMENSIONS = [
   { key: 'bio_richness', label: 'Bio Richness', weight: 0.20 },
   { key: 'acoustic_diversity', label: 'Acoustic Diversity', weight: 0.20 },
   { key: 'humpback_coverage', label: 'Humpback Coverage', weight: 0.15 },
-  { key: 'cross_model_agreement', label: 'Cross-Model Agreement', weight: 0.15 },
+  { key: 'cross_model', label: 'Cross-Model Agreement', weight: 0.15 },
   { key: 'humpback_peak', label: 'Humpback Peak', weight: 0.05 },
   { key: 'yamnet_top_quality', label: 'YAMNet Quality', weight: 0.05 },
 ]

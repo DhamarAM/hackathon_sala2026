@@ -28,7 +28,7 @@ export default function AnalysisPanel({ ranking, cascade, basic }) {
             <div style={{ textAlign: 'right' }}>
               <div style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>Top Species</div>
               <div style={{ color: 'var(--teal)', fontWeight: 600 }}>
-                {ranking.top_species} {SPECIES_MAP[ranking.top_species] && <span style={{ fontWeight: 400, fontSize: 12 }}>({SPECIES_MAP[ranking.top_species]})</span>}
+                {ranking.top_species}
               </div>
             </div>
           )}
@@ -122,7 +122,7 @@ export default function AnalysisPanel({ ranking, cascade, basic }) {
           <TimeSeriesChart
             title="Humpback Detection"
             dataSeries={cascade.stage3_humpback.time_series}
-            threshold={0.5}
+            threshold={0.3}
             color="rgb(56,189,248)"
           />
         )}
