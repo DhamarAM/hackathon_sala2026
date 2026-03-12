@@ -14,8 +14,8 @@ export default function PipelineDiagram() {
     },
     {
       icon: <IconSearch size={24} />,
-      title: 'AI Cascade Classifier',
-      desc: 'Perch 2.0 · Multispecies · Humpback · NatureLM · BioLingual · Dasheng (6 models)',
+      title: 'AI Ensemble Classifier',
+      desc: 'Perch 2.0 · Multispecies · Humpback · NatureLM · BioLingual · Dasheng — 6 models in parallel',
     },
     {
       icon: <IconWhale size={24} />,

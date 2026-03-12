@@ -2,14 +2,15 @@ export const API = {
   cascadeResults:     '/api/pipeline/analysis/results.json',
   rankedImportance:   '/api/pipeline/ranking/ranked.json',
   rankedCsv:          '/api/pipeline/ranking/ranked.csv',
-  spectrogram:        (id) => `/api/pipeline/spectrograms/${id}.png`,
+  spectrogram:        (id) => `/api/pipeline/spectrograms_clean/${id}.png`,
   cascadeSpectrogram: (filename) => `/api/pipeline/analysis/spectrograms/${filename}`,
-  cleanSpectrogram:   (filename) => `/api/clean-spectrogram/${filename}`,
   cascadeAnnotation:  (id)       => `/api/pipeline/analysis/annotations/${id}_cascade.json`,
-  chartData:          (id) => `/api/pipeline/analysis/charts/${id}_charts.json`,
+  clipAudio:          (filename) => `/api/pipeline/clips/${filename}`,
   audio:              (filename) => `/api/audio/${filename}`,
   audioStatus:        (filename) => `/api/audio/status/${filename}`,
   audioDownload:      (filename) => `/api/audio/download/${filename}`,
+  soundscape:         '/api/pipeline/soundscape/soundscape.json',
+  clusters:           '/api/pipeline/clusters/clusters.json',
 }
 
 export const TIER_CONFIG = {

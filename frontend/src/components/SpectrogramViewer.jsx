@@ -23,7 +23,7 @@ export default function SpectrogramViewer({ fileId, duration, audioSrc, cascade,
     ? API.spectrogram(fileId)
     : API.cascadeSpectrogram(`${fileId}_cascade.png`)
 
-  const actualAudioSrc = audioSrc || API.audio(`${fileId}.wav`)
+  const actualAudioSrc = audioSrc || API.clipAudio(`${fileId}.wav`)
 
   useEffect(() => {
     return () => { if (animRef.current) cancelAnimationFrame(animRef.current) }
@@ -244,14 +244,14 @@ export default function SpectrogramViewer({ fileId, duration, audioSrc, cascade,
         }
       })
     }
-    // YAMNet bio detections
-    if (cascade.stage1_yamnet?.has_bio_signal) {
-      cascade.stage1_yamnet.bio_detections?.forEach(d => {
+    // Perch 2.0 bio detections
+    if (cascade.stage1_perch?.has_bio_signal) {
+      cascade.stage1_perch.bio_detections?.forEach(d => {
         if (d.score > 0.1) {
           eventMarkers.push({
             position: 50,
             color: 'var(--green)',
-            label: `YAMNet: ${d.class} (${(d.score * 100).toFixed(0)}%)`,
+            label: `Perch: ${d.class} (${(d.score * 100).toFixed(0)}%)`,
           })
         }
       })

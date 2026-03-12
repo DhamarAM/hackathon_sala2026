@@ -2,21 +2,13 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import PipelineDiagram from '../components/PipelineDiagram'
 import { IconWave, IconWhale, IconBarChart, IconHeadphones, IconBrain, IconExport } from '../components/Icons'
-import { loadRankedData, loadCascadeResults } from '../utils'
+import { loadRankedData } from '../utils'
 
 export default function LandingPage() {
-  const [stats, setStats] = useState(null)
+  const [total, setTotal] = useState(null)
 
   useEffect(() => {
-    Promise.all([loadRankedData(), loadCascadeResults()])
-      .then(([ranked, cascade]) => setStats({
-        total: ranked.total_ranked,
-        tiers: ranked.tier_distribution,
-        yamnetBio: cascade?.yamnet_bio_signals || 0,
-        whaleSpecies: cascade?.whale_species_detected || 0,
-        humpback: cascade?.humpback_detected || 0,
-      }))
-      .catch(() => setStats(null))
+    loadRankedData().then(r => setTotal(r?.total_ranked ?? null)).catch(() => {})
   }, [])
 
   return (
@@ -31,51 +23,34 @@ export default function LandingPage() {
         <div className="hero-badge">Galapagos Marine Reserve &middot; Acoustic Monitoring</div>
         <h1>Dragon Ocean<br />Analyzer</h1>
         <p className="subtitle">
-          AI-powered marine bioacoustics platform that detects and classifies
-          underwater species from hydrophone recordings using a 6-model
-          cascade classifier pipeline (3 CNN + 3 Transformer).
+          AI-powered marine bioacoustics platform that classifies underwater species
+          from hydrophone recordings using a 6-model ensemble (3 CNN + 3 Transformer),
+          all running independently and contributing equally to the final biological
+          importance score.
         </p>
-        <p className="meta">Perch 2.0 &middot; Multispecies Whale &middot; Humpback &middot; NatureLM &middot; BioLingual &middot; Dasheng</p>
+        <p className="meta">Perch 2.0 &middot; Multispecies Whale &middot; Humpback &middot; NatureLM-BEATs &middot; BioLingual &middot; Dasheng</p>
 
         <div className="hero-cta">
-          <Link to="/single" className="btn btn-primary">
-            Analyze Recording
-          </Link>
-          <Link to="/multiple" className="btn">
-            View Batch Report
-          </Link>
+          <Link to="/single" className="btn btn-primary">Analyze Recording</Link>
+          <Link to="/multiple" className="btn">View Batch Report</Link>
         </div>
 
-        {stats && (
-          <div className="landing-stats">
-            <div className="stat-card">
-              <div className="stat-value" style={{ color: 'var(--text-primary)' }}>{stats.total}</div>
-              <div className="stat-label">Recordings Analyzed</div>
+        {total !== null && (
+          <div style={{
+            marginTop: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+          }}>
+            <div style={{
+              fontSize: 52, fontWeight: 900, fontFamily: 'var(--font-mono)',
+              color: 'var(--teal)', lineHeight: 1,
+            }}>
+              {total}
             </div>
-            <div className="stat-card">
-              <div className="stat-value" style={{ color: 'var(--tier-critical)' }}>
-                {stats.tiers?.CRITICAL || 0}
-              </div>
-              <div className="stat-label">High Bio-Interest</div>
-              <div style={{ fontSize: 10, color: 'var(--text-dim)', marginTop: 2 }}>Score &ge; 65</div>
+            <div style={{ fontSize: 13, color: 'var(--text-secondary)', letterSpacing: 1, textTransform: 'uppercase' }}>
+              recordings analyzed
             </div>
-            <div className="stat-card">
-              <div className="stat-value" style={{ color: 'var(--tier-high)' }}>
-                {stats.whaleSpecies}
-              </div>
-              <div className="stat-label">Whale Species Detections</div>
+            <div style={{ fontSize: 11, color: 'var(--text-dim)' }}>
+              Galapagos Marine Reserve · 2019
             </div>
-            <div className="stat-card">
-              <div className="stat-value" style={{ color: 'var(--teal)' }}>
-                {stats.humpback}
-              </div>
-              <div className="stat-label">Humpback-Consistent Signals*</div>
-            </div>
-          </div>
-        )}
-        {stats && (
-          <div style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 12, position: 'relative' }}>
-            *Humpback model may over-detect due to frequency overlap with boat noise (100&ndash;500 Hz). Threshold = 0.3.
           </div>
         )}
       </div>
@@ -84,7 +59,8 @@ export default function LandingPage() {
       <div className="pipeline-section">
         <h2>Analysis Pipeline</h2>
         <p className="section-sub">
-          Six-model cascade classifier (3 CNN + 3 Transformer) with 6-model equal-weight biological importance scoring
+          6-model ensemble (3 CNN + 3 Transformer) — all models run independently in parallel,
+          each contributing an equal-weight <code style={{ fontSize: 12 }}>bio_signal_score</code> to the final biological importance ranking
         </p>
         <PipelineDiagram />
       </div>
@@ -96,7 +72,7 @@ export default function LandingPage() {
             <div className="feature-card-icon"><IconWave size={28} /></div>
             <h3>Acoustic Analysis</h3>
             <p>
-              Process hydrophone recordings through spectral analysis,
+              Process hydrophone recordings through mel spectrogram analysis,
               4-band frequency decomposition, and transient event detection.
             </p>
           </div>
@@ -104,8 +80,8 @@ export default function LandingPage() {
             <div className="feature-card-icon"><IconWhale size={28} /></div>
             <h3>Species Detection</h3>
             <p>
-              Detect 12 whale and dolphin sound classes across 7 species and 5 vocalization
-              types using Google's multispecies classifier.
+              Identify 12 whale and dolphin sound classes across 7 species and 5 vocalization
+              types using Google's Multispecies Whale detector.
             </p>
           </div>
           <div className="feature-card">
@@ -121,24 +97,24 @@ export default function LandingPage() {
             <h3>Synchronized Playback</h3>
             <p>
               Play audio recordings with synchronized spectrogram cursor,
-              event markers, and real-time position tracking.
+              event markers, and real-time frequency-time position tracking.
             </p>
           </div>
           <div className="feature-card">
             <div className="feature-card-icon"><IconBrain size={28} /></div>
-            <h3>Cascade Classifiers</h3>
+            <h3>Ensemble Classifiers</h3>
             <p>
-              Perch 2.0 bio-signal gating, multispecies whale identification,
-              humpback detection, NatureLM embeddings, BioLingual zero-shot
-              classification, and Dasheng structural complexity — in sequence.
+              3 CNN models (Perch 2.0, Multispecies Whale, Humpback) and 3 Transformer
+              models (NatureLM-BEATs, BioLingual, Dasheng) run in parallel — each capturing
+              different acoustic dimensions, from species-specific patterns to structural complexity.
             </p>
           </div>
           <div className="feature-card">
             <div className="feature-card-icon"><IconExport size={28} /></div>
-            <h3>Export & Report</h3>
+            <h3>Export &amp; Report</h3>
             <p>
-              Export ranked results to CSV, view per-file radar charts
-              of scoring dimensions, and batch-analyze datasets.
+              Export ranked results to CSV, view per-file CNN vs Transformer radar charts,
+              acoustic embedding cluster maps, and full batch analysis reports.
             </p>
           </div>
         </div>

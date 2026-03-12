@@ -1,5 +1,5 @@
 import TierBadge from './TierBadge'
-import { ScoringRadarChart, YamnetBarChart, TimeSeriesChart, BandEnergyChart } from './Charts'
+import { ModelFamilyRadars, YamnetBarChart, TimeSeriesChart, BandEnergyChart, BioLingualChart } from './Charts'
 import { formatScore, formatDuration } from '../utils'
 import { SPECIES_MAP, VOCALIZATION_CODES } from '../config'
 
@@ -35,9 +35,7 @@ export default function AnalysisPanel({ ranking, cascade, basic, section = 'all'
             {ranking.top_species && (
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>Top Species</div>
-                <div style={{ color: 'var(--teal)', fontWeight: 600 }}>
-                  {ranking.top_species}
-                </div>
+                <div style={{ color: 'var(--teal)', fontWeight: 600 }}>{ranking.top_species}</div>
               </div>
             )}
           </div>
@@ -49,12 +47,44 @@ export default function AnalysisPanel({ ranking, cascade, basic, section = 'all'
         </div>
       )}
 
-      {/* Radar Chart */}
-      {showSummary && ranking.components && (
-        <ScoringRadarChart components={ranking.components} />
+      {/* 1. BioLingual Zero-Shot Classification */}
+      {showDetail && cascade?.stage5_biolingual?.label_scores && (
+        <BioLingualChart labelScores={cascade.stage5_biolingual.label_scores} />
       )}
 
-      {/* Cascade Classifiers */}
+      {/* 2. Time series — Multispecies + Humpback */}
+      {showDetail && (cascade?.stage2_multispecies?.top_time_series || cascade?.stage3_humpback?.time_series) && (
+        <div className="grid-2">
+          {cascade?.stage2_multispecies?.top_time_series && (
+            <TimeSeriesChart
+              title={`Multispecies: ${cascade.stage2_multispecies.top_species || 'Top Species'}`}
+              dataSeries={cascade.stage2_multispecies.top_time_series}
+              threshold={0.1}
+              color="rgb(45,212,191)"
+            />
+          )}
+          {cascade?.stage3_humpback?.time_series && (
+            <TimeSeriesChart
+              title="Humpback Detection"
+              dataSeries={cascade.stage3_humpback.time_series}
+              threshold={0.3}
+              color="rgb(56,189,248)"
+            />
+          )}
+        </div>
+      )}
+
+      {/* 3. CNN vs Transformer family radars */}
+      {showDetail && ranking.components && (
+        <ModelFamilyRadars components={ranking.components} />
+      )}
+
+      {/* 4. Perch 2.0 top classes bar chart */}
+      {showDetail && cascade?.stage1_perch?.top_classes?.length > 0 && (
+        <YamnetBarChart topClasses={cascade.stage1_perch.top_classes} />
+      )}
+
+      {/* 5. All 6 model classifier cards */}
       {showDetail && cascade && (
         <div className="classifier-grid">
           {/* Stage 1: Perch 2.0 */}
@@ -135,32 +165,64 @@ export default function AnalysisPanel({ ranking, cascade, basic, section = 'all'
               </div>
             )}
           </div>
-        </div>
-      )}
 
-      {/* Perch 2.0 bar chart */}
-      {showDetail && cascade?.stage1_perch?.top_classes && (
-        <YamnetBarChart topClasses={cascade.stage1_perch.top_classes} />
-      )}
-
-      {/* Time series */}
-      {showDetail && (
-        <div className="grid-2">
-          {cascade?.stage2_multispecies?.top_time_series && (
-            <TimeSeriesChart
-              title={`Multispecies: ${cascade.stage2_multispecies.top_species || 'Top Species'}`}
-              dataSeries={cascade.stage2_multispecies.top_time_series}
-              threshold={0.1}
-              color="rgb(45,212,191)"
-            />
+          {/* Stage 4: NatureLM-BEATs */}
+          {cascade.stage4_naturelm && (
+            <div className="classifier-card">
+              <div className="classifier-card-header">
+                <span className="classifier-name">Stage 4: NatureLM-BEATs</span>
+                <span className={`classifier-status ${cascade.stage4_naturelm.bio_signal_score > 0.3 ? 'detected' : 'not-detected'}`}>
+                  {cascade.stage4_naturelm.bio_signal_score > 0.3 ? 'Bio Signal' : 'Low Signal'}
+                </span>
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>
+                Magnitude: {formatScore(cascade.stage4_naturelm.magnitude_score)} &middot;
+                Entropy: {formatScore(cascade.stage4_naturelm.entropy_score)} &middot;
+                Bio: {formatScore(cascade.stage4_naturelm.bio_signal_score)}
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>
+                Embedding: {cascade.stage4_naturelm.embedding_dim}D, {cascade.stage4_naturelm.n_frames} frames
+              </div>
+            </div>
           )}
-          {cascade?.stage3_humpback?.time_series && (
-            <TimeSeriesChart
-              title="Humpback Detection"
-              dataSeries={cascade.stage3_humpback.time_series}
-              threshold={0.3}
-              color="rgb(56,189,248)"
-            />
+
+          {/* Stage 5: BioLingual */}
+          {cascade.stage5_biolingual && (
+            <div className="classifier-card">
+              <div className="classifier-card-header">
+                <span className="classifier-name">Stage 5: BioLingual</span>
+                <span className={`classifier-status ${cascade.stage5_biolingual.top_is_bio ? 'detected' : 'not-detected'}`}>
+                  {cascade.stage5_biolingual.top_is_bio ? 'Bio Top Label' : cascade.stage5_biolingual.top_label}
+                </span>
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4 }}>
+                Top: <span style={{ fontWeight: 600 }}>{cascade.stage5_biolingual.top_label}</span> ({(cascade.stage5_biolingual.top_score * 100).toFixed(1)}%)
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>
+                Bio sum: {formatScore(cascade.stage5_biolingual.bio_score_sum)} &middot;
+                Bio signal: {formatScore(cascade.stage5_biolingual.bio_signal_score)}
+              </div>
+            </div>
+          )}
+
+          {/* Stage 6: Dasheng */}
+          {cascade.stage6_dasheng && (
+            <div className="classifier-card">
+              <div className="classifier-card-header">
+                <span className="classifier-name">Stage 6: Dasheng</span>
+                <span className={`classifier-status ${cascade.stage6_dasheng.bio_signal_score > 0.3 ? 'detected' : 'not-detected'}`}>
+                  {cascade.stage6_dasheng.bio_signal_score > 0.3 ? 'Complex' : 'Simple'}
+                </span>
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>
+                Temporal variance: {cascade.stage6_dasheng.temporal_variance?.toFixed(2)} &middot;
+                Cosine sim: {cascade.stage6_dasheng.half_cosine_similarity?.toFixed(3)}
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>
+                Diversity: {formatScore(cascade.stage6_dasheng.temporal_diversity_score)} &middot;
+                Bio signal: {formatScore(cascade.stage6_dasheng.bio_signal_score)}
+              </div>
+            </div>
           )}
         </div>
       )}
