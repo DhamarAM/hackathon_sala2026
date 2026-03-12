@@ -155,3 +155,12 @@ Species known in the region: Orca, Humpback whale, Fin whale, Blue whale, Minke 
 The scoring philosophy mirrors ensemble model practice: no single model is authoritative for out-of-domain hydrophone recordings. Perch 2.0 and NatureLM were trained on terrestrial/general bioacoustics; the Google whale models on surface/aerial recordings; BioLingual and Dasheng are domain-agnostic. Averaging their `bio_signal_scores` creates a robust signal where genuine biological content triggers multiple independent detectors simultaneously.
 
 All detection thresholds are calibrated for **hydrophone recordings**, which produce scores 10–50× lower than the surface recordings these models were originally calibrated on. See `backend/config.py` for the full parameter documentation.
+
+---
+
+## Demo & Presentation
+
+| Resource | Link                                              |
+|----------|---------------------------------------------------|
+| Live Demo | https://youtu.be/1pdVvTEDZhU?si=MHoyPcAOGeAnkgOY  |
+| Presentation Slides | https://docs.google.com/presentation/d/1NyhSd2XY5jdfVkB3GY6M2B0IiwVNvzhLJQAr4Hiu3Iw/edit?usp=sharing                                     |
