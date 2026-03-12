@@ -71,17 +71,28 @@ npm run dev
 # Open http://localhost:5173
 ```
 
-Vite serves the pre-computed pipeline outputs from `outputs/` — no backend needed to view results.
+Vite serves pre-computed pipeline outputs from `outputs/` — no backend needed to view the demo.
 
-### Re-run the pipeline
+> The `outputs/` directory included in the repo contains a **sample of results** from a subset of recordings, enough to fully navigate the dashboard without running the pipeline.
+
+### Test the pipeline with the included sample clip
+
+A single WAV clip is included for local testing:
+
+```
+hackathon_data/marine-acoustic/sample/190806_3761.wav
+```
+
 ```bash
 pip install -r requirements.txt
-python -m backend.run --source hackathon_data/marine-acoustic
+python -m backend.run --source hackathon_data/marine-acoustic/sample
 
 # Resume from checkpoint (skip completed stages)
 python -m backend.run --skip-clip --skip-cascade        # reuse clips + cascade
 python -m backend.run --no-cluster                       # skip GPU clustering
 ```
+
+See `backend/README.md` for the full list of flags and checkpoint-resume options.
 
 ---
 
@@ -101,7 +112,7 @@ Species known in the region: Orca, Humpback whale, Fin whale, Blue whale, Minke 
 | AI Models | Perch 2.0 · Google Multispecies Whale · Google Humpback · NatureLM-BEATs · BioLingual · Dasheng |
 | Clustering | UMAP · HDBSCAN |
 | Frontend | React 18 · Vite 6 · Chart.js · React Router |
-| Data | No database — pipeline outputs static JSON/CSV served by Vite middleware |
+| Data | No database (yet) — pipeline outputs static JSON/CSV served by Vite middleware. The pipeline is ready to deploy and store results in the cloud. |
 
 ---
 
@@ -119,10 +130,11 @@ Species known in the region: Orca, Humpback whale, Fin whale, Blue whale, Minke 
 │       ├── pages/         LandingPage · SingleObservation · MultipleObservations
 │       └── components/    SpectrogramViewer · Charts · AnalysisPanel · ReportTable
 │
-├── hackathon_data/        audio dataset (gitignored — download separately)
-│   └── sample/            small sample included for testing
+├── hackathon_data/
+│   └── marine-acoustic/
+│       └── sample/        ← 190806_3761.wav included for pipeline testing
 │
-├── outputs/               generated artifacts (gitignored)
+├── outputs/               ← sample results included for frontend demo (full run gitignored)
 │   ├── clips/             segmented WAVs
 │   ├── analysis/          results.json · spectrograms · annotations
 │   ├── soundscape/        NDSI timeseries · soundscape.json
@@ -130,10 +142,10 @@ Species known in the region: Orca, Humpback whale, Fin whale, Blue whale, Minke 
 │   └── ranking/           ranked.json · ranked.csv  ← final output
 │
 └── docs/
-    ├── PROJECT_OVERVIEW.md
-    ├── ENSEMBLE_MODELS.md
-    ├── HACKATHON_PROPOSAL.md
-    └── PAPER_NOTES.md
+    ├── MODELS.md                ← full documentation for all 8 models (6 ensemble + UMAP + HDBSCAN)
+    ├── ENSEMBLE_MODELS.md       ← architecture, thresholds, and per-clip output schema for the 6 classifiers
+    ├── RANKING_METHODOLOGY.md   ← scoring formula, tier logic, normalization choices, and limitations
+    └── GUIDELINES.md            ← SALA 2026 hackathon rules and submission requirements
 ```
 
 ---
