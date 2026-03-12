@@ -1,21 +1,28 @@
 import { useState, useEffect } from 'react'
 import ReportTable from '../components/ReportTable'
 import DetailModal from '../components/DetailModal'
-import { TierDistributionChart, ScoreHistogramChart, SpeciesDetectionChart } from '../components/Charts'
-import { loadRankedData, loadCascadeResults } from '../utils'
+import { TierDistributionChart, ScoreHistogramChart, SpeciesDetectionChart, ClusterScatterChart } from '../components/Charts'
+import { loadRankedData, loadCascadeResults, fetchJSON } from '../utils'
+import { API } from '../config'
 
 export default function MultipleObservations() {
   const [rankedData, setRankedData] = useState(null)
   const [cascadeData, setCascadeData] = useState(null)
+  const [clusterData, setClusterData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [selectedRow, setSelectedRow] = useState(null)
 
   useEffect(() => {
-    Promise.all([loadRankedData(), loadCascadeResults()])
-      .then(([ranked, cascade]) => {
+    Promise.all([
+      loadRankedData(),
+      loadCascadeResults(),
+      fetchJSON(API.clusters).catch(() => null),
+    ])
+      .then(([ranked, cascade, clusters]) => {
         setRankedData(ranked)
         setCascadeData(cascade)
+        setClusterData(clusters)
       })
       .catch(err => setError(err.message))
       .finally(() => setLoading(false))
@@ -63,7 +70,7 @@ export default function MultipleObservations() {
         *Humpback model may over-detect due to frequency overlap with boat noise (100&ndash;1000 Hz). Scores indicate acoustic pattern confidence.
       </div>
 
-      {/* Charts */}
+      {/* Tier + Score distribution */}
       <div className="grid-2">
         <TierDistributionChart distribution={rankedData?.tier_distribution} />
         <ScoreHistogramChart rankings={rankedData?.rankings} />
@@ -71,6 +78,11 @@ export default function MultipleObservations() {
 
       {/* Species Detection Summary */}
       <SpeciesDetectionChart cascadeData={cascadeData} />
+
+      {/* Acoustic Embedding Clusters */}
+      {clusterData && (
+        <ClusterScatterChart clusterData={clusterData} rankings={rankedData?.rankings} />
+      )}
 
       {/* Report Table */}
       <ReportTable

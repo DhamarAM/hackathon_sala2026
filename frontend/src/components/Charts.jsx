@@ -3,7 +3,7 @@ import {
   CategoryScale, LinearScale, BarElement, PointElement, LineElement,
   ArcElement, RadialLinearScale, Filler, Tooltip, Legend,
 } from 'chart.js'
-import { Bar, Doughnut, Line, Radar } from 'react-chartjs-2'
+import { Bar, Doughnut, Line, Radar, Scatter } from 'react-chartjs-2'
 import { TIER_CONFIG, SCORING_DIMENSIONS, SPECIES_MAP, VOCALIZATION_CODES } from '../config'
 
 ChartJS.register(
@@ -429,7 +429,13 @@ export function SpeciesDetectionChart({ cascadeData }) {
 
   const isVocalization = (code) => VOCALIZATION_CODES.includes(code)
   const data = {
-    labels: sorted.map(([code]) => code),
+    labels: sorted.map(([code]) => {
+      const full = SPECIES_MAP[code]
+      if (!full) return code
+      // Extract just the common name part after the scientific name
+      const match = full.match(/\(([^)]+)\)$/)
+      return match ? match[1] : full
+    }),
     datasets: [{
       label: 'Files with detection',
       data: sorted.map(([, count]) => count),
@@ -454,8 +460,11 @@ export function SpeciesDetectionChart({ cascadeData }) {
         bodyFont: chartFont,
         callbacks: {
           title: (items) => {
-            const code = items[0]?.label
-            return SPECIES_MAP[code] || code
+            // Find original code by reverse-looking up from sorted array
+            const idx = items[0]?.dataIndex
+            if (idx === undefined) return ''
+            const [code] = sorted[idx]
+            return `${code} — ${SPECIES_MAP[code] || code}`
           },
           label: (item) => `${item.raw} / ${cascadeData.total_files} files`,
         },
@@ -477,6 +486,165 @@ export function SpeciesDetectionChart({ cascadeData }) {
         <span style={{ fontSize: 10, color: tickColor, display: 'flex', alignItems: 'center', gap: 4 }}>
           <span style={{ width: 10, height: 10, borderRadius: 2, background: 'rgba(56,189,248,0.7)', display: 'inline-block' }} /> Vocalization
         </span>
+      </div>
+    </div>
+  )
+}
+
+// ─── Cluster Scatter Chart ────────────────────────────────────────────────────
+
+const CLUSTER_PALETTE = {
+  '-1': { color: '#6b7280', label: 'Outliers', fill: 'rgba(107,114,128,0.08)' },
+    0:  { color: '#2dd4bf', label: 'Cluster 0', fill: 'rgba(45,212,191,0.08)' },
+    1:  { color: '#38bdf8', label: 'Cluster 1', fill: 'rgba(56,189,248,0.08)' },
+    2:  { color: '#f97316', label: 'Cluster 2', fill: 'rgba(249,115,22,0.08)' },
+    3:  { color: '#a78bfa', label: 'Cluster 3', fill: 'rgba(167,139,250,0.08)' },
+    4:  { color: '#22c55e', label: 'Cluster 4', fill: 'rgba(34,197,94,0.08)' },
+}
+
+function convexHull(pts) {
+  if (pts.length < 3) return pts
+  const sorted = [...pts].sort((a, b) => a.x - b.x || a.y - b.y)
+  const cross = (O, A, B) => (A.x - O.x) * (B.y - O.y) - (A.y - O.y) * (B.x - O.x)
+  const lower = []
+  for (const p of sorted) {
+    while (lower.length >= 2 && cross(lower[lower.length-2], lower[lower.length-1], p) <= 0) lower.pop()
+    lower.push(p)
+  }
+  const upper = []
+  for (const p of [...sorted].reverse()) {
+    while (upper.length >= 2 && cross(upper[upper.length-2], upper[upper.length-1], p) <= 0) upper.pop()
+    upper.push(p)
+  }
+  return lower.slice(0, -1).concat(upper.slice(0, -1))
+}
+
+function padHull(hull, factor = 0.18) {
+  if (hull.length === 0) return hull
+  const cx = hull.reduce((s, p) => s + p.x, 0) / hull.length
+  const cy = hull.reduce((s, p) => s + p.y, 0) / hull.length
+  return hull.map(p => ({ x: p.x + (p.x - cx) * factor, y: p.y + (p.y - cy) * factor }))
+}
+
+function makeHullPlugin(clusters) {
+  return {
+    id: 'hullPlugin',
+    afterDraw(chart) {
+      const { ctx, scales: { x: sx, y: sy } } = chart
+      for (const { pts, color, fill } of clusters) {
+        if (pts.length === 0) continue
+        const hull = padHull(pts.length >= 3 ? convexHull(pts) : pts)
+        const px = hull.map(p => ({ x: sx.getPixelForValue(p.x), y: sy.getPixelForValue(p.y) }))
+        ctx.save()
+        ctx.beginPath()
+        if (pts.length === 1) {
+          ctx.arc(px[0].x, px[0].y, 22, 0, Math.PI * 2)
+        } else {
+          ctx.moveTo(px[0].x, px[0].y)
+          for (let i = 1; i < px.length; i++) ctx.lineTo(px[i].x, px[i].y)
+          ctx.closePath()
+        }
+        ctx.fillStyle = fill
+        ctx.fill()
+        ctx.strokeStyle = color
+        ctx.lineWidth = 1.5
+        ctx.setLineDash([5, 3])
+        ctx.stroke()
+        ctx.restore()
+      }
+    },
+  }
+}
+
+export function ClusterScatterChart({ clusterData, rankings }) {
+  if (!clusterData || Object.keys(clusterData).length === 0) return null
+
+  const rankMap = {}
+  if (rankings) rankings.forEach(r => { rankMap[r.filename] = r })
+
+  const byCluster = {}
+  Object.entries(clusterData).forEach(([filename, d]) => {
+    const cid = String(d.cluster_id)
+    if (!byCluster[cid]) byCluster[cid] = []
+    byCluster[cid].push({
+      x: d.umap_x, y: d.umap_y,
+      filename,
+      tier: rankMap[filename]?.tier,
+      score: rankMap[filename]?.score,
+      band: d.cluster_dominant_band,
+    })
+  })
+
+  const clusterIds = Object.keys(byCluster).sort((a, b) => Number(a) - Number(b))
+
+  const datasets = clusterIds.map(cid => {
+    const palette = CLUSTER_PALETTE[Number(cid)] || CLUSTER_PALETTE[0]
+    return {
+      label: `${palette.label} (${byCluster[cid].length})`,
+      data: byCluster[cid],
+      backgroundColor: palette.color,
+      borderColor: palette.color,
+      borderWidth: 1.5,
+      pointRadius: 7,
+      pointHoverRadius: 10,
+    }
+  })
+
+  const hullClusters = clusterIds.map(cid => {
+    const palette = CLUSTER_PALETTE[Number(cid)] || CLUSTER_PALETTE[0]
+    return { pts: byCluster[cid], color: palette.color, fill: palette.fill }
+  })
+
+  const hullPlugin = makeHullPlugin(hullClusters)
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: false,
+    plugins: {
+      legend: {
+        display: true,
+        labels: { color: tickColor, font: chartFont, usePointStyle: true, pointStyleWidth: 10 },
+      },
+      tooltip: {
+        backgroundColor: '#0f1a2e',
+        borderColor: 'rgba(56,189,248,0.2)',
+        borderWidth: 1,
+        titleFont: chartFont,
+        bodyFont: chartFont,
+        callbacks: {
+          title: (items) => items[0]?.raw?.filename?.replace('.wav', '') || '',
+          label: (item) => {
+            const d = item.raw
+            const parts = [`Band: ${d.band}`]
+            if (d.score !== undefined) parts.push(`Score: ${d.score?.toFixed(1)} (${d.tier})`)
+            return parts
+          },
+        },
+      },
+    },
+    scales: {
+      x: {
+        grid: { color: gridColor },
+        ticks: { color: tickColor, font: chartFont },
+        title: { display: true, text: 'UMAP dimension 1', color: tickColor, font: chartFont },
+      },
+      y: {
+        grid: { color: gridColor },
+        ticks: { color: tickColor, font: chartFont },
+        title: { display: true, text: 'UMAP dimension 2', color: tickColor, font: chartFont },
+      },
+    },
+  }
+
+  return (
+    <div className="chart-container">
+      <h3>Acoustic Embedding Clusters <span style={{ fontSize: 11, fontWeight: 400, color: tickColor }}>(NatureLM-BEATs → UMAP → HDBSCAN)</span></h3>
+      <div style={{ height: 380 }}>
+        <Scatter data={{ datasets }} options={options} plugins={[hullPlugin]} />
+      </div>
+      <div style={{ fontSize: 10, color: tickColor, marginTop: 6, textAlign: 'center', fontStyle: 'italic' }}>
+        Each point is a clip. Dashed boundaries show cluster hull regions. Outliers (∅) were not assigned to any cluster.
       </div>
     </div>
   )

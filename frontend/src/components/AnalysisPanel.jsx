@@ -1,5 +1,5 @@
 import TierBadge from './TierBadge'
-import { ScoringRadarChart, ModelFamilyRadars, YamnetBarChart, TimeSeriesChart, BandEnergyChart, BioLingualChart } from './Charts'
+import { ModelFamilyRadars, YamnetBarChart, TimeSeriesChart, BandEnergyChart, BioLingualChart } from './Charts'
 import { formatScore, formatDuration } from '../utils'
 import { SPECIES_MAP, VOCALIZATION_CODES } from '../config'
 
@@ -35,9 +35,7 @@ export default function AnalysisPanel({ ranking, cascade, basic, section = 'all'
             {ranking.top_species && (
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>Top Species</div>
-                <div style={{ color: 'var(--teal)', fontWeight: 600 }}>
-                  {ranking.top_species}
-                </div>
+                <div style={{ color: 'var(--teal)', fontWeight: 600 }}>{ranking.top_species}</div>
               </div>
             )}
           </div>
@@ -49,12 +47,44 @@ export default function AnalysisPanel({ ranking, cascade, basic, section = 'all'
         </div>
       )}
 
-      {/* Model Family Radar Charts — CNN vs Transformer */}
-      {showSummary && ranking.components && (
+      {/* 1. BioLingual Zero-Shot Classification */}
+      {showDetail && cascade?.stage5_biolingual?.label_scores && (
+        <BioLingualChart labelScores={cascade.stage5_biolingual.label_scores} />
+      )}
+
+      {/* 2. Time series — Multispecies + Humpback */}
+      {showDetail && (cascade?.stage2_multispecies?.top_time_series || cascade?.stage3_humpback?.time_series) && (
+        <div className="grid-2">
+          {cascade?.stage2_multispecies?.top_time_series && (
+            <TimeSeriesChart
+              title={`Multispecies: ${cascade.stage2_multispecies.top_species || 'Top Species'}`}
+              dataSeries={cascade.stage2_multispecies.top_time_series}
+              threshold={0.1}
+              color="rgb(45,212,191)"
+            />
+          )}
+          {cascade?.stage3_humpback?.time_series && (
+            <TimeSeriesChart
+              title="Humpback Detection"
+              dataSeries={cascade.stage3_humpback.time_series}
+              threshold={0.3}
+              color="rgb(56,189,248)"
+            />
+          )}
+        </div>
+      )}
+
+      {/* 3. CNN vs Transformer family radars */}
+      {showDetail && ranking.components && (
         <ModelFamilyRadars components={ranking.components} />
       )}
 
-      {/* Cascade Classifiers */}
+      {/* 4. Perch 2.0 top classes bar chart */}
+      {showDetail && cascade?.stage1_perch?.top_classes?.length > 0 && (
+        <YamnetBarChart topClasses={cascade.stage1_perch.top_classes} />
+      )}
+
+      {/* 5. All 6 model classifier cards */}
       {showDetail && cascade && (
         <div className="classifier-grid">
           {/* Stage 1: Perch 2.0 */}
@@ -195,38 +225,6 @@ export default function AnalysisPanel({ ranking, cascade, basic, section = 'all'
             </div>
           )}
         </div>
-      )}
-
-      {/* Perch 2.0 bar chart */}
-      {showDetail && cascade?.stage1_perch?.top_classes && (
-        <YamnetBarChart topClasses={cascade.stage1_perch.top_classes} />
-      )}
-
-      {/* Time series */}
-      {showDetail && (
-        <div className="grid-2">
-          {cascade?.stage2_multispecies?.top_time_series && (
-            <TimeSeriesChart
-              title={`Multispecies: ${cascade.stage2_multispecies.top_species || 'Top Species'}`}
-              dataSeries={cascade.stage2_multispecies.top_time_series}
-              threshold={0.1}
-              color="rgb(45,212,191)"
-            />
-          )}
-          {cascade?.stage3_humpback?.time_series && (
-            <TimeSeriesChart
-              title="Humpback Detection"
-              dataSeries={cascade.stage3_humpback.time_series}
-              threshold={0.3}
-              color="rgb(56,189,248)"
-            />
-          )}
-        </div>
-      )}
-
-      {/* BioLingual label scores */}
-      {showDetail && cascade?.stage5_biolingual?.label_scores && (
-        <BioLingualChart labelScores={cascade.stage5_biolingual.label_scores} />
       )}
 
       {/* Band Energy */}
