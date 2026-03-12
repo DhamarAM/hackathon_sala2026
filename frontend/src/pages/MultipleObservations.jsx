@@ -32,9 +32,11 @@ export default function MultipleObservations() {
 
   const pipelineStats = cascadeData ? [
     { label: 'Total Files', value: cascadeData.total_files },
-    { label: 'YAMNet Bio Signals', value: cascadeData.yamnet_bio_signals },
-    { label: 'Whale Species', value: cascadeData.whale_species_detected },
-    { label: 'Humpback-Consistent*', value: cascadeData.humpback_detected },
+    { label: 'Bio Signals', value: cascadeData.bio_signals },
+    { label: 'Whale Detected', value: cascadeData.whale_detected },
+    { label: 'Humpback*', value: cascadeData.humpback_detected },
+    { label: 'NatureLM Bio', value: cascadeData.naturelm_bio },
+    { label: 'BioLingual Bio', value: cascadeData.biolingual_bio },
   ] : []
 
   return (
@@ -49,7 +51,7 @@ export default function MultipleObservations() {
       </div>
 
       {/* Pipeline Summary Stats */}
-      <div className="grid-4">
+      <div className="grid-3">
         {pipelineStats.map(s => (
           <div key={s.label} className="card" style={{ textAlign: 'center' }}>
             <div className="card-value">{s.value}</div>

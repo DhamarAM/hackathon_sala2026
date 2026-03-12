@@ -99,7 +99,7 @@ export function ScoreHistogramChart({ rankings }) {
   )
 }
 
-// Radar Chart for scoring dimensions
+// Radar Chart for scoring dimensions (all 6 models)
 export function ScoringRadarChart({ components }) {
   if (!components) return null
   const data = {
@@ -135,8 +135,112 @@ export function ScoringRadarChart({ components }) {
   }
   return (
     <div className="chart-container">
-      <h3>Scoring Dimensions</h3>
+      <h3>All Models</h3>
       <div style={{ height: 280 }}><Radar data={data} options={options} /></div>
+    </div>
+  )
+}
+
+// CNN Family Radar (Perch, Multispecies, Humpback)
+const CNN_MODELS = [
+  { key: 'perch',        label: 'Perch 2.0',         desc: 'General bioacoustic triage' },
+  { key: 'multispecies', label: 'Multispecies Whale', desc: 'Cetacean species ID' },
+  { key: 'humpback',     label: 'Humpback',           desc: 'Humpback vocalization' },
+]
+
+// Transformer Family Radar (NatureLM, BioLingual, Dasheng)
+const TRANSFORMER_MODELS = [
+  { key: 'naturelm',     label: 'NatureLM-BEATs', desc: 'Structural complexity' },
+  { key: 'biolingual',   label: 'BioLingual',     desc: 'Zero-shot semantic' },
+  { key: 'dasheng',      label: 'Dasheng',         desc: 'Temporal diversity' },
+]
+
+function makeRadarOptions(subtitle) {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#0f1a2e',
+        borderColor: 'rgba(56,189,248,0.2)',
+        borderWidth: 1,
+        titleFont: chartFont,
+        bodyFont: chartFont,
+        callbacks: {
+          label: (ctx) => `${ctx.label}: ${ctx.raw.toFixed(1)}%`,
+        },
+      },
+    },
+    scales: {
+      r: {
+        beginAtZero: true,
+        max: 100,
+        grid: { color: gridColor },
+        angleLines: { color: gridColor },
+        pointLabels: { color: tickColor, font: { ...chartFont, size: 10 } },
+        ticks: { display: false },
+      },
+    },
+  }
+}
+
+export function ModelFamilyRadars({ components }) {
+  if (!components) return null
+
+  const cnnMean = CNN_MODELS.reduce((s, m) => s + (components[m.key] || 0), 0) / CNN_MODELS.length * 100
+  const transMean = TRANSFORMER_MODELS.reduce((s, m) => s + (components[m.key] || 0), 0) / TRANSFORMER_MODELS.length * 100
+
+  const cnnData = {
+    labels: CNN_MODELS.map(m => m.label),
+    datasets: [{
+      label: 'CNN Bio Signal',
+      data: CNN_MODELS.map(m => (components[m.key] || 0) * 100),
+      backgroundColor: 'rgba(239,68,68,0.12)',
+      borderColor: '#ef4444',
+      borderWidth: 2,
+      pointBackgroundColor: '#ef4444',
+      pointRadius: 5,
+      pointHoverRadius: 7,
+    }],
+  }
+
+  const transData = {
+    labels: TRANSFORMER_MODELS.map(m => m.label),
+    datasets: [{
+      label: 'Transformer Bio Signal',
+      data: TRANSFORMER_MODELS.map(m => (components[m.key] || 0) * 100),
+      backgroundColor: 'rgba(45,212,191,0.12)',
+      borderColor: '#2dd4bf',
+      borderWidth: 2,
+      pointBackgroundColor: '#2dd4bf',
+      pointRadius: 5,
+      pointHoverRadius: 7,
+    }],
+  }
+
+  return (
+    <div className="grid-2">
+      <div className="chart-container">
+        <h3>CNN Models <span style={{ fontSize: 11, fontWeight: 400, color: tickColor }}>(domain-specific)</span></h3>
+        <div style={{ height: 220 }}><Radar data={cnnData} options={makeRadarOptions('CNN')} /></div>
+        <div style={{ fontSize: 11, color: tickColor, textAlign: 'center', marginTop: 4 }}>
+          Mean: <span style={{ fontWeight: 700, color: '#ef4444' }}>{cnnMean.toFixed(1)}%</span>
+        </div>
+        <div style={{ fontSize: 10, color: tickColor, textAlign: 'center', marginTop: 2, fontStyle: 'italic' }}>
+          Trained on labeled cetacean/bird data. High precision for known species.
+        </div>
+      </div>
+      <div className="chart-container">
+        <h3>Transformer Models <span style={{ fontSize: 11, fontWeight: 400, color: tickColor }}>(domain-agnostic)</span></h3>
+        <div style={{ height: 220 }}><Radar data={transData} options={makeRadarOptions('Transformer')} /></div>
+        <div style={{ fontSize: 11, color: tickColor, textAlign: 'center', marginTop: 4 }}>
+          Mean: <span style={{ fontWeight: 700, color: '#2dd4bf' }}>{transMean.toFixed(1)}%</span>
+        </div>
+        <div style={{ fontSize: 10, color: tickColor, textAlign: 'center', marginTop: 2, fontStyle: 'italic' }}>
+          Self-supervised / zero-shot. More robust to out-of-domain audio.
+        </div>
+      </div>
     </div>
   )
 }
@@ -165,12 +269,12 @@ export function YamnetBarChart({ topClasses }) {
     },
     scales: {
       x: { grid: { color: gridColor }, ticks: { color: tickColor, font: chartFont }, max: 1 },
-      y: { grid: { display: false }, ticks: { color: '#f1f5f9', font: chartFont } },
+      y: { grid: { display: false }, ticks: { color: tickColor, font: chartFont } },
     },
   }
   return (
     <div className="chart-container">
-      <h3>YAMNet Top Classes</h3>
+      <h3>Perch 2.0 Top Classes</h3>
       <div style={{ height: Math.max(140, sorted.length * 32) }}><Bar data={data} options={options} /></div>
     </div>
   )
@@ -264,7 +368,53 @@ export function BandEnergyChart({ bandAnalysis }) {
   )
 }
 
-// Species Detection Summary — how many files contain each class code
+// BioLingual Label Scores Bar Chart
+export function BioLingualChart({ labelScores }) {
+  if (!labelScores) return null
+  const sorted = Object.entries(labelScores).sort((a, b) => b[1] - a[1])
+  const BIO_LABELS = new Set([
+    'humpback whale song', 'dolphin clicks and whistles', 'shrimp snapping',
+    'seal barking', 'bird calls', 'orca killer whale call', 'fish sounds',
+  ])
+  const data = {
+    labels: sorted.map(([label]) => label),
+    datasets: [{
+      label: 'Score',
+      data: sorted.map(([, score]) => score),
+      backgroundColor: sorted.map(([label]) => BIO_LABELS.has(label) ? 'rgba(45,212,191,0.7)' : 'rgba(100,116,139,0.4)'),
+      borderWidth: 0,
+      borderRadius: 4,
+    }],
+  }
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: 'y',
+    plugins: {
+      legend: { display: false },
+      tooltip: { backgroundColor: '#0f1a2e', borderColor: 'rgba(56,189,248,0.2)', borderWidth: 1, titleFont: chartFont, bodyFont: chartFont },
+    },
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { color: tickColor, font: chartFont }, max: 1 },
+      y: { grid: { display: false }, ticks: { color: tickColor, font: chartFont } },
+    },
+  }
+  return (
+    <div className="chart-container">
+      <h3>BioLingual Zero-Shot Classification</h3>
+      <div style={{ height: Math.max(140, sorted.length * 28) }}><Bar data={data} options={options} /></div>
+      <div style={{ display: 'flex', gap: 16, justifyContent: 'center', marginTop: 8 }}>
+        <span style={{ fontSize: 10, color: tickColor, display: 'flex', alignItems: 'center', gap: 4 }}>
+          <span style={{ width: 10, height: 10, borderRadius: 2, background: 'rgba(45,212,191,0.7)', display: 'inline-block' }} /> Biological
+        </span>
+        <span style={{ fontSize: 10, color: tickColor, display: 'flex', alignItems: 'center', gap: 4 }}>
+          <span style={{ width: 10, height: 10, borderRadius: 2, background: 'rgba(100,116,139,0.4)', display: 'inline-block' }} /> Non-bio
+        </span>
+      </div>
+    </div>
+  )
+}
+
 export function SpeciesDetectionChart({ cascadeData }) {
   if (!cascadeData?.files) return null
   const counts = {}
@@ -313,7 +463,7 @@ export function SpeciesDetectionChart({ cascadeData }) {
     },
     scales: {
       x: { grid: { color: gridColor }, ticks: { color: tickColor, font: chartFont }, title: { display: true, text: 'Number of files', color: tickColor, font: chartFont } },
-      y: { grid: { display: false }, ticks: { color: '#f1f5f9', font: { ...chartFont, weight: 'bold' } } },
+      y: { grid: { display: false }, ticks: { color: tickColor, font: { ...chartFont, weight: 'bold' } } },
     },
   }
   return (
