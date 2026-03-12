@@ -15,7 +15,7 @@ export default function PipelineDiagram() {
     {
       icon: <IconSearch size={24} />,
       title: 'AI Cascade Classifier',
-      desc: 'YAMNet → Multispecies Whale → Humpback Detector (Stages 1–3)',
+      desc: 'Perch 2.0 · Multispecies · Humpback · NatureLM · BioLingual · Dasheng (6 models)',
     },
     {
       icon: <IconWhale size={24} />,
@@ -25,7 +25,7 @@ export default function PipelineDiagram() {
     {
       icon: <IconRanking size={24} />,
       title: 'Ranking & Report',
-      desc: '9-dimension biological importance scoring with 5-tier classification (Stage 4)',
+      desc: '6-model equal-weight scoring (mean bio_signal_score × 100) with 5-tier classification',
     },
   ]
 

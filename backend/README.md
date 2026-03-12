@@ -12,7 +12,7 @@ pip install -r requirements.txt   # from repo root
 
 **Key dependencies:** `tensorflow`, `tensorflow-hub`, `librosa`, `scikit-maad`, `opensoundscape`, `umap-learn`, `hdbscan`
 
-**Stage 6 (clustering)** requires GPU for BirdNET embeddings. Without GPU it falls back to MFCC features automatically. Use `--no-cluster` to skip it entirely.
+**Stage 6 (clustering)** uses NatureLM embeddings (reuses the model loaded in the cascade). Use `--no-cluster` to skip it entirely.
 
 ---
 
@@ -70,10 +70,10 @@ python -m backend.run --no-cluster
 | Stage | Script | What it does |
 |-------|--------|--------------|
 | Stage 0 | `backend/pipeline/stage1_clip.py` | AudioClipper — silence detection (RMS), active-segment extraction, padding and merging. Produces short WAV clips. |
-| Stages 1–3 | `backend/pipeline/stage2_cascade.py` | Cascade — YAMNet (521 classes, 16 kHz) + Multispecies Whale (12 classes, 24 kHz, 5s windows) + Humpback (binary, 10 kHz, 1s windows). |
-| Stage 5 | `backend/pipeline/stage3_soundscape.py` | Soundscape — NDSI, band power, spectral and temporal entropy. CPU-only, no GPU needed. |
-| Stage 6 | `backend/pipeline/stage4_cluster.py` | Clustering — BirdNET embeddings (1024-dim, GPU optional) → UMAP (2D) → HDBSCAN. Fallback: MFCC+Chroma (148-dim) on CPU. |
-| Stage 4 | `backend/pipeline/stage5_rank.py` | Ranking — 9-dimensional weighted score (0–100), 5 tiers. Writes `ranked.json` and `ranked.csv`. |
+| Cascade | `backend/pipeline/stage2_cascade.py` | 6 models in parallel — Perch 2.0 (32 kHz) + Multispecies Whale (12 classes, 24 kHz) + Humpback (binary, 10 kHz) + NatureLM-BEATs (16 kHz) + BioLingual (zero-shot) + Dasheng (complexity). |
+| Soundscape | `backend/pipeline/stage3_soundscape.py` | NDSI, band power, boat_score. CPU-only, no GPU needed. |
+| Clustering | `backend/pipeline/stage4_cluster.py` | NatureLM embeddings (768-dim) → UMAP (2D) → HDBSCAN. |
+| Ranking | `backend/pipeline/stage5_rank.py` | 6-model equal-weight score (0–100), 5 tiers. Writes `ranked.json` and `ranked.csv`. |
 
 > **Note on numbering:** Stage 4 (Ranking) runs last because it depends on Stages 5 and 6 as inputs. The script filenames (`stage1_` through `stage5_`) reflect execution order, not the conceptual stage numbers.
 
@@ -91,7 +91,7 @@ outputs/
 ├── analysis/                       ← Stage 1-3
 │   ├── results.json                Consolidated cascade results for all clips
 │   ├── spectrograms/
-│   │   └── <clip>_cascade.png      4-panel spectrogram (mel + YAMNet + multispecies + humpback)
+│   │   └── <clip>_cascade.png      4-panel spectrogram (mel + Perch 2.0 + multispecies + humpback)
 │   └── annotations/
 │       └── <clip>_cascade.json     Full per-clip result (includes time_series arrays)
 │
@@ -101,11 +101,11 @@ outputs/
 │
 ├── clusters/                       ← Stage 6
 │   ├── clusters.json               Cluster assignments + UMAP coordinates per clip
-│   ├── embeddings.npy              Raw embedding matrix (N × 1024 or N × 148)
+│   ├── embeddings.npy              Raw NatureLM embedding matrix (N × 768)
 │   └── umap_clusters.png           2D scatter plot colored by cluster
 │
 └── ranking/                        ← Stage 4
-    ├── ranked.json                 Full ranking with scores, tiers, and 9 components
+    ├── ranked.json                 Full ranking with scores, tiers, and 6 model components
     └── ranked.csv                  Flat CSV version for quick inspection
 ```
 
@@ -114,27 +114,26 @@ outputs/
 ```json
 {
   "total_ranked": 57,
-  "tier_distribution": {"HIGH": 1, "MODERATE": 2, "LOW": 28, "MINIMAL": 26},
+  "tier_distribution": {"HIGH": 7, "MODERATE": 3, "LOW": 28, "MINIMAL": 19},
   "rankings": [
     {
       "rank": 1,
-      "filename": "6478.230724141251_seg004.wav",
-      "score": 45.76,
+      "filename": "190808_4244_seg003.wav",
+      "score": 63.37,
       "tier": "HIGH",
       "components": {
-        "whale_sustained": 0.5868,
-        "bio_richness": 0.0,
-        "acoustic_diversity": 0.5714,
-        "humpback_coverage": 1.0,
-        "cross_model": 0.6,
-        "ndsi_score": 0.0206,
-        "cluster_signal": 0.3,
-        "humpback_peak": 0.9643,
-        "yamnet_quality": 0.0
+        "perch": 0.0332,
+        "multispecies": 0.6667,
+        "humpback": 0.6111,
+        "naturelm": 0.5724,
+        "biolingual": 0.9842,
+        "dasheng": 0.9349
       },
-      "cascade_flags": ["whale_species", "humpback"],
-      "top_species": "Generic whale call",
-      "annotations": ["Whale: Generic whale call (score=0.6286)", "Humpback detected (...)"]
+      "cascade_flags": ["biological_audio", "whale_species", "humpback", "naturelm_bio", "biolingual_bio", "dasheng_complex"],
+      "top_species": "Orcinus orca (Orca)",
+      "boat_score": 0.12,
+      "ndsi": 0.45,
+      "cluster_id": 2
     }
   ]
 }
@@ -144,25 +143,26 @@ outputs/
 
 | Tier | Score | Interpretation |
 |------|-------|----------------|
-| CRITICAL | ≥ 65 | High-confidence multi-model detection — review first |
-| HIGH | ≥ 45 | Strong single-model signal — likely biological |
-| MODERATE | ≥ 25 | Moderate signal — worth reviewing |
-| LOW | ≥ 10 | Weak signal — review if time permits |
-| MINIMAL | < 10 | No significant biological signal detected |
+| CRITICAL | ≥ 70 | Strong multi-model agreement — review first |
+| HIGH | ≥ 50 | Clear biological signals — detailed review |
+| MODERATE | ≥ 30 | Moderate signals — review when possible |
+| LOW | ≥ 15 | Weak signal — review if time permits |
+| MINIMAL | < 15 | Little biological evidence |
 
-### Ranking dimensions (9 total, sum = 100%)
+### Ranking methodology (6-model equal-weight)
 
-| Dimension | Weight | Source |
-|-----------|--------|--------|
-| `whale_sustained` | 18% | Multispecies peak + mean scores |
-| `bio_richness` | 15% | YAMNet bio detection count and scores |
-| `acoustic_diversity` | 15% | Number of distinct species/vocalization types |
-| `humpback_coverage` | 12% | Fraction of 1s windows above humpback threshold |
-| `cross_model` | 12% | Flags agreement across YAMNet + multispecies + humpback |
-| `ndsi_score` | 10% | NDSI index — penalizes anthropogenic noise dominance |
-| `cluster_signal` | 8% | Bonus for biological cluster membership (Stage 6) |
-| `humpback_peak` | 5% | Maximum humpback score across windows |
-| `yamnet_quality` | 5% | Top-1 YAMNet class quality (penalizes silence/noise) |
+`score = mean(bio_signal_score per model) × 100`
+
+| Model | Key | Weight |
+|-------|-----|--------|
+| Perch 2.0 | `perch` | 1/6 |
+| Multispecies Whale | `multispecies` | 1/6 |
+| Humpback Detector | `humpback` | 1/6 |
+| NatureLM-BEATs | `naturelm` | 1/6 |
+| BioLingual | `biolingual` | 1/6 |
+| Dasheng | `dasheng` | 1/6 |
+
+`boat_score` and `cluster_id` are stored as metadata — they do not affect the score.
 
 ---
 
@@ -172,8 +172,8 @@ All thresholds and paths are in `backend/config.py`:
 
 ```python
 HUMPBACK_THRESHOLD         = 0.3    # per-window detection (raised from 0.1 to reduce FP)
-MULTISPECIES_DETECTION_THR = 0.10   # activates whale_species flag
-MULTISPECIES_THRESHOLD     = 0.01   # minimum score to list in detections[]
+MULTISPECIES_DETECTION_THR = 0.01   # activates whale_species flag (lowered from 0.10 for hydrophone calibration)
+MULTISPECIES_THRESHOLD     = 0.005  # minimum score to list in detections[]
 SILENCE_THRESHOLD          = 50.0   # RMS units for Stage 0 activity detection
 ```
 
@@ -181,7 +181,7 @@ SILENCE_THRESHOLD          = 50.0   # RMS units for Stage 0 activity detection
 
 ## Notes
 
-- **First run downloads ~500 MB of TF Hub models** (YAMNet, Multispecies, Humpback). Cached after first use.
-- **YAMNet does not reliably detect cetaceans** in underwater recordings — it was trained on terrestrial AudioSet. Its role is general environment characterization, not cetacean detection.
+- **First run downloads models** (Perch 2.0, Multispecies, Humpback from TF Hub/Kaggle; NatureLM, BioLingual, Dasheng from HuggingFace). Cached after first use.
+- **Perch 2.0 domain note**: Trained on terrestrial/aerial bioacoustics. In hydrophone recordings with TF Hub fallback (no class names), bio_signal falls back to `std(embeddings)/2`. Typical range: 0.02–0.08.
 - **Biological content is unverified** — all detections are model predictions, not expert-confirmed observations.
 - **Cache invalidation:** if you change `HUMPBACK_THRESHOLD` or other detection thresholds, delete `outputs/analysis/` before re-running to avoid stale cached results.

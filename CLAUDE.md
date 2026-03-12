@@ -52,10 +52,10 @@ No test suite or linting configuration exists in this project.
 | Stage | File | What it does |
 |-------|------|-------------|
 | 0 | `stage1_clip.py` | Silence detection + WAV segmentation |
-| 1–3 | `stage2_cascade.py` | YAMNet (521 classes) + Multispecies Whale (12) + Humpback (binary), all parallel |
-| 5 | `stage3_soundscape.py` | NDSI, entropy, band power indices |
-| 6 | `stage4_cluster.py` | BirdNET embeddings → UMAP → HDBSCAN (GPU or CPU) |
-| 4 | `stage5_rank.py` | 9-dimension weighted score → 5 tiers → `ranked.json` + `ranked.csv` |
+| 1–6 | `stage2_cascade.py` | Perch 2.0 · Multispecies Whale · Humpback · NatureLM · BioLingual · Dasheng |
+| 5 | `stage3_soundscape.py` | NDSI, entropy, band power, boat_score indices |
+| 6 | `stage4_cluster.py` | NatureLM embeddings → UMAP → HDBSCAN (GPU or CPU) |
+| 4 | `stage5_rank.py` | 6-model equal-weight score → 5 tiers → `ranked.json` + `ranked.csv` |
 
 All constants (thresholds, weights, keywords) are centralized in `backend/config.py`.
 
@@ -92,25 +92,11 @@ Audio files are searched in subdirectories: `Music_Soundtrap_Pilot/`, `6478/`, `
 - `src/components/` — SpectrogramViewer (zoom/pan/playback), Charts, ReportTable, AnalysisPanel
 
 ### Ranking System
-9-dimension weighted score (0–100) produces 5 tiers:
-- **CRITICAL** ≥65, **HIGH** ≥45, **MODERATE** ≥25, **LOW** ≥10, **MINIMAL** <10
+6-model equal-weight score (0–100) produces 5 tiers:
+- **CRITICAL** ≥70, **HIGH** ≥50, **MODERATE** ≥30, **LOW** ≥15, **MINIMAL** <15
 
-Dimensions (from `backend/config.py` `RANK_WEIGHTS`): `whale_sustained` 18%, `bio_richness` 15%, `acoustic_diversity` 15%, plus `cross_model`, `yamnet_quality`, `ndsi_score`, `cluster_signal`, and others.
+`score = mean(bio_signal_score per model) × 100` — models: `perch`, `multispecies`, `humpback`, `naturelm`, `biolingual`, `dasheng` (each weight = 1/6). `boat_score` from soundscape is stored as metadata only (does not affect score).
 
 ---
-
-## Known Bugs
-
-### `frontend/src/config.js` — SCORING_DIMENSIONS is wrong
-- Has only 7 dimensions; should match backend's 9 (`RANK_WEIGHTS` in `backend/config.py`)
-- Wrong key: `yamnet_top_quality` → should be `yamnet_quality`
-- Wrong key: `cross_model_agreement` → should be `cross_model`
-- Missing: `ndsi_score`, `cluster_signal`
-- **Impact:** Radar chart shows zeros for nonexistent keys, missing 2 dimensions
-
-### `frontend/src/pages/LandingPage.jsx` — Copy errors
-- Line ~115: "7-dimension" → should be "9-dimension"
-- Line ~78: Humpback threshold shown as 0.1 → should be 0.3
-- Line ~87: "Three-stage cascade" → should reference the 5-stage pipeline
 
 See `docs/FRONTEND_NEXT_STEPS.md` for the full list of pending features and bugs.

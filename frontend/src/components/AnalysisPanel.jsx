@@ -52,22 +52,22 @@ export default function AnalysisPanel({ ranking, cascade, basic }) {
       {/* Cascade Classifiers */}
       {cascade && (
         <div className="classifier-grid">
-          {/* Stage 1: YAMNet */}
+          {/* Stage 1: Perch 2.0 */}
           <div className="classifier-card">
             <div className="classifier-card-header">
-              <span className="classifier-name">Stage 1: YAMNet</span>
-              <span className={`classifier-status ${cascade.stage1_yamnet?.has_bio_signal ? 'detected' : 'not-detected'}`}>
-                {cascade.stage1_yamnet?.has_bio_signal ? 'Bio Signal' : 'No Bio Signal'}
+              <span className="classifier-name">Stage 1: Perch 2.0</span>
+              <span className={`classifier-status ${cascade.stage1_perch?.has_bio_signal ? 'detected' : 'not-detected'}`}>
+                {cascade.stage1_perch?.has_bio_signal ? 'Bio Signal' : 'No Bio Signal'}
               </span>
             </div>
-            {cascade.stage1_yamnet?.bio_detections?.length > 0 && (
+            {cascade.stage1_perch?.bio_detections?.length > 0 && (
               <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-                Bio: {cascade.stage1_yamnet.bio_detections.map(d => `${d.class} (${(d.score * 100).toFixed(0)}%)`).join(', ')}
+                Bio: {cascade.stage1_perch.bio_detections.map(d => `${d.class} (${(d.score * 100).toFixed(0)}%)`).join(', ')}
               </div>
             )}
-            {cascade.stage1_yamnet?.marine_detections?.length > 0 && (
+            {cascade.stage1_perch?.marine_detections?.length > 0 && (
               <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
-                Marine: {cascade.stage1_yamnet.marine_detections.map(d => `${d.class} (${(d.score * 100).toFixed(0)}%)`).join(', ')}
+                Marine: {cascade.stage1_perch.marine_detections.map(d => `${d.class} (${(d.score * 100).toFixed(0)}%)`).join(', ')}
               </div>
             )}
           </div>
@@ -126,16 +126,16 @@ export default function AnalysisPanel({ ranking, cascade, basic }) {
             </div>
             {cascade.stage3_humpback?.humpback_detected && (
               <div style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 6, fontStyle: 'italic' }}>
-                Note: Model may over-detect due to boat noise overlap (100&ndash;1000 Hz)
+                Note: Model may over-detect due to boat noise overlap (100&ndash;500 Hz)
               </div>
             )}
           </div>
         </div>
       )}
 
-      {/* YAMNet bar chart */}
-      {cascade?.stage1_yamnet?.top_classes && (
-        <YamnetBarChart topClasses={cascade.stage1_yamnet.top_classes} />
+      {/* Perch 2.0 bar chart */}
+      {cascade?.stage1_perch?.top_classes && (
+        <YamnetBarChart topClasses={cascade.stage1_perch.top_classes} />
       )}
 
       {/* Time series */}
@@ -177,7 +177,7 @@ export default function AnalysisPanel({ ranking, cascade, basic }) {
 
       {/* Methodology note */}
       <div style={{ fontSize: 11, color: 'var(--text-tertiary)', textAlign: 'center', padding: '8px 0', fontStyle: 'italic' }}>
-        Automated analysis via pretrained models (YAMNet, Google Whale). Scores reflect acoustic pattern confidence, not confirmed presence.
+        Automated analysis via pretrained models (Perch 2.0, Google Whale, NatureLM, BioLingual, Dasheng). Scores reflect acoustic pattern confidence, not confirmed presence.
       </div>
     </div>
   )

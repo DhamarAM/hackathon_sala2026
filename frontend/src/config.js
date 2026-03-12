@@ -21,13 +21,13 @@ export const TIER_CONFIG = {
 }
 
 export const SPECIES_MAP = {
-  Oo: 'Orcinus orca (Killer whale)',
+  Oo: 'Orcinus orca (Orca)',
   Mn: 'Megaptera novaeangliae (Humpback whale)',
   Eg: 'Eubalaena glacialis (Right whale)',
   Bp: 'Balaenoptera physalus (Fin whale)',
   Bm: 'Balaenoptera musculus (Blue whale)',
   Ba: 'Balaenoptera acutorostrata (Minke whale)',
-  Be: 'Beaked whale',
+  Be: 'Mesoplodon/Ziphius (Beaked whale)',
   Call: 'Whale call (generic vocalization)',
   Echolocation: 'Echolocation click (odontocetes)',
   Gunshot: 'Gunshot call (right whale surface)',
@@ -38,14 +38,14 @@ export const SPECIES_MAP = {
 export const VOCALIZATION_CODES = ['Call', 'Echolocation', 'Gunshot', 'Upcall', 'Whistle']
 export const SPECIES_CODES = ['Oo', 'Mn', 'Eg', 'Bp', 'Bm', 'Ba', 'Be']
 
+// Equal-weight model scoring: score = mean(bio_signal_score per model) × 100
 export const SCORING_DIMENSIONS = [
-  { key: 'whale_sustained', label: 'Whale Sustained', weight: 0.20 },
-  { key: 'bio_richness', label: 'Bio Richness', weight: 0.20 },
-  { key: 'acoustic_diversity', label: 'Acoustic Diversity', weight: 0.20 },
-  { key: 'humpback_coverage', label: 'Humpback Coverage', weight: 0.15 },
-  { key: 'cross_model_agreement', label: 'Cross-Model Agreement', weight: 0.15 },
-  { key: 'humpback_peak', label: 'Humpback Peak', weight: 0.05 },
-  { key: 'yamnet_top_quality', label: 'YAMNet Quality', weight: 0.05 },
+  { key: 'perch',        label: 'Perch 2.0',         weight: 1/6 },
+  { key: 'multispecies', label: 'Multispecies Whale', weight: 1/6 },
+  { key: 'humpback',     label: 'Humpback',           weight: 1/6 },
+  { key: 'naturelm',     label: 'NatureLM',           weight: 1/6 },
+  { key: 'biolingual',   label: 'BioLingual',         weight: 1/6 },
+  { key: 'dasheng',      label: 'Dasheng',            weight: 1/6 },
 ]
 
 export const BAND_CONFIG = {

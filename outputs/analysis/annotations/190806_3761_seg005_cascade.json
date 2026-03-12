@@ -1,0 +1,135 @@
+{
+  "filename": "190806_3761_seg005.wav",
+  "source_path": "/home/dhamarkin/Kin Analytics - Repos/hackathon-proposal/outputs/clips/190806_3761_seg005.wav",
+  "duration_s": 30.0,
+  "sample_rate": 48000,
+  "rms": 0.00518344,
+  "status": "analyzed",
+  "cascade_flags": [
+    "biological_audio",
+    "whale_species",
+    "humpback",
+    "naturelm_bio",
+    "dasheng_complex"
+  ],
+  "cascade_summary": "biological_audio; whale_species; humpback; naturelm_bio; dasheng_complex",
+  "stage1_perch": {
+    "top_classes": [],
+    "bio_detections": [],
+    "marine_detections": [],
+    "has_bio_signal": true,
+    "has_marine_signal": false,
+    "bio_signal_score": 0.0399
+  },
+  "stage2_multispecies": {
+    "detections": [
+      {
+        "class_code": "Oo",
+        "species": "Orcinus orca (Orca)",
+        "max_score": 0.017393,
+        "mean_score": 0.005002
+      },
+      {
+        "class_code": "Echolocation",
+        "species": "Odontocete echolocation",
+        "max_score": 0.016847,
+        "mean_score": 0.003651
+      }
+    ],
+    "num_windows": 6,
+    "top_species": "Oo",
+    "top_species_name": "Orcinus orca (Orca)",
+    "top_max_score": 0.017393,
+    "top_time_series": [
+      0.007709390949457884,
+      7.107265992090106e-05,
+      0.00011964557052124292,
+      0.017393169924616814,
+      0.004064125008881092,
+      0.0006517283618450165
+    ],
+    "any_whale_detected": true,
+    "bio_signal_score": 0.8333
+  },
+  "stage3_humpback": {
+    "max_score": 0.45761,
+    "mean_score": 0.084431,
+    "fraction_above_threshold": 0.0741,
+    "num_windows": 27,
+    "humpback_detected": true,
+    "time_series": [
+      0.06326142698526382,
+      0.0806453749537468,
+      0.14762456715106964,
+      0.03270909562706947,
+      0.4178512692451477,
+      0.45761027932167053,
+      0.2903063893318176,
+      0.11796751618385315,
+      0.004459537100046873,
+      0.014528553001582623,
+      0.005040791817009449,
+      0.021031225100159645,
+      0.006010058801621199,
+      0.2704792618751526,
+      0.02163998782634735,
+      0.060934145003557205,
+      0.010042351670563221,
+      0.02781646139919758,
+      0.015154260210692883,
+      0.06424589455127716,
+      0.018517281860113144,
+      0.011082827113568783,
+      0.004329345189034939,
+      0.011472262442111969,
+      0.014460316859185696,
+      0.004270808771252632,
+      0.08614274859428406
+    ],
+    "bio_signal_score": 0.5741
+  },
+  "stage4_naturelm": {
+    "n_frames": 1496,
+    "embedding_dim": 768,
+    "norm_mean": 27.7127,
+    "norm_std": 0.0,
+    "magnitude_score": 0.0,
+    "embedding_entropy": 6.3572,
+    "entropy_score": 0.9569,
+    "bio_signal_score": 0.5741
+  },
+  "stage5_biolingual": {
+    "label_scores": {
+      "ocean ambient noise": 0.3166,
+      "silence": 0.3153,
+      "dolphin clicks and whistles": 0.2969,
+      "humpback whale song": 0.0614,
+      "seal barking": 0.0074,
+      "shrimp snapping": 0.0021,
+      "bird calls": 0.0004,
+      "boat engine noise": 0.0,
+      "fish sounds": 0.0,
+      "orca killer whale call": 0.0
+    },
+    "top_label": "ocean ambient noise",
+    "top_score": 0.3166,
+    "bio_score_sum": 0.3682,
+    "top_is_bio": false,
+    "bio_signal_score": 0.3682
+  },
+  "stage6_dasheng": {
+    "n_frames": 750,
+    "temporal_variance": 11.1021,
+    "half_cosine_similarity": 0.929,
+    "temporal_diversity_score": 0.071,
+    "bio_signal_score": 0.855
+  },
+  "annotations": [
+    "Whale: Orcinus orca (Orca) (score=0.0174)",
+    "Whale: Odontocete echolocation (score=0.0168)",
+    "Humpback detected (max=0.4576, 7% of windows)",
+    "Perch bio: ",
+    "NatureLM: entropy=6.36, mag_var=0.00"
+  ],
+  "spectrogram": "190806_3761_seg005_cascade.png"
+}

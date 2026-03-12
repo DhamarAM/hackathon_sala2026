@@ -26,10 +26,12 @@ __pycache__/
 
 # Generated pipeline artifacts
 output/
-outputs/
+output2/
 
-# Large audio dataset (download separately)
-hackathon_data/
+# Large audio dataset (download separately — only sample/ is tracked)
+hackathon_data/marine-acoustic/5783/
+hackathon_data/marine-acoustic/6478/
+hackathon_data/marine-acoustic/Music_Soundtrap_Pilot/
 
 # Logs
 *.log

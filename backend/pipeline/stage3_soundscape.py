@@ -13,7 +13,7 @@ Metrics per clip:
   temporal_entropy  — temporal diversity of the signal (maad.features.temporal_entropy)
   spectral_entropy  — spectral diversity               (maad.features.spectral_entropy)
   dominant_band     — LOW | MID | HIGH (which has the most energy)
-  boat_score        — boat noise proxy (normalized band_power_low)
+  boat_score        — boat noise proxy (normalized band_power_low, 50–500 Hz)
 
 Usage:
     from backend.pipeline.stage3_soundscape import run_soundscape
@@ -27,15 +27,13 @@ from typing import Dict, List
 
 import numpy as np
 
+from backend.config import (
+    SOUNDSCAPE_ANTHRO_HZ, SOUNDSCAPE_BIO_LOW_HZ, SOUNDSCAPE_BIO_BAND_HZ,
+    SOUNDSCAPE_MID_HZ, SOUNDSCAPE_HIGH_HZ,
+    SOUNDSCAPE_WELCH_NPERSEG, SOUNDSCAPE_BOAT_SCALE,
+)
+
 logger = logging.getLogger(__name__)
-
-
-# ─── Band limits (Hz) ────────────────────────────────────────────────────────
-_ANTHRO_LOW_HZ  = (50,   1_000)   # dominant anthropogenic noise
-_BIO_LOW_HZ     = (50,   2_000)   # fish, boats mixed
-_BIO_BAND_HZ    = (2_000, 20_000) # main marine biology
-_MID_HZ         = (2_000, 10_000) # shrimp, low dolphins
-_HIGH_HZ        = (10_000, 48_000) # echolocation, high dolphins
 
 
 def _load_wav(path: Path):
@@ -57,17 +55,17 @@ def _compute_metrics(y: np.ndarray, sr: int) -> dict:
     """Computes acoustic metrics for an audio array."""
     from scipy.signal import welch
 
-    nperseg = min(len(y), 4096)
+    nperseg = min(len(y), SOUNDSCAPE_WELCH_NPERSEG)
     freqs, psd = welch(y, fs=sr, nperseg=nperseg)
 
     total_power = np.sum(psd) + 1e-12
 
     # Relative band power
-    p_anthro = _band_power(psd, freqs, *_ANTHRO_LOW_HZ) / total_power
-    p_bio    = _band_power(psd, freqs, *_BIO_BAND_HZ)   / total_power
-    p_low    = _band_power(psd, freqs, *_BIO_LOW_HZ)    / total_power
-    p_mid    = _band_power(psd, freqs, *_MID_HZ)        / total_power
-    p_high   = _band_power(psd, freqs, *_HIGH_HZ)       / total_power
+    p_anthro = _band_power(psd, freqs, *SOUNDSCAPE_ANTHRO_HZ)   / total_power
+    p_bio    = _band_power(psd, freqs, *SOUNDSCAPE_BIO_BAND_HZ) / total_power
+    p_low    = _band_power(psd, freqs, *SOUNDSCAPE_BIO_LOW_HZ)  / total_power
+    p_mid    = _band_power(psd, freqs, *SOUNDSCAPE_MID_HZ)      / total_power
+    p_high   = _band_power(psd, freqs, *SOUNDSCAPE_HIGH_HZ)     / total_power
 
     # Underwater NDSI: biology vs (noise + biology) ratio
     denom = p_anthro + p_bio
@@ -83,7 +81,7 @@ def _compute_metrics(y: np.ndarray, sr: int) -> dict:
     dominant_band = max(bands, key=bands.get)
 
     # boat_score: low power normalized to [0,1]
-    boat_score = float(np.clip(p_low * 5, 0.0, 1.0))  # empirical scale
+    boat_score = float(np.clip(p_low * SOUNDSCAPE_BOAT_SCALE, 0.0, 1.0))
 
     return {
         'ndsi_underwater':  float(round(ndsi, 4)),

@@ -1,0 +1,119 @@
+{
+  "filename": "190806_3761_seg001.wav",
+  "source_path": "/home/dhamarkin/Kin Analytics - Repos/hackathon-proposal/outputs/clips/190806_3761_seg001.wav",
+  "duration_s": 30.0,
+  "sample_rate": 48000,
+  "rms": 0.00330613,
+  "status": "analyzed",
+  "cascade_flags": [
+    "biological_audio",
+    "humpback",
+    "naturelm_bio",
+    "dasheng_complex"
+  ],
+  "cascade_summary": "biological_audio; humpback; naturelm_bio; dasheng_complex",
+  "stage1_perch": {
+    "top_classes": [],
+    "bio_detections": [],
+    "marine_detections": [],
+    "has_bio_signal": true,
+    "has_marine_signal": false,
+    "bio_signal_score": 0.0768
+  },
+  "stage2_multispecies": {
+    "detections": [],
+    "num_windows": 6,
+    "top_species": "Bp",
+    "top_species_name": "Balaenoptera physalus (Fin whale)",
+    "top_max_score": 0.004059,
+    "top_time_series": [
+      8.258977572950243e-07,
+      8.942025306168944e-05,
+      3.779351391131058e-05,
+      3.1317547836806625e-05,
+      3.423429006943479e-05,
+      0.00405915966257453
+    ],
+    "any_whale_detected": false,
+    "bio_signal_score": 0.203
+  },
+  "stage3_humpback": {
+    "max_score": 0.331819,
+    "mean_score": 0.069738,
+    "fraction_above_threshold": 0.037,
+    "num_windows": 27,
+    "humpback_detected": true,
+    "time_series": [
+      0.33181899785995483,
+      0.17746253311634064,
+      0.009988997131586075,
+      0.009654693305492401,
+      0.00203292490914464,
+      0.005340603180229664,
+      0.03831258416175842,
+      0.024749845266342163,
+      0.19555802643299103,
+      0.024645384401082993,
+      0.010342711582779884,
+      0.014200687408447266,
+      0.004978457931429148,
+      0.11473459750413895,
+      0.12859459221363068,
+      0.020924661308526993,
+      0.21649156510829926,
+      0.2288595736026764,
+      0.05635024607181549,
+      0.023116063326597214,
+      0.13616019487380981,
+      0.024369526654481888,
+      0.00941519532352686,
+      0.019815463572740555,
+      0.015368710272014141,
+      0.01448815781623125,
+      0.025153063237667084
+    ],
+    "bio_signal_score": 0.537
+  },
+  "stage4_naturelm": {
+    "n_frames": 1496,
+    "embedding_dim": 768,
+    "norm_mean": 27.7127,
+    "norm_std": 0.0,
+    "magnitude_score": 0.0,
+    "embedding_entropy": 6.3564,
+    "entropy_score": 0.9567,
+    "bio_signal_score": 0.574
+  },
+  "stage5_biolingual": {
+    "label_scores": {
+      "silence": 0.7733,
+      "ocean ambient noise": 0.1328,
+      "humpback whale song": 0.0826,
+      "dolphin clicks and whistles": 0.0071,
+      "shrimp snapping": 0.0034,
+      "seal barking": 0.0007,
+      "bird calls": 0.0001,
+      "boat engine noise": 0.0,
+      "orca killer whale call": 0.0,
+      "fish sounds": 0.0
+    },
+    "top_label": "silence",
+    "top_score": 0.7733,
+    "bio_score_sum": 0.0939,
+    "top_is_bio": false,
+    "bio_signal_score": 0.0939
+  },
+  "stage6_dasheng": {
+    "n_frames": 750,
+    "temporal_variance": 11.3598,
+    "half_cosine_similarity": 0.9528,
+    "temporal_diversity_score": 0.0472,
+    "bio_signal_score": 0.7358
+  },
+  "annotations": [
+    "Humpback detected (max=0.3318, 4% of windows)",
+    "Perch bio: ",
+    "NatureLM: entropy=6.36, mag_var=0.00"
+  ],
+  "spectrogram": "190806_3761_seg001_cascade.png"
+}
