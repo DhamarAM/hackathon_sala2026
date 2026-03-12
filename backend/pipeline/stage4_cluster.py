@@ -1,9 +1,9 @@
 """
 backend/stage6_cluster.py — Stage 6: Audio embeddings + unsupervised clustering.
 
-Extracts 1024-dimensional acoustic embeddings with BirdNET (via opensoundscape),
-reduces to 2D with UMAP and groups with HDBSCAN. Produces a cluster_id per clip
-and a visual map of acoustic similarity.
+Extracts 768-dimensional bioacoustic embeddings with NatureLM-BEATs (reusing the
+singleton loaded in Stage 2), reduces to 2D with UMAP and groups with HDBSCAN.
+Produces a cluster_id per clip and a visual map of acoustic similarity.
 
 Output per clip:
   cluster_id           — int (-1 = outlier/noise)
@@ -23,50 +23,60 @@ from typing import Dict, List, Optional
 
 import numpy as np
 
+from backend.config import (
+    CLUSTER_UMAP_N_COMPONENTS, CLUSTER_UMAP_N_NEIGHBORS,
+    CLUSTER_UMAP_MIN_DIST, CLUSTER_HDBSCAN_MIN_CLUSTER,
+)
+
 logger = logging.getLogger(__name__)
 
 
-# ─── Hyperparameters ─────────────────────────────────────────────────────────
-
-_UMAP_N_COMPONENTS  = 2
-_UMAP_N_NEIGHBORS   = 5     # low because datasets are small
-_UMAP_MIN_DIST      = 0.1
-_HDBSCAN_MIN_CLUSTER = 3    # minimum 3 clips per cluster
-
-
-def _extract_birdnet_embeddings(wav_paths: List[Path]) -> np.ndarray:
+def _extract_naturelm_embeddings(wav_paths: List[Path]) -> np.ndarray:
     """
-    Extracts BirdNET embeddings for each WAV using opensoundscape.
-    Returns array (N, D) where D is typically 1024.
-    Automatically uses GPU if CUDA is available.
+    Extracts NatureLM-BEATs embeddings (768-dim) for each WAV.
+    Reuses the model already loaded in the Stage 2 singleton — zero extra GPU cost.
+    Returns array (N, 768).
     """
-    try:
-        from opensoundscape.ml.cnn import load_model
-        from opensoundscape import Audio
-    except ImportError:
-        raise ImportError(
-            "opensoundscape is not installed. "
-            "Install with: pip install opensoundscape>=0.10"
-        )
+    import torch
+    import librosa
+    from backend.pipeline.stage2_cascade import _get_models
+
+    m = _get_models()
+    model = m.get('naturelm')
+    if model is None:
+        raise RuntimeError("NatureLM not loaded in Stage 2 singleton")
+    device = m['device']
 
     embeddings = []
     for path in wav_paths:
         try:
-            audio = Audio.from_file(str(path), sample_rate=48_000)
-            # opensoundscape BirdNET embedding: shape (n_windows, 1024)
-            # take the temporal mean as the clip representation
-            emb = audio.birdnet_embeddings()
-            if emb is not None and len(emb) > 0:
-                embeddings.append(np.mean(emb, axis=0))
+            y, sr = librosa.load(str(path), sr=None, mono=True)
+            y_16k = librosa.resample(y, orig_sr=sr, target_sr=16_000) if sr != 16_000 else y
+            if len(y_16k) > 60 * 16_000:
+                y_16k = y_16k[:60 * 16_000]
+
+            audio_tensor = torch.from_numpy(y_16k).float().unsqueeze(0).to(device)
+            with torch.no_grad():
+                output = model(audio_tensor)
+
+            if isinstance(output, torch.Tensor):
+                emb = output.squeeze(0).cpu().numpy()   # (time_steps, 768)
             else:
-                embeddings.append(np.zeros(1024))
+                out = output[0] if isinstance(output, (tuple, list)) else output
+                emb = (out.squeeze(0).cpu().numpy()
+                       if isinstance(out, torch.Tensor) else np.array(out))
+
+            if emb.ndim == 1:
+                emb = emb[np.newaxis, :]
+
+            embeddings.append(emb.mean(axis=0))  # temporal mean → (768,)
         except Exception as exc:
-            logger.warning("  %s — embedding error: %s", path.name, exc)
-            embeddings.append(np.zeros(1024))
+            logger.warning("  %s — NatureLM embedding error: %s", path.name, exc)
+            embeddings.append(np.zeros(768))
 
     result = np.array(embeddings, dtype=np.float32)
     if not any(np.any(e != 0) for e in result):
-        raise RuntimeError("birdnet_embeddings API incompatible — all clips failed")
+        raise RuntimeError("NatureLM embeddings all zeros — model may not be loaded")
     return result
 
 
@@ -104,11 +114,11 @@ def _reduce_umap(embeddings: np.ndarray) -> np.ndarray:
     from umap import UMAP
 
     n = len(embeddings)
-    n_neighbors = min(_UMAP_N_NEIGHBORS, n - 1) if n > 1 else 1
+    n_neighbors = min(CLUSTER_UMAP_N_NEIGHBORS, n - 1) if n > 1 else 1
     reducer = UMAP(
-        n_components=_UMAP_N_COMPONENTS,
+        n_components=CLUSTER_UMAP_N_COMPONENTS,
         n_neighbors=n_neighbors,
-        min_dist=_UMAP_MIN_DIST,
+        min_dist=CLUSTER_UMAP_MIN_DIST,
         random_state=42,
         verbose=False,
     )
@@ -120,7 +130,7 @@ def _cluster_hdbscan(embedding_2d: np.ndarray) -> np.ndarray:
     import hdbscan
 
     n = len(embedding_2d)
-    min_size = min(_HDBSCAN_MIN_CLUSTER, max(2, n // 4))
+    min_size = min(CLUSTER_HDBSCAN_MIN_CLUSTER, max(2, n // 4))
     clusterer = hdbscan.HDBSCAN(min_cluster_size=min_size, min_samples=1)
     return clusterer.fit_predict(embedding_2d)
 
@@ -222,10 +232,10 @@ def run_clustering(
     # ── 1. Feature extraction ────────────────────────────────────────────────
     logger.info("  Extracting embeddings…")
     try:
-        embeddings = _extract_birdnet_embeddings(wav_paths)
-        logger.info("  BirdNET embeddings: shape=%s", embeddings.shape)
+        embeddings = _extract_naturelm_embeddings(wav_paths)
+        logger.info("  NatureLM embeddings: shape=%s", embeddings.shape)
     except Exception as exc:
-        logger.warning("  BirdNET not available (%s) → falling back to librosa MFCCs", exc)
+        logger.warning("  NatureLM not available (%s) → falling back to librosa MFCCs", exc)
         embeddings = _extract_librosa_embeddings(wav_paths)
         logger.info("  Librosa embeddings: shape=%s", embeddings.shape)
 

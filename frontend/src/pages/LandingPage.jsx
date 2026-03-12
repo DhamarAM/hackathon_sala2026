@@ -32,10 +32,10 @@ export default function LandingPage() {
         <h1>Dragon Ocean<br />Analyzer</h1>
         <p className="subtitle">
           AI-powered marine bioacoustics platform that detects and classifies
-          underwater species from hydrophone recordings using a 3-stage
-          cascade classifier pipeline.
+          underwater species from hydrophone recordings using a 6-model
+          cascade classifier pipeline (3 CNN + 3 Transformer).
         </p>
-        <p className="meta">YAMNet &middot; Multispecies Whale Detector &middot; Humpback Whale Detector</p>
+        <p className="meta">Perch 2.0 &middot; Multispecies Whale &middot; Humpback &middot; NatureLM &middot; BioLingual &middot; Dasheng</p>
 
         <div className="hero-cta">
           <Link to="/single" className="btn btn-primary">
@@ -75,7 +75,7 @@ export default function LandingPage() {
         )}
         {stats && (
           <div style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 12, position: 'relative' }}>
-            *Humpback model may over-detect due to frequency overlap with boat noise (100&ndash;1000 Hz). Threshold = 0.3.
+            *Humpback model may over-detect due to frequency overlap with boat noise (100&ndash;500 Hz). Threshold = 0.3.
           </div>
         )}
       </div>
@@ -84,7 +84,7 @@ export default function LandingPage() {
       <div className="pipeline-section">
         <h2>Analysis Pipeline</h2>
         <p className="section-sub">
-          Three-stage sequential cascade classifier with biological importance ranking
+          Six-model cascade classifier (3 CNN + 3 Transformer) with 6-model equal-weight biological importance scoring
         </p>
         <PipelineDiagram />
       </div>
@@ -112,7 +112,7 @@ export default function LandingPage() {
             <div className="feature-card-icon"><IconBarChart size={28} /></div>
             <h3>Biological Ranking</h3>
             <p>
-              Prioritize recordings using a 7-dimension weighted scoring system
+              Prioritize recordings using a 6-model equal-weight scoring system
               with 5-tier classification from Critical to Minimal.
             </p>
           </div>
@@ -128,8 +128,9 @@ export default function LandingPage() {
             <div className="feature-card-icon"><IconBrain size={28} /></div>
             <h3>Cascade Classifiers</h3>
             <p>
-              YAMNet bio-signal gating, multispecies whale identification,
-              and dedicated humpback detection in sequence.
+              Perch 2.0 bio-signal gating, multispecies whale identification,
+              humpback detection, NatureLM embeddings, BioLingual zero-shot
+              classification, and Dasheng structural complexity — in sequence.
             </p>
           </div>
           <div className="feature-card">

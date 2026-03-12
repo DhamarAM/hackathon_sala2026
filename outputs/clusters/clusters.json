@@ -1,0 +1,128 @@
+{
+  "190806_3761_seg001.wav": {
+    "cluster_id": 1,
+    "umap_x": 3.7402,
+    "umap_y": -0.9954,
+    "cluster_size": 6,
+    "cluster_dominant_band": "HIGH"
+  },
+  "190806_3761_seg002.wav": {
+    "cluster_id": 1,
+    "umap_x": 2.7629,
+    "umap_y": -1.8759,
+    "cluster_size": 6,
+    "cluster_dominant_band": "HIGH"
+  },
+  "190806_3761_seg003.wav": {
+    "cluster_id": 1,
+    "umap_x": 3.6412,
+    "umap_y": -2.0823,
+    "cluster_size": 6,
+    "cluster_dominant_band": "HIGH"
+  },
+  "190806_3761_seg004.wav": {
+    "cluster_id": 1,
+    "umap_x": 3.1258,
+    "umap_y": -0.9992,
+    "cluster_size": 6,
+    "cluster_dominant_band": "HIGH"
+  },
+  "190806_3761_seg005.wav": {
+    "cluster_id": 2,
+    "umap_x": 3.411,
+    "umap_y": -2.7155,
+    "cluster_size": 4,
+    "cluster_dominant_band": "LOW"
+  },
+  "190806_3761_seg006.wav": {
+    "cluster_id": 2,
+    "umap_x": 3.0704,
+    "umap_y": -3.4303,
+    "cluster_size": 4,
+    "cluster_dominant_band": "LOW"
+  },
+  "190806_3761_seg007.wav": {
+    "cluster_id": 1,
+    "umap_x": 3.2441,
+    "umap_y": -1.5466,
+    "cluster_size": 6,
+    "cluster_dominant_band": "HIGH"
+  },
+  "190806_3761_seg008.wav": {
+    "cluster_id": 0,
+    "umap_x": 1.8023,
+    "umap_y": -3.3047,
+    "cluster_size": 7,
+    "cluster_dominant_band": "LOW"
+  },
+  "190806_3761_seg009.wav": {
+    "cluster_id": -1,
+    "umap_x": 2.4776,
+    "umap_y": -2.5518,
+    "cluster_size": 1,
+    "cluster_dominant_band": "UNKNOWN"
+  },
+  "190806_3761_seg010.wav": {
+    "cluster_id": 2,
+    "umap_x": 2.4822,
+    "umap_y": -3.2526,
+    "cluster_size": 4,
+    "cluster_dominant_band": "LOW"
+  },
+  "5783.040122170635_seg001.wav": {
+    "cluster_id": 2,
+    "umap_x": 3.685,
+    "umap_y": -3.2055,
+    "cluster_size": 4,
+    "cluster_dominant_band": "LOW"
+  },
+  "5783.040122170635_seg002.wav": {
+    "cluster_id": 0,
+    "umap_x": 1.0434,
+    "umap_y": -2.0411,
+    "cluster_size": 7,
+    "cluster_dominant_band": "LOW"
+  },
+  "5783.040122170635_seg003.wav": {
+    "cluster_id": 0,
+    "umap_x": 1.5238,
+    "umap_y": -2.2663,
+    "cluster_size": 7,
+    "cluster_dominant_band": "LOW"
+  },
+  "5783.040122170635_seg004.wav": {
+    "cluster_id": 1,
+    "umap_x": 3.6094,
+    "umap_y": -0.5958,
+    "cluster_size": 6,
+    "cluster_dominant_band": "HIGH"
+  },
+  "5783.040122170635_seg005.wav": {
+    "cluster_id": 0,
+    "umap_x": 0.7965,
+    "umap_y": -1.7041,
+    "cluster_size": 7,
+    "cluster_dominant_band": "LOW"
+  },
+  "5783.040122170635_seg006.wav": {
+    "cluster_id": 0,
+    "umap_x": 1.441,
+    "umap_y": -2.8477,
+    "cluster_size": 7,
+    "cluster_dominant_band": "LOW"
+  },
+  "5783.040122170635_seg007.wav": {
+    "cluster_id": 0,
+    "umap_x": 2.0166,
+    "umap_y": -1.9005,
+    "cluster_size": 7,
+    "cluster_dominant_band": "LOW"
+  },
+  "5783.040122170635_seg008.wav": {
+    "cluster_id": 0,
+    "umap_x": 0.9794,
+    "umap_y": -3.0894,
+    "cluster_size": 7,
+    "cluster_dominant_band": "LOW"
+  }
+}

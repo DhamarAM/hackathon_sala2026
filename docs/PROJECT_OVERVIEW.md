@@ -9,49 +9,48 @@
 
 **Dragon Ocean Analyzer** is a web dashboard for the SALA 2026 hackathon that visualizes results from an underwater audio classification pipeline. 3-minute presentation.
 
-**Problem:** San Cristóbal Bay (Galápagos) has SoundTrap ST300 hydrophones that recorded ~926 WAV files (~97 hours). Marine biologists need to know which ones to review first.
+**Problem:** San Cristóbal Bay (Galápagos) has SoundTrap ST300 hydrophones that recorded hundreds of WAV files. Marine biologists need to know which ones to review first.
 
-**Our solution:** A 6-stage pipeline (segmentation + 3 AI models + soundscape + clustering) + a biological importance ranking + an interactive frontend that shows everything.
+**Our solution:** A pipeline (segmentation + 6 AI models in parallel + soundscape + clustering) + a biological importance ranking + an interactive frontend that shows everything.
 
 ---
 
-## Pipeline (stages 0-6)
+## Pipeline
 
 ```
-WAV → Stage 0: AudioClipper    (silence filter + segmentation)
-    → Stage 1: YAMNet          (521 AudioSet classes, bio vs noise)
-    → Stage 2: Multispecies    (12 classes: 7 species + 5 vocalizations)
-    → Stage 3: Humpback Whale  (binary per 1s window)
-    → Stage 5: Soundscape      (NDSI — penalizes boat dominance)
-    → Stage 6: Clustering      (UMAP + HDBSCAN, bonus for biological cluster)
-    → Stage 4: Ranking         (9 weighted dimensions, score 0-100, 5 tiers)
+WAV → Stage 0: AudioClipper    (silence filter + segmentation, max 30s clips)
+    → Cascade: 6 models run in parallel
+        · Perch 2.0            (~14k biodiversity classes, bio vs noise)
+        · Multispecies Whale   (12 classes: 7 species + 5 vocalizations)
+        · Humpback Whale       (binary per 1s window)
+        · NatureLM-BEATs       (bioacoustic transformer, structural complexity)
+        · BioLingual           (zero-shot, detects boat noise too)
+        · Dasheng              (self-supervised audio complexity)
+    → Soundscape               (NDSI, band power, boat_score — metadata only)
+    → Clustering               (NatureLM embeddings → UMAP → HDBSCAN)
+    → Ranking                  (6-model equal-weight score 0-100, 5 tiers)
 ```
 
-**IMPORTANT:** The 3 models (stages 1-3) always run (no gating). It is not a true cascade — it is a parallel pipeline. See BACKEND_AUDIT.md §4.1.
+**Note:** All 6 models always run (no gating). It is a parallel ensemble, not a sequential cascade.
 
 ### Models
 
-| Stage | Model | Input SR | Output |
-|-------|--------|----------|--------|
-| 1 | YAMNet (TFHub google/yamnet/1) | 16 kHz | 521 classes, embeddings |
-| 2 | Multispecies Whale (Kaggle google/multispecies-whale/TF2/default/2) | 24 kHz | 12 classes per 5s window |
-| 3 | Humpback Whale (TFHub google/humpback_whale/1) | 10 kHz | binary score per 1s window |
+| Model | Input SR | Output |
+|-------|----------|--------|
+| Perch 2.0 (TFHub) | 32 kHz | ~14k class scores + embeddings |
+| Multispecies Whale (Kaggle) | 24 kHz | 12 classes per 5s window |
+| Humpback Whale (TFHub) | 10 kHz | binary score per 1s window |
+| NatureLM-BEATs | 16 kHz | 768-dim embeddings → entropy + magnitude |
+| BioLingual (CLAP-based) | any | softmax over 10 semantic labels |
+| Dasheng | any | temporal variance + embedding diversity |
 
-### Ranking v2 (9 dimensions)
+### Ranking (6-model equal-weight)
 
-| Dimension (key) | Weight | Measures |
-|-----------------|------|------|
-| `whale_sustained` | 18% | Composite max + mean multispecies |
-| `bio_richness` | 15% | Count + YAMNet bio scores |
-| `acoustic_diversity` | 15% | Species + vocalization types |
-| `humpback_coverage` | 12% | Fraction of windows with humpback |
-| `cross_model` | 12% | Convergence across models |
-| `ndsi_score` | 10% | Marine NDSI (Stage 5, penalizes boats) |
-| `cluster_signal` | 8% | Bonus for biological cluster (Stage 6) |
-| `humpback_peak` | 5% | Maximum humpback score |
-| `yamnet_quality` | 5% | Whether YAMNet top-1 is biological |
+`score = mean(bio_signal_score per model) × 100`
 
-**Tiers:** CRITICAL (≥65), HIGH (≥45), MODERATE (≥25), LOW (≥10), MINIMAL (<10)
+Each model outputs `bio_signal_score [0, 1]`. All weights = 1/6.
+
+**Tiers:** CRITICAL (≥70), HIGH (≥50), MODERATE (≥30), LOW (≥15), MINIMAL (<15)
 
 ---
 
@@ -101,7 +100,7 @@ dragon-ocean-analyzer/
 │   │   ├── stage2_cascade.py    ← YAMNet + Multispecies + Humpback
 │   │   ├── stage3_soundscape.py ← NDSI (scikit-maad)
 │   │   ├── stage4_cluster.py    ← UMAP + HDBSCAN embeddings
-│   │   └── stage5_rank.py       ← 9-dimensional ranking (score 0-100)
+│   │   └── stage5_rank.py       ← 6-model equal-weight ranking (score 0-100)
 │   └── utils/              ← Helpers: r2_download, spectrograms, tester…
 │
 ├── frontend/               ← React 18 + Vite 6
@@ -155,19 +154,21 @@ dragon-ocean-analyzer/
 ### cascade_results.json → per file
 
 ```
-stage1_yamnet:
+stage1_perch:
   top_classes: [{class, score}]
   bio_detections: [{class, score}]
   has_bio_signal: bool
   has_marine_signal: bool
+  bio_signal_score: float
 
 stage2_multispecies:
   detections: [{class_code, species, max_score, mean_score}]
   top_species: string
   top_max_score: float
-  any_whale_detected: bool (threshold ≥ MULTISPECIES_DETECTION_THR = 0.10)
+  any_whale_detected: bool (threshold ≥ MULTISPECIES_DETECTION_THR = 0.01)
   num_windows: int
-  top_time_series: [float]  ← included in JSON since Bug 1.1 fix
+  top_time_series: [float]
+  bio_signal_score: float
 
 stage3_humpback:
   max_score: float
@@ -175,7 +176,27 @@ stage3_humpback:
   fraction_above_threshold: float
   humpback_detected: bool (threshold ≥ HUMPBACK_THRESHOLD = 0.30)
   num_windows: int
-  time_series: [float]  ← included in JSON since Bug 1.1 fix
+  time_series: [float]
+  bio_signal_score: float
+
+stage4_naturelm:
+  embedding_dim: int
+  norm_mean: float
+  magnitude_score: float
+  embedding_entropy: float
+  entropy_score: float
+  bio_signal_score: float
+
+stage5_biolingual:
+  labels: [{label, score}]
+  top_label: string
+  bio_score: float
+  bio_signal_score: float
+
+stage6_dasheng:
+  temporal_variance: float
+  diversity_score: float
+  bio_signal_score: float
 ```
 
 ### ranked.json → per file (outputs/ranking/)
@@ -185,11 +206,12 @@ total_ranked: int
 tier_distribution: {CRITICAL, HIGH, MODERATE, LOW, MINIMAL}
 rankings: [{
   rank, filename, score (0-100), tier
-  components: {whale_sustained, bio_richness, acoustic_diversity,
-               humpback_coverage, cross_model, ndsi_score,
-               cluster_signal, humpback_peak, yamnet_quality}
+  components: {perch, multispecies, humpback, naturelm, biolingual, dasheng}
   cascade_flags: [string]
-  top_species: string  ← full name, not code
+  top_species: string
+  boat_score: float  ← soundscape metadata, does not affect score
+  ndsi: float        ← soundscape metadata
+  cluster_id: int    ← clustering metadata
   annotations: [string]
 }]
 ```
@@ -257,8 +279,7 @@ Only detected in our data: Bm, Bp, Eg, Mn, Oo + Call, Echolocation, Gunshot, Upc
 - **Judging:** Originality (30%), Technical Execution (30%), Impact & Relevance (25%), Presentation (15%)
 - **Key pitch points:**
   - Tool for marine biologists that prioritizes which recordings to review
-  - 9 scoring dimensions, not just a simple threshold
-  - 100 files analyzed, 3 CRITICAL identified
+  - 6-model ensemble: no single model is authoritative for out-of-domain hydrophone recordings
   - Galápagos: 23 cetacean species, 14 residents/visitors
   - Unverified content = scientific honesty (valuable for judges)
 - **Future vision:** similarity search (Agile Modeling), PCEN, more units, active learning

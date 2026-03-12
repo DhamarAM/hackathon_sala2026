@@ -1,0 +1,182 @@
+{
+  "190806_3761_seg001.wav": {
+    "ndsi_underwater": -0.6608,
+    "band_power_low": 0.0304,
+    "band_power_mid": 0.0459,
+    "band_power_high": 0.054,
+    "temporal_entropy": 0.8783,
+    "spectral_entropy": 0.4781,
+    "dominant_band": "HIGH",
+    "boat_score": 0.1519
+  },
+  "190806_3761_seg002.wav": {
+    "ndsi_underwater": 0.0907,
+    "band_power_low": 0.0696,
+    "band_power_mid": 0.1964,
+    "band_power_high": 0.2309,
+    "temporal_entropy": 0.9908,
+    "spectral_entropy": 0.7854,
+    "dominant_band": "HIGH",
+    "boat_score": 0.3478
+  },
+  "190806_3761_seg003.wav": {
+    "ndsi_underwater": -0.5085,
+    "band_power_low": 0.026,
+    "band_power_mid": 0.0659,
+    "band_power_high": 0.0775,
+    "temporal_entropy": 0.9233,
+    "spectral_entropy": 0.5045,
+    "dominant_band": "HIGH",
+    "boat_score": 0.1302
+  },
+  "190806_3761_seg004.wav": {
+    "ndsi_underwater": -0.1796,
+    "band_power_low": 0.0478,
+    "band_power_mid": 0.135,
+    "band_power_high": 0.1585,
+    "temporal_entropy": 0.9717,
+    "spectral_entropy": 0.6634,
+    "dominant_band": "HIGH",
+    "boat_score": 0.2388
+  },
+  "190806_3761_seg005.wav": {
+    "ndsi_underwater": -0.869,
+    "band_power_low": 0.0315,
+    "band_power_mid": 0.0191,
+    "band_power_high": 0.0216,
+    "temporal_entropy": 0.8882,
+    "spectral_entropy": 0.4146,
+    "dominant_band": "LOW",
+    "boat_score": 0.1574
+  },
+  "190806_3761_seg006.wav": {
+    "ndsi_underwater": -0.5001,
+    "band_power_low": 0.0373,
+    "band_power_mid": 0.0955,
+    "band_power_high": 0.1126,
+    "temporal_entropy": 0.9332,
+    "spectral_entropy": 0.5867,
+    "dominant_band": "HIGH",
+    "boat_score": 0.1867
+  },
+  "190806_3761_seg007.wav": {
+    "ndsi_underwater": -0.2185,
+    "band_power_low": 0.0592,
+    "band_power_mid": 0.1451,
+    "band_power_high": 0.1711,
+    "temporal_entropy": 0.9764,
+    "spectral_entropy": 0.6989,
+    "dominant_band": "HIGH",
+    "boat_score": 0.2958
+  },
+  "190806_3761_seg008.wav": {
+    "ndsi_underwater": -0.7297,
+    "band_power_low": 0.0237,
+    "band_power_mid": 0.0394,
+    "band_power_high": 0.0461,
+    "temporal_entropy": 0.9148,
+    "spectral_entropy": 0.4533,
+    "dominant_band": "HIGH",
+    "boat_score": 0.1186
+  },
+  "190806_3761_seg009.wav": {
+    "ndsi_underwater": 0.1585,
+    "band_power_low": 0.0699,
+    "band_power_mid": 0.2067,
+    "band_power_high": 0.2441,
+    "temporal_entropy": 0.9919,
+    "spectral_entropy": 0.8015,
+    "dominant_band": "HIGH",
+    "boat_score": 0.3495
+  },
+  "190806_3761_seg010.wav": {
+    "ndsi_underwater": 0.2042,
+    "band_power_low": 0.081,
+    "band_power_mid": 0.215,
+    "band_power_high": 0.2469,
+    "temporal_entropy": 0.9921,
+    "spectral_entropy": 0.8115,
+    "dominant_band": "HIGH",
+    "boat_score": 0.4051
+  },
+  "5783.040122170635_seg001.wav": {
+    "ndsi_underwater": -0.9467,
+    "band_power_low": 0.0193,
+    "band_power_mid": 0.0061,
+    "band_power_high": 0.0033,
+    "temporal_entropy": 0.5094,
+    "spectral_entropy": 0.2005,
+    "dominant_band": "LOW",
+    "boat_score": 0.0965
+  },
+  "5783.040122170635_seg002.wav": {
+    "ndsi_underwater": -0.9975,
+    "band_power_low": 0.0295,
+    "band_power_mid": 0.0006,
+    "band_power_high": 0.0002,
+    "temporal_entropy": 0.7714,
+    "spectral_entropy": 0.3079,
+    "dominant_band": "LOW",
+    "boat_score": 0.1476
+  },
+  "5783.040122170635_seg003.wav": {
+    "ndsi_underwater": -0.9912,
+    "band_power_low": 0.0446,
+    "band_power_mid": 0.0029,
+    "band_power_high": 0.0,
+    "temporal_entropy": 0.5082,
+    "spectral_entropy": 0.3272,
+    "dominant_band": "LOW",
+    "boat_score": 0.2228
+  },
+  "5783.040122170635_seg004.wav": {
+    "ndsi_underwater": -0.9822,
+    "band_power_low": 0.1737,
+    "band_power_mid": 0.005,
+    "band_power_high": 0.0,
+    "temporal_entropy": 0.6346,
+    "spectral_entropy": 0.3862,
+    "dominant_band": "LOW",
+    "boat_score": 0.8684
+  },
+  "5783.040122170635_seg005.wav": {
+    "ndsi_underwater": -0.9993,
+    "band_power_low": 0.0026,
+    "band_power_mid": 0.0001,
+    "band_power_high": 0.0002,
+    "temporal_entropy": NaN,
+    "spectral_entropy": 0.3514,
+    "dominant_band": "LOW",
+    "boat_score": 0.0128
+  },
+  "5783.040122170635_seg006.wav": {
+    "ndsi_underwater": -0.9997,
+    "band_power_low": 0.0244,
+    "band_power_mid": 0.0001,
+    "band_power_high": 0.0,
+    "temporal_entropy": NaN,
+    "spectral_entropy": 0.3287,
+    "dominant_band": "LOW",
+    "boat_score": 0.122
+  },
+  "5783.040122170635_seg007.wav": {
+    "ndsi_underwater": -0.9992,
+    "band_power_low": 0.2246,
+    "band_power_mid": 0.0003,
+    "band_power_high": 0.0,
+    "temporal_entropy": 0.1149,
+    "spectral_entropy": 0.4099,
+    "dominant_band": "LOW",
+    "boat_score": 1.0
+  },
+  "5783.040122170635_seg008.wav": {
+    "ndsi_underwater": -0.9938,
+    "band_power_low": 0.0121,
+    "band_power_mid": 0.0006,
+    "band_power_high": 0.0,
+    "temporal_entropy": 0.5602,
+    "spectral_entropy": 0.1529,
+    "dominant_band": "LOW",
+    "boat_score": 0.0604
+  }
+}

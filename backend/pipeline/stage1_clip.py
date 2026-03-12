@@ -21,7 +21,7 @@ import numpy as np
 
 from backend.config import (
     SILENCE_THRESHOLD, CHUNK_FRAMES, PADDING_S,
-    MERGE_GAP_S, MIN_SEGMENT_S, CLIPS_DIR,
+    MERGE_GAP_S, MIN_SEGMENT_S, MAX_CLIP_S, CLIPS_DIR,
     MULTISPECIES_MIN_S,
 )
 
@@ -191,7 +191,21 @@ class AudioClipper:
             if n > 0:
                 segments.append((start_frame, n))
 
-        return segments
+        # Split segments longer than MAX_CLIP_S into sub-clips
+        max_frames = int(MAX_CLIP_S * sr)
+        split: List[Tuple[int, int]] = []
+        for start_frame, n in segments:
+            if n <= max_frames:
+                split.append((start_frame, n))
+            else:
+                pos = start_frame
+                remaining = n
+                while remaining >= int(MIN_SEGMENT_S * sr):
+                    chunk = min(max_frames, remaining)
+                    split.append((pos, chunk))
+                    pos += chunk
+                    remaining -= chunk
+        return split
 
     @staticmethod
     def _write_clip(src: wave.Wave_read, start_frame: int, n_frames: int, dst: Path) -> None:

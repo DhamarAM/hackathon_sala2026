@@ -3,10 +3,10 @@ backend/run.py — Main entrypoint for the integrated backend.
 
 Full pipeline:
     Stage 0:   AudioClipper      → clips WAVs to active segments
-    Stage 1-3: Cascade           → YAMNet + Multispecies Whale + Humpback
+    Stage 1-6: Cascade           → Perch 2.0 + Multispecies + Humpback + NatureLM + BioLingual + Dasheng
     Stage 5:   Soundscape        → marine acoustic indices (no GPU)
-    Stage 6:   Embeddings+Cluster→ BirdNET/MFCC + UMAP + HDBSCAN (GPU optional)
-    Stage 4:   Enhanced Ranking  → 9-dimensional score + CSV/JSON
+    Stage 6:   Embeddings+Cluster→ NatureLM embeddings + UMAP + HDBSCAN (GPU optional)
+    Stage 4:   Biological Ranking→ 6-model equal-weight score + CSV/JSON
 
 Usage:
     python -m backend.run --source <folder_with_wavs>
@@ -94,7 +94,7 @@ def run(
         results = data.get('files', {})
     else:
         logger.info("=" * 60)
-        logger.info("STAGE 1-3 — Cascade (YAMNet + Multispecies + Humpback)")
+        logger.info("STAGE 1-6 — Cascade (Perch 2.0 + Multispecies + Humpback + NatureLM + BioLingual + Dasheng)")
         results = run_cascade(clip_paths, output_dir=analysis_dir)
 
     # ── Stage 5: Soundscape ──────────────────────────────────────────────────
@@ -123,7 +123,7 @@ def run(
 
     # ── Stage 4: Enhanced Ranking ─────────────────────────────────────────────
     logger.info("=" * 60)
-    logger.info("STAGE 4 — Biological ranking (9 dimensions)")
+    logger.info("STAGE 4 — Biological ranking (6-model equal-weight)")
     rankings = rank_results(
         results,
         soundscape=soundscape,

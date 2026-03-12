@@ -1,0 +1,126 @@
+{
+  "filename": "5783.040122170635_seg003.wav",
+  "source_path": "/home/dhamarkin/Kin Analytics - Repos/hackathon-proposal/outputs/clips/5783.040122170635_seg003.wav",
+  "duration_s": 30.0,
+  "sample_rate": 144000,
+  "rms": 0.02118025,
+  "status": "analyzed",
+  "cascade_flags": [
+    "biological_audio",
+    "whale_species",
+    "naturelm_bio",
+    "dasheng_complex"
+  ],
+  "cascade_summary": "biological_audio; whale_species; naturelm_bio; dasheng_complex",
+  "stage1_perch": {
+    "top_classes": [],
+    "bio_detections": [],
+    "marine_detections": [],
+    "has_bio_signal": true,
+    "has_marine_signal": false,
+    "bio_signal_score": 0.0342
+  },
+  "stage2_multispecies": {
+    "detections": [
+      {
+        "class_code": "Mn",
+        "species": "Megaptera novaeangliae (Humpback whale)",
+        "max_score": 0.017201,
+        "mean_score": 0.003223
+      }
+    ],
+    "num_windows": 6,
+    "top_species": "Mn",
+    "top_species_name": "Megaptera novaeangliae (Humpback whale)",
+    "top_max_score": 0.017201,
+    "top_time_series": [
+      0.002129481639713049,
+      0.01720079407095909,
+      5.604999653460957e-16,
+      9.836123354034498e-06,
+      2.6712985601307082e-08,
+      8.320929882621453e-12
+    ],
+    "any_whale_detected": true,
+    "bio_signal_score": 0.6667
+  },
+  "stage3_humpback": {
+    "max_score": 0.052229,
+    "mean_score": 0.00759,
+    "fraction_above_threshold": 0.0,
+    "num_windows": 27,
+    "humpback_detected": false,
+    "time_series": [
+      0.00634740898385644,
+      0.007557298522442579,
+      0.023963168263435364,
+      0.0025019857566803694,
+      0.0050389738753438,
+      0.003338718554005027,
+      0.0014846581034362316,
+      0.0003330389445181936,
+      0.0008509239996783435,
+      0.004053308162838221,
+      0.0011875112541019917,
+      0.008188758045434952,
+      0.005714199505746365,
+      0.00245289015583694,
+      0.01252208836376667,
+      0.005570189096033573,
+      0.003646044060587883,
+      0.000424142403062433,
+      0.02892148494720459,
+      0.0008241321775130928,
+      0.0004903740482404828,
+      0.00021091561939101666,
+      0.024486936628818512,
+      0.00044211518252268434,
+      0.0014391060685738921,
+      0.0007056244648993015,
+      0.052228618413209915
+    ],
+    "bio_signal_score": 0.087
+  },
+  "stage4_naturelm": {
+    "n_frames": 1496,
+    "embedding_dim": 768,
+    "norm_mean": 27.7127,
+    "norm_std": 0.0,
+    "magnitude_score": 0.0,
+    "embedding_entropy": 6.352,
+    "entropy_score": 0.9561,
+    "bio_signal_score": 0.5736
+  },
+  "stage5_biolingual": {
+    "label_scores": {
+      "ocean ambient noise": 0.938,
+      "humpback whale song": 0.0462,
+      "silence": 0.0112,
+      "boat engine noise": 0.0025,
+      "fish sounds": 0.0014,
+      "bird calls": 0.0005,
+      "shrimp snapping": 0.0002,
+      "seal barking": 0.0,
+      "dolphin clicks and whistles": 0.0,
+      "orca killer whale call": 0.0
+    },
+    "top_label": "ocean ambient noise",
+    "top_score": 0.938,
+    "bio_score_sum": 0.0483,
+    "top_is_bio": false,
+    "bio_signal_score": 0.0483
+  },
+  "stage6_dasheng": {
+    "n_frames": 750,
+    "temporal_variance": 12.4479,
+    "half_cosine_similarity": 0.8414,
+    "temporal_diversity_score": 0.1586,
+    "bio_signal_score": 1.0
+  },
+  "annotations": [
+    "Whale: Megaptera novaeangliae (Humpback whale) (score=0.0172)",
+    "Perch bio: ",
+    "NatureLM: entropy=6.35, mag_var=0.00"
+  ],
+  "spectrogram": "5783.040122170635_seg003_cascade.png"
+}

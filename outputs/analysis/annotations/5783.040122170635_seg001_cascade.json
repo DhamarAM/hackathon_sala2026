@@ -1,0 +1,99 @@
+{
+  "filename": "5783.040122170635_seg001.wav",
+  "source_path": "/home/dhamarkin/Kin Analytics - Repos/hackathon-proposal/outputs/clips/5783.040122170635_seg001.wav",
+  "duration_s": 12.0,
+  "sample_rate": 144000,
+  "rms": 0.0618207,
+  "status": "analyzed",
+  "cascade_flags": [
+    "biological_audio",
+    "humpback",
+    "naturelm_bio",
+    "biolingual_bio",
+    "dasheng_complex"
+  ],
+  "cascade_summary": "biological_audio; humpback; naturelm_bio; biolingual_bio; dasheng_complex",
+  "stage1_perch": {
+    "top_classes": [],
+    "bio_detections": [],
+    "marine_detections": [],
+    "has_bio_signal": true,
+    "has_marine_signal": false,
+    "bio_signal_score": 0.0701
+  },
+  "stage2_multispecies": {
+    "detections": [],
+    "num_windows": 2,
+    "top_species": "Oo",
+    "top_species_name": "Orcinus orca (Orca)",
+    "top_max_score": 0.000313,
+    "top_time_series": [
+      1.5975399492162978e-06,
+      0.00031292950734496117
+    ],
+    "any_whale_detected": false,
+    "bio_signal_score": 0.0156
+  },
+  "stage3_humpback": {
+    "max_score": 0.489445,
+    "mean_score": 0.069854,
+    "fraction_above_threshold": 0.1111,
+    "num_windows": 9,
+    "humpback_detected": true,
+    "time_series": [
+      0.4894450306892395,
+      0.035435013473033905,
+      0.08720776438713074,
+      0.0003340453840792179,
+      0.0020930215250700712,
+      0.000978659139946103,
+      0.0008668875088915229,
+      0.0015963901532813907,
+      0.01072630938142538
+    ],
+    "bio_signal_score": 0.6111
+  },
+  "stage4_naturelm": {
+    "n_frames": 592,
+    "embedding_dim": 768,
+    "norm_mean": 27.7127,
+    "norm_std": 0.0,
+    "magnitude_score": 0.0,
+    "embedding_entropy": 6.363,
+    "entropy_score": 0.9577,
+    "bio_signal_score": 0.5746
+  },
+  "stage5_biolingual": {
+    "label_scores": {
+      "dolphin clicks and whistles": 0.9731,
+      "ocean ambient noise": 0.026,
+      "orca killer whale call": 0.0008,
+      "silence": 0.0,
+      "fish sounds": 0.0,
+      "seal barking": 0.0,
+      "boat engine noise": 0.0,
+      "shrimp snapping": 0.0,
+      "bird calls": 0.0,
+      "humpback whale song": 0.0
+    },
+    "top_label": "dolphin clicks and whistles",
+    "top_score": 0.9731,
+    "bio_score_sum": 0.9739,
+    "top_is_bio": true,
+    "bio_signal_score": 0.9739
+  },
+  "stage6_dasheng": {
+    "n_frames": 300,
+    "temporal_variance": 11.743,
+    "half_cosine_similarity": 0.8848,
+    "temporal_diversity_score": 0.1152,
+    "bio_signal_score": 1.0
+  },
+  "annotations": [
+    "Humpback detected (max=0.4894, 11% of windows)",
+    "Perch bio: ",
+    "NatureLM: entropy=6.36, mag_var=0.00",
+    "BioLingual: dolphin clicks and whistles (0.973)"
+  ],
+  "spectrogram": "5783.040122170635_seg001_cascade.png"
+}

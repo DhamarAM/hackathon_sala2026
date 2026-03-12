@@ -1,0 +1,89 @@
+{
+  "filename": "5783.040122170635_seg007.wav",
+  "source_path": "/home/dhamarkin/Kin Analytics - Repos/hackathon-proposal/outputs/clips/5783.040122170635_seg007.wav",
+  "duration_s": 5.0,
+  "sample_rate": 144000,
+  "rms": 0.01257882,
+  "status": "analyzed",
+  "cascade_flags": [
+    "biological_audio",
+    "humpback",
+    "naturelm_bio",
+    "dasheng_complex"
+  ],
+  "cascade_summary": "biological_audio; humpback; naturelm_bio; dasheng_complex",
+  "stage1_perch": {
+    "top_classes": [],
+    "bio_detections": [],
+    "marine_detections": [],
+    "has_bio_signal": true,
+    "has_marine_signal": false,
+    "bio_signal_score": 0.0304
+  },
+  "stage2_multispecies": {
+    "detections": [],
+    "num_windows": 1,
+    "top_species": "Bm",
+    "top_species_name": "Balaenoptera musculus (Blue whale)",
+    "top_max_score": 0.004905,
+    "top_time_series": [
+      0.004904798232018948
+    ],
+    "any_whale_detected": false,
+    "bio_signal_score": 0.2452
+  },
+  "stage3_humpback": {
+    "max_score": 0.777238,
+    "mean_score": 0.442311,
+    "fraction_above_threshold": 0.5,
+    "num_windows": 2,
+    "humpback_detected": true,
+    "time_series": [
+      0.7772382497787476,
+      0.10738319158554077
+    ],
+    "bio_signal_score": 1.0
+  },
+  "stage4_naturelm": {
+    "n_frames": 248,
+    "embedding_dim": 768,
+    "norm_mean": 27.7127,
+    "norm_std": 0.0,
+    "magnitude_score": 0.0,
+    "embedding_entropy": 6.3575,
+    "entropy_score": 0.9569,
+    "bio_signal_score": 0.5741
+  },
+  "stage5_biolingual": {
+    "label_scores": {
+      "ocean ambient noise": 0.9965,
+      "silence": 0.003,
+      "shrimp snapping": 0.0003,
+      "bird calls": 0.0002,
+      "fish sounds": 0.0,
+      "seal barking": 0.0,
+      "boat engine noise": 0.0,
+      "orca killer whale call": 0.0,
+      "humpback whale song": 0.0,
+      "dolphin clicks and whistles": 0.0
+    },
+    "top_label": "ocean ambient noise",
+    "top_score": 0.9965,
+    "bio_score_sum": 0.0005,
+    "top_is_bio": false,
+    "bio_signal_score": 0.0005
+  },
+  "stage6_dasheng": {
+    "n_frames": 125,
+    "temporal_variance": 11.17,
+    "half_cosine_similarity": 0.9432,
+    "temporal_diversity_score": 0.0568,
+    "bio_signal_score": 0.7839
+  },
+  "annotations": [
+    "Humpback detected (max=0.7772, 50% of windows)",
+    "Perch bio: ",
+    "NatureLM: entropy=6.36, mag_var=0.00"
+  ],
+  "spectrogram": "5783.040122170635_seg007_cascade.png"
+}

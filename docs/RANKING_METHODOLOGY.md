@@ -1,168 +1,61 @@
-# Biological Importance Ranking — Methodology (v3)
+# Biological Importance Ranking — Methodology (v4)
 
 ## Objective
 
 Rank all processed audio clips by **biological importance**, allowing researchers to focus their manual review on the recordings with the richest and most relevant content.
 
-## Problem
-
-The pipeline generates multiple heterogeneous metrics per clip:
-- **Stage 1–3 (Cascade)**: YAMNet class scores, multispecies per-window probabilities, humpback per-window probabilities
-- **Stage 3 (Soundscape)**: NDSI, band power distribution, spectral/temporal entropy
-- **Stage 4 (Clustering)**: cluster identity, cluster size, dominant spectral band
-
-How can we combine all these into a **single, sortable score** that reflects the true biological value of each recording?
-
 ## Score Formula
 
 ```
-Score (0–100) = Σ (component_i × weight_i) × 100
+score (0–100) = mean(bio_signal_score per model) × 100
 ```
 
-9 components, each normalized to [0, 1]. Weights defined in `backend/config.py` under `RANK_WEIGHTS`.
+Six models each contribute their `bio_signal_score [0, 1]` with **equal weight (1/6)**. Models that independently agree on biological content push the score up linearly.
+
+This approach is robust to out-of-domain failures: if one model produces near-zero scores for a type of recording it was not calibrated on, the other five models can still produce a meaningful result. No single model is authoritative.
 
 ---
 
-## The 9 Dimensions
+## The 6 Models
 
-### Dimension 1 — Sustained Cetacean Presence (18%)
+| Model | Key | What bio_signal_score measures |
+|-------|-----|-------------------------------|
+| Perch 2.0 | `perch` | Fraction of detections in biological/marine classes, normalized |
+| Multispecies Whale | `multispecies` | Peak cetacean score (normalized to detection threshold) + species richness |
+| Humpback Detector | `humpback` | Peak humpback score + fraction of windows above threshold |
+| NatureLM-BEATs | `naturelm` | Embedding entropy + magnitude (structural complexity of bio signals) |
+| BioLingual | `biolingual` | Probability mass on biological labels (zero-shot) |
+| Dasheng | `dasheng` | Temporal variance + embedding diversity (non-stationarity = biology) |
 
-```
-whale_sustained = 0.5 × top_max_score + 0.5 × min(Σ mean_scores × 5, 1.0)
-```
+Each model's `bio_signal_score` is computed independently in `backend/pipeline/stage2_cascade.py` and stored in `outputs/analysis/results.json`. The ranking stage (`stage5_rank.py`) reads these values and averages them.
 
-Combines the **peak** signal (best 5-second window) with the **sustained** presence (average across all windows). A clip with a moderate but persistent signal scores higher than one with a single transient spike.
+### Design rationale: normalization choices
 
-The ×5 factor compensates for mean scores being 10–100× smaller than max scores (vocalizations are intermittent, not continuous).
+**Multispecies:** normalized by `MULTISPECIES_DETECTION_THR = 0.01` (not the original 0.10). Rationale: hydrophone recordings produce scores 10–50× lower than the aerial/surface recordings this model was calibrated on. Normalizing by 0.01 means "a clip at the detection threshold contributes ~0.5 to bio_signal". This is an intentional domain-adaptation choice — see comments in `stage2_cascade.py`.
 
----
+**Humpback:** `0.5 × (max_score / threshold) + 0.5 × min(coverage × 2, 1)`. Peak component saturates at threshold (0.3); coverage saturates at 50% of windows above threshold.
 
-### Dimension 2 — YAMNet Biological Richness (15%)
-
-```
-bio_richness = 0.5 × min(n_bio_detections / 8, 1.0) + 0.5 × min(Σ bio_scores, 1.0)
-```
-
-Combines:
-- **Count** of biological class detections (normalized to 8): more types = richer signal
-- **Intensity** of those detections (sum of scores): stronger = clearer
-
-When YAMNet's top-1 class is "Animal" or "Wild animals" in underwater audio, it correlates strongly with visible biological structure in the spectrogram. When top-1 is "Speech" or "Silence", biological detections tend to be isolated events in otherwise noisy audio.
+**Dasheng:** Thresholds recalibrated for marine audio: `temporal_scale = 0.5` (was 3.0), `diversity_scale = 0.1` (was 0.3). Marine recordings are stationary — terrestrial defaults would produce near-zero scores on all clips.
 
 ---
 
-### Dimension 3 — Acoustic Diversity (15%)
+## Soundscape and Cluster metadata (not in score)
 
-```
-diversity = min((n_species + n_vocalization_types) / 7, 1.0)
-```
-
-Where:
-- `n_species`: species with multispecies score ≥ 0.01 (Oo, Mn, Eg, Be, Bp, Bm, Ba)
-- `n_vocalization_types`: types with score ≥ 0.01 (Call, Echolocation, Whistle, Gunshot, Upcall)
-
-More distinct sound types = richer acoustic scene = more scientific value. Normalization to 7.0 reflects the maximum observed in practice.
-
----
-
-### Dimension 4 — Humpback Temporal Coverage (12%)
-
-```
-humpback_coverage = fraction of 1s windows with humpback score ≥ 0.30
-```
-
-Sustained humpback presence (many windows above threshold) is more informative than a single high-confidence moment.
-
----
-
-### Dimension 5 — Cross-Model Agreement (12%)
-
-```
-agreement = 0.30×(YAMNet bio flag) + 0.10×(YAMNet marine flag)
-           + 0.35×(whale_species flag) + 0.25×(humpback flag)
-```
-
-When three independent models (different architectures, training data, sampling frequencies) agree, the probability of a false positive decreases multiplicatively. Sub-weights reflect each model's cetacean specificity.
-
----
-
-### Dimension 6 — NDSI Soundscape Score (10%)
-
-```
-ndsi_score = clip((ndsi_underwater + 1) / 2, 0, 1)
-```
-
-Maps the NDSI from [-1, 1] to [0, 1]. High NDSI = biology-dominated soundscape; low NDSI = anthropogenic noise (boats) dominated. Acts as a noise penalty: clips with heavy boat noise score lower even if the cascade detected something.
-
-Source: Stage 3 (`soundscape.json`). If Stage 3 was skipped, this dimension is 0.0.
-
----
-
-### Dimension 7 — Biological Cluster Signal (8%)
-
-Bonus for clips that belong to a real acoustic cluster (not outlier) where the dominant spectral band is not LOW (which typically indicates boat noise):
-
-| Condition | Score |
-|-----------|-------|
-| Real cluster (id ≥ 0), dominant band = MID or HIGH | `min(1.0, 0.5 + 0.1 × cluster_size)` |
-| Real cluster (id ≥ 0), dominant band = LOW | 0.30 |
-| Outlier (cluster_id = -1) | 0.00 |
-
-Source: Stage 4 (`clusters.json`). If Stage 4 was skipped (`--no-cluster`), this dimension is 0.0.
-
----
-
-### Dimension 8 — Humpback Peak Confidence (5%)
-
-```
-humpback_peak = min(max_humpback_score, 1.0)
-```
-
-The single highest humpback score across all 1-second windows. Receives low weight (5%) because it is nearly uniform across clips — most clips have humpback detection — so it has weak discriminating power.
-
----
-
-### Dimension 9 — YAMNet Top-Class Quality (5%)
-
-```
-yamnet_quality = min(top1_score × 3.0, 1.0)  if top-1 ∈ biological classes
-               = 0.0                           otherwise
-```
-
-When YAMNet's most probable class for the entire clip is a biological class ("Animal", "Wild animals", "Insect", "Bird", "Frog", "Cricket", "Whale vocalization", "Roar"), it indicates that most of the audio is biologically active. If top-1 is "Speech", "Silence", or "Noise", biological detections are likely isolated events.
-
----
-
-## Current Weights Summary
-
-From `backend/config.py → RANK_WEIGHTS`:
-
-| Dimension | Key | Weight |
-|-----------|-----|--------|
-| Sustained cetacean presence | `whale_sustained` | 18% |
-| YAMNet biological richness | `bio_richness` | 15% |
-| Acoustic diversity | `acoustic_diversity` | 15% |
-| Humpback temporal coverage | `humpback_coverage` | 12% |
-| Cross-model agreement | `cross_model` | 12% |
-| NDSI soundscape score | `ndsi_score` | 10% |
-| Biological cluster signal | `cluster_signal` | 8% |
-| Humpback peak confidence | `humpback_peak` | 5% |
-| YAMNet top-class quality | `yamnet_quality` | 5% |
-| **Total** | | **100%** |
+`boat_score` (from soundscape) and `cluster_id` (from clustering) are stored as metadata in `ranked.json` but do **not** affect the score. Rationale: BioLingual already has "boat engine noise" as a label — if a clip is dominated by boat noise, its bio_signal_scores will be low without an additional penalty (double-counting).
 
 ---
 
 ## Tier Classification
 
-Final score (0–100) classified into 5 priority levels (`backend/config.py → RANK_TIERS`):
+From `backend/config.py → RANK_TIERS`:
 
-| Tier | Score | Interpretation | Recommended Action |
-|------|-------|---------------|-------------------|
-| **CRITICAL** | ≥ 65 | Multiple strong dimensions, high multi-model agreement | Immediate priority review |
-| **HIGH** | ≥ 45 | Clear biological signals from at least one model | Detailed review |
-| **MODERATE** | ≥ 25 | Signals detected with moderate confidence | Review when possible |
-| **LOW** | ≥ 10 | Weak or single-model signals | Optional review |
-| **MINIMAL** | < 10 | Little or no biological evidence | Low priority |
+| Tier | Score | Recommended Action |
+|------|-------|--------------------|
+| **CRITICAL** | ≥ 70 | Immediate priority review |
+| **HIGH** | ≥ 50 | Detailed review |
+| **MODERATE** | ≥ 30 | Review when possible |
+| **LOW** | ≥ 15 | Optional review |
+| **MINIMAL** | < 15 | Low priority |
 
 ---
 
@@ -170,8 +63,8 @@ Final score (0–100) classified into 5 priority levels (`backend/config.py → 
 
 ```
 outputs/ranking/
-├── ranked.json   # Full ranking: scores, tiers, 9 components, flags, annotations
-└── ranked.csv    # Flat version for spreadsheet import
+├── ranked.json   # Full ranking: scores, tiers, 6 model components, flags, annotations
+└── ranked.csv    # Flat version: rank, filename, score, tier, 6 model scores, boat_score, flags
 ```
 
 ```bash
@@ -185,8 +78,8 @@ python -m backend.run --skip-clip --skip-cascade --skip-soundscape --skip-cluste
 
 ## Limitations
 
-1. **Bias toward orcas**: The multispecies model has high sensitivity for *Orcinus orca*, which may inflate scores for clips with acoustically similar patterns.
-2. **Geographic bias**: Models were trained on North Atlantic/Pacific data. Galápagos species (South Pacific humpback, bottlenose dolphin, Bryde's whale) may not be perfectly represented.
-3. **NDSI and cluster scores are optional**: If `--no-cluster` is used, dimensions 7 (cluster_signal) and 6 (ndsi_score, if Stage 3 is also skipped) default to 0.0, effectively compressing the score range. Weights do not auto-renormalize.
+1. **Domain mismatch**: All models were trained on data that is not perfectly representative of Galápagos hydrophone recordings. Perch 2.0 and NatureLM on terrestrial audio; Google whale models on surface/aerial recordings. Thresholds are calibrated empirically.
+2. **Bias toward orcas**: The multispecies model has high sensitivity for *Orcinus orca*, which may inflate scores for clips with acoustically similar patterns.
+3. **Geographic bias**: Models trained on North Atlantic/Pacific data. Some species codes (Eg = Right whale) appear in detections but that species is not found in Galápagos waters — likely responding to similar acoustic patterns from local species.
 4. **Scores are not probabilities**: A high score indicates greater potential value for human review, not scientific certainty of species presence.
 5. **Requires expert validation**: Final biological classifications must be confirmed by a marine bioacoustics specialist.

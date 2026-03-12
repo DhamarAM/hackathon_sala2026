@@ -1,0 +1,148 @@
+{
+  "filename": "190806_3761_seg010.wav",
+  "source_path": "/home/dhamarkin/Kin Analytics - Repos/hackathon-proposal/outputs/clips/190806_3761_seg010.wav",
+  "duration_s": 29.9,
+  "sample_rate": 48000,
+  "rms": 0.00155092,
+  "status": "analyzed",
+  "cascade_flags": [
+    "biological_audio",
+    "whale_species",
+    "humpback",
+    "naturelm_bio",
+    "dasheng_complex"
+  ],
+  "cascade_summary": "biological_audio; whale_species; humpback; naturelm_bio; dasheng_complex",
+  "stage1_perch": {
+    "top_classes": [],
+    "bio_detections": [],
+    "marine_detections": [],
+    "has_bio_signal": true,
+    "has_marine_signal": false,
+    "bio_signal_score": 0.0813
+  },
+  "stage2_multispecies": {
+    "detections": [
+      {
+        "class_code": "Oo",
+        "species": "Orcinus orca (Orca)",
+        "max_score": 0.104762,
+        "mean_score": 0.027893
+      },
+      {
+        "class_code": "Echolocation",
+        "species": "Odontocete echolocation",
+        "max_score": 0.032433,
+        "mean_score": 0.008117
+      },
+      {
+        "class_code": "Call",
+        "species": "Generic whale call",
+        "max_score": 0.030739,
+        "mean_score": 0.008351
+      },
+      {
+        "class_code": "Whistle",
+        "species": "Dolphin/whale whistle",
+        "max_score": 0.007334,
+        "mean_score": 0.002432
+      }
+    ],
+    "num_windows": 5,
+    "top_species": "Oo",
+    "top_species_name": "Orcinus orca (Orca)",
+    "top_max_score": 0.104762,
+    "top_time_series": [
+      0.015769248828291893,
+      0.008772563189268112,
+      0.008589147590100765,
+      0.10476170480251312,
+      0.0015699174255132675
+    ],
+    "any_whale_detected": true,
+    "bio_signal_score": 1.0
+  },
+  "stage3_humpback": {
+    "max_score": 0.452009,
+    "mean_score": 0.097737,
+    "fraction_above_threshold": 0.1111,
+    "num_windows": 27,
+    "humpback_detected": true,
+    "time_series": [
+      0.1878347545862198,
+      0.07163462042808533,
+      0.07422230392694473,
+      0.452009379863739,
+      0.007412666454911232,
+      0.013949151150882244,
+      0.27152350544929504,
+      0.0070773400366306305,
+      0.013225933536887169,
+      0.0422847643494606,
+      0.0145910969004035,
+      0.005292665679007769,
+      0.004551056306809187,
+      0.0018513464601710439,
+      0.1317819058895111,
+      0.11543223261833191,
+      0.4334775507450104,
+      0.3552372455596924,
+      0.13689014315605164,
+      0.011798322200775146,
+      0.004286160226911306,
+      0.003666586708277464,
+      0.0015760447131469846,
+      0.2373843640089035,
+      0.01516055129468441,
+      0.009298852644860744,
+      0.01545445341616869
+    ],
+    "bio_signal_score": 0.6111
+  },
+  "stage4_naturelm": {
+    "n_frames": 1488,
+    "embedding_dim": 768,
+    "norm_mean": 27.7127,
+    "norm_std": 0.0,
+    "magnitude_score": 0.0,
+    "embedding_entropy": 6.3589,
+    "entropy_score": 0.9571,
+    "bio_signal_score": 0.5743
+  },
+  "stage5_biolingual": {
+    "label_scores": {
+      "ocean ambient noise": 0.9763,
+      "silence": 0.0215,
+      "humpback whale song": 0.0017,
+      "bird calls": 0.0004,
+      "shrimp snapping": 0.0001,
+      "seal barking": 0.0,
+      "dolphin clicks and whistles": 0.0,
+      "fish sounds": 0.0,
+      "boat engine noise": 0.0,
+      "orca killer whale call": 0.0
+    },
+    "top_label": "ocean ambient noise",
+    "top_score": 0.9763,
+    "bio_score_sum": 0.0022,
+    "top_is_bio": false,
+    "bio_signal_score": 0.0022
+  },
+  "stage6_dasheng": {
+    "n_frames": 747,
+    "temporal_variance": 11.2695,
+    "half_cosine_similarity": 0.9764,
+    "temporal_diversity_score": 0.0236,
+    "bio_signal_score": 0.6178
+  },
+  "annotations": [
+    "Whale: Orcinus orca (Orca) (score=0.1048)",
+    "Whale: Odontocete echolocation (score=0.0324)",
+    "Whale: Generic whale call (score=0.0307)",
+    "Possible whale: Dolphin/whale whistle (score=0.0073)",
+    "Humpback detected (max=0.4520, 11% of windows)",
+    "Perch bio: ",
+    "NatureLM: entropy=6.36, mag_var=0.00"
+  ],
+  "spectrogram": "190806_3761_seg010_cascade.png"
+}

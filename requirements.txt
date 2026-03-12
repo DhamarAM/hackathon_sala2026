@@ -4,16 +4,34 @@ soundfile>=0.12
 numpy>=1.24,<2.0
 scipy>=1.11
 
-# ─── Deep learning (TF + TF-Hub for Stages 1-3) ──────────────────────────────
+# ─── Deep learning (TF + TF-Hub for CNN stages) ───────────────────────────────
 tensorflow[and-cuda]>=2.17
 tensorflow-hub>=0.16
 setuptools<81              # required by tensorflow-hub import
 
-# ─── Soundscape indices (Stage 5 — CPU only) ─────────────────────────────────
+# ─── Perch 2.0 (Google, 2025) — replaces YAMNet + PANNs ─────────────────────
+perch-hoplite[tf]>=0.0.4   # pip install 'perch-hoplite[tf]'
+                            # GPU variant: pip install 'perch-hoplite[tf-cuda]'
+
+# ─── PyTorch (Transformer models: NatureLM-BEATs, BioLingual, Dasheng) ───────
+torch>=2.1
+torchaudio>=2.1
+
+# ─── HuggingFace Transformers (BioLingual) ────────────────────────────────────
+transformers>=4.40
+accelerate>=0.27           # required by some HF models for device placement
+
+# ─── avex (Earth Species Project) — required for NatureLM-BEATs ──────────────
+avex>=1.0.0                # pip install avex
+
+# ─── Dasheng (Shanghai AI Lab, 2024) ─────────────────────────────────────────
+dasheng>=0.0.9             # pip install dasheng  (latest on PyPI: 0.0.9)
+
+# ─── Soundscape indices (backend pipeline — CPU only) ────────────────────────
 scikit-maad>=0.3
 
-# ─── Embeddings + clustering (Stage 6 — GPU optional) ────────────────────────
-opensoundscape>=0.10       # BirdNET/Perch embeddings
+# ─── Embeddings + clustering (backend pipeline) ───────────────────────────────
+opensoundscape>=0.10       # BirdNET embeddings
 umap-learn>=0.5
 hdbscan>=0.8.33
 
